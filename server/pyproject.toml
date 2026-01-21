@@ -1,0 +1,41 @@
+[project]
+name = "cadenza-server"
+version = "0.1.0"
+description = "FastAPI server for Cadenza music practice app"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.115.0",
+    "uvicorn[standard]>=0.32.0",
+    "sqlmodel>=0.0.22",
+    "psycopg2-binary>=2.9.10",
+    "pyjwt>=2.9.0",
+    "pydantic-settings>=2.6.0",
+    "python-dotenv>=1.1.1",
+    "httpx>=0.27.2",
+    "python-multipart>=0.0.12",
+    "boto3>=1.35.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.3.3",
+    "pytest-asyncio>=0.24.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["app"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.4.2",
+    "pytest-asyncio>=1.2.0",
+]

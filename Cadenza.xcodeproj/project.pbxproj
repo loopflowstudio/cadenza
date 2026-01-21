@@ -1,0 +1,661 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		048C696E2E1726E5000AFF98 /* Apollo in Frameworks */ = {isa = PBXBuildFile; productRef = 048C696D2E1726E5000AFF98 /* Apollo */; };
+		048C69702E1726E5000AFF98 /* ApolloAPI in Frameworks */ = {isa = PBXBuildFile; productRef = 048C696F2E1726E5000AFF98 /* ApolloAPI */; };
+		048C69722E1726E5000AFF98 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 048C69712E1726E5000AFF98 /* GoogleSignIn */; };
+		048C69742E1726E5000AFF98 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 048C69732E1726E5000AFF98 /* GoogleSignInSwift */; };
+		048C6C1B2E2B29FD000AFF98 /* ApolloSQLite in Frameworks */ = {isa = PBXBuildFile; productRef = 048C6C1A2E2B29FD000AFF98 /* ApolloSQLite */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		04B5A61E2E0E6DFA004E2FEA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 04B5A6062E0E6DF2004E2FEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 04B5A60D2E0E6DF2004E2FEA;
+			remoteInfo = Cadenza;
+		};
+		04B5A6282E0E6DFA004E2FEA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 04B5A6062E0E6DF2004E2FEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 04B5A60D2E0E6DF2004E2FEA;
+			remoteInfo = Cadenza;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		04B5A60E2E0E6DF2004E2FEA /* Cadenza.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Cadenza.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		04B5A61D2E0E6DFA004E2FEA /* CadenzaTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CadenzaTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		04B5A6272E0E6DFA004E2FEA /* CadenzaUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CadenzaUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		048C697A2E172DF7000AFF98 /* Exceptions for "Cadenza" folder in "Cadenza" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 04B5A60D2E0E6DF2004E2FEA /* Cadenza */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		04B5A6102E0E6DF2004E2FEA /* Cadenza */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				048C697A2E172DF7000AFF98 /* Exceptions for "Cadenza" folder in "Cadenza" target */,
+			);
+			path = Cadenza;
+			sourceTree = "<group>";
+		};
+		04B5A6202E0E6DFA004E2FEA /* CadenzaTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = CadenzaTests;
+			sourceTree = "<group>";
+		};
+		04B5A62A2E0E6DFA004E2FEA /* CadenzaUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = CadenzaUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		04B5A60B2E0E6DF2004E2FEA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				048C69702E1726E5000AFF98 /* ApolloAPI in Frameworks */,
+				048C696E2E1726E5000AFF98 /* Apollo in Frameworks */,
+				048C6C1B2E2B29FD000AFF98 /* ApolloSQLite in Frameworks */,
+				048C69722E1726E5000AFF98 /* GoogleSignIn in Frameworks */,
+				048C69742E1726E5000AFF98 /* GoogleSignInSwift in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		04B5A61A2E0E6DFA004E2FEA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		04B5A6242E0E6DFA004E2FEA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		048C696C2E1726E5000AFF98 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		04B5A6052E0E6DF2004E2FEA = {
+			isa = PBXGroup;
+			children = (
+				04B5A6102E0E6DF2004E2FEA /* Cadenza */,
+				04B5A6202E0E6DFA004E2FEA /* CadenzaTests */,
+				04B5A62A2E0E6DFA004E2FEA /* CadenzaUITests */,
+				048C696C2E1726E5000AFF98 /* Frameworks */,
+				04B5A60F2E0E6DF2004E2FEA /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		04B5A60F2E0E6DF2004E2FEA /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				04B5A60E2E0E6DF2004E2FEA /* Cadenza.app */,
+				04B5A61D2E0E6DFA004E2FEA /* CadenzaTests.xctest */,
+				04B5A6272E0E6DFA004E2FEA /* CadenzaUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		04B5A60D2E0E6DF2004E2FEA /* Cadenza */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 04B5A6312E0E6DFB004E2FEA /* Build configuration list for PBXNativeTarget "Cadenza" */;
+			buildPhases = (
+				04B5A60A2E0E6DF2004E2FEA /* Sources */,
+				04B5A60B2E0E6DF2004E2FEA /* Frameworks */,
+				04B5A60C2E0E6DF2004E2FEA /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				04B5A6102E0E6DF2004E2FEA /* Cadenza */,
+			);
+			name = Cadenza;
+			packageProductDependencies = (
+				048C696D2E1726E5000AFF98 /* Apollo */,
+				048C696F2E1726E5000AFF98 /* ApolloAPI */,
+				048C69712E1726E5000AFF98 /* GoogleSignIn */,
+				048C69732E1726E5000AFF98 /* GoogleSignInSwift */,
+				048C6C1A2E2B29FD000AFF98 /* ApolloSQLite */,
+			);
+			productName = Cadenza;
+			productReference = 04B5A60E2E0E6DF2004E2FEA /* Cadenza.app */;
+			productType = "com.apple.product-type.application";
+		};
+		04B5A61C2E0E6DFA004E2FEA /* CadenzaTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 04B5A6342E0E6DFB004E2FEA /* Build configuration list for PBXNativeTarget "CadenzaTests" */;
+			buildPhases = (
+				04B5A6192E0E6DFA004E2FEA /* Sources */,
+				04B5A61A2E0E6DFA004E2FEA /* Frameworks */,
+				04B5A61B2E0E6DFA004E2FEA /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				04B5A61F2E0E6DFA004E2FEA /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				04B5A6202E0E6DFA004E2FEA /* CadenzaTests */,
+			);
+			name = CadenzaTests;
+			packageProductDependencies = (
+			);
+			productName = CadenzaTests;
+			productReference = 04B5A61D2E0E6DFA004E2FEA /* CadenzaTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		04B5A6262E0E6DFA004E2FEA /* CadenzaUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 04B5A6372E0E6DFB004E2FEA /* Build configuration list for PBXNativeTarget "CadenzaUITests" */;
+			buildPhases = (
+				04B5A6232E0E6DFA004E2FEA /* Sources */,
+				04B5A6242E0E6DFA004E2FEA /* Frameworks */,
+				04B5A6252E0E6DFA004E2FEA /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				04B5A6292E0E6DFA004E2FEA /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				04B5A62A2E0E6DFA004E2FEA /* CadenzaUITests */,
+			);
+			name = CadenzaUITests;
+			packageProductDependencies = (
+			);
+			productName = CadenzaUITests;
+			productReference = 04B5A6272E0E6DFA004E2FEA /* CadenzaUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		04B5A6062E0E6DF2004E2FEA /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1600;
+				LastUpgradeCheck = 1600;
+				TargetAttributes = {
+					04B5A60D2E0E6DF2004E2FEA = {
+						CreatedOnToolsVersion = 16.0;
+					};
+					04B5A61C2E0E6DFA004E2FEA = {
+						CreatedOnToolsVersion = 16.0;
+						TestTargetID = 04B5A60D2E0E6DF2004E2FEA;
+					};
+					04B5A6262E0E6DFA004E2FEA = {
+						CreatedOnToolsVersion = 16.0;
+						TestTargetID = 04B5A60D2E0E6DF2004E2FEA;
+					};
+				};
+			};
+			buildConfigurationList = 04B5A6092E0E6DF2004E2FEA /* Build configuration list for PBXProject "Cadenza" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 04B5A6052E0E6DF2004E2FEA;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				048C68692E165618000AFF98 /* XCRemoteSwiftPackageReference "apollo-ios" */,
+				048C68732E1664BE000AFF98 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 04B5A60F2E0E6DF2004E2FEA /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				04B5A60D2E0E6DF2004E2FEA /* Cadenza */,
+				04B5A61C2E0E6DFA004E2FEA /* CadenzaTests */,
+				04B5A6262E0E6DFA004E2FEA /* CadenzaUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		04B5A60C2E0E6DF2004E2FEA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		04B5A61B2E0E6DFA004E2FEA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		04B5A6252E0E6DFA004E2FEA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		04B5A60A2E0E6DF2004E2FEA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		04B5A6192E0E6DFA004E2FEA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		04B5A6232E0E6DFA004E2FEA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		04B5A61F2E0E6DFA004E2FEA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 04B5A60D2E0E6DF2004E2FEA /* Cadenza */;
+			targetProxy = 04B5A61E2E0E6DFA004E2FEA /* PBXContainerItemProxy */;
+		};
+		04B5A6292E0E6DFA004E2FEA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 04B5A60D2E0E6DF2004E2FEA /* Cadenza */;
+			targetProxy = 04B5A6282E0E6DFA004E2FEA /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		04B5A62F2E0E6DFB004E2FEA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		04B5A6302E0E6DFB004E2FEA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		04B5A6322E0E6DFB004E2FEA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Cadenza/Cadenza.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "";
+				DEVELOPMENT_TEAM = 2V3M244HF2;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Cadenza/Info.plist;
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Cadenza uses the microphone to detect pitch for the tuner feature, helping you tune your instrument.";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = studio.loopflow.Cadenza;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		04B5A6332E0E6DFB004E2FEA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Cadenza/Cadenza.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "";
+				DEVELOPMENT_TEAM = 2V3M244HF2;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Cadenza/Info.plist;
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Cadenza uses the microphone to detect pitch for the tuner feature, helping you tune your instrument.";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = studio.loopflow.Cadenza;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		04B5A6352E0E6DFB004E2FEA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.loopflowstudio.CadenzaTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Cadenza.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Cadenza";
+			};
+			name = Debug;
+		};
+		04B5A6362E0E6DFB004E2FEA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.loopflowstudio.CadenzaTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Cadenza.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Cadenza";
+			};
+			name = Release;
+		};
+		04B5A6382E0E6DFB004E2FEA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.loopflowstudio.CadenzaUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_STRICT_CONCURRENCY = minimal;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Cadenza;
+			};
+			name = Debug;
+		};
+		04B5A6392E0E6DFB004E2FEA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.loopflowstudio.CadenzaUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_STRICT_CONCURRENCY = minimal;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Cadenza;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		04B5A6092E0E6DF2004E2FEA /* Build configuration list for PBXProject "Cadenza" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				04B5A62F2E0E6DFB004E2FEA /* Debug */,
+				04B5A6302E0E6DFB004E2FEA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		04B5A6312E0E6DFB004E2FEA /* Build configuration list for PBXNativeTarget "Cadenza" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				04B5A6322E0E6DFB004E2FEA /* Debug */,
+				04B5A6332E0E6DFB004E2FEA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		04B5A6342E0E6DFB004E2FEA /* Build configuration list for PBXNativeTarget "CadenzaTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				04B5A6352E0E6DFB004E2FEA /* Debug */,
+				04B5A6362E0E6DFB004E2FEA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		04B5A6372E0E6DFB004E2FEA /* Build configuration list for PBXNativeTarget "CadenzaUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				04B5A6382E0E6DFB004E2FEA /* Debug */,
+				04B5A6392E0E6DFB004E2FEA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		048C68692E165618000AFF98 /* XCRemoteSwiftPackageReference "apollo-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apollographql/apollo-ios";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.23.0;
+			};
+		};
+		048C68732E1664BE000AFF98 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/google/GoogleSignIn-iOS";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		048C696D2E1726E5000AFF98 /* Apollo */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 048C68692E165618000AFF98 /* XCRemoteSwiftPackageReference "apollo-ios" */;
+			productName = Apollo;
+		};
+		048C696F2E1726E5000AFF98 /* ApolloAPI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 048C68692E165618000AFF98 /* XCRemoteSwiftPackageReference "apollo-ios" */;
+			productName = ApolloAPI;
+		};
+		048C69712E1726E5000AFF98 /* GoogleSignIn */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 048C68732E1664BE000AFF98 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignIn;
+		};
+		048C69732E1726E5000AFF98 /* GoogleSignInSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 048C68732E1664BE000AFF98 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignInSwift;
+		};
+		048C6C1A2E2B29FD000AFF98 /* ApolloSQLite */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 048C68692E165618000AFF98 /* XCRemoteSwiftPackageReference "apollo-ios" */;
+			productName = ApolloSQLite;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 04B5A6062E0E6DF2004E2FEA /* Project object */;
+}

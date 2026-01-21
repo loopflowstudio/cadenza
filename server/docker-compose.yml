@@ -1,0 +1,32 @@
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: cadenza
+      POSTGRES_PASSWORD: cadenza_dev
+      POSTGRES_DB: cadenza
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  api:
+    build: .
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    volumes:
+      - .:/app
+      - ~/.aws:/root/.aws  # Mount AWS credentials (SSO needs write access for cache)
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgresql://cadenza:cadenza_dev@db:5432/cadenza
+      JWT_SECRET_KEY: dev_secret_key_change_in_production
+      JWT_ALGORITHM: HS256
+      AWS_PROFILE: loopflow  # Use loopflow profile for local dev
+      AWS_REGION: us-west-2
+      S3_BUCKET: loopflow
+    depends_on:
+      - db
+
+volumes:
+  postgres_data:
