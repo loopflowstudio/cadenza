@@ -1,10 +1,24 @@
 # Questions
 
-## Wave backlog missing
+## ~~Wave backlog missing~~ (Resolved)
 
-The `roadmap/` directory does not exist in this repository. The branch name is `security`, suggesting a wave named "security", but there's no `roadmap/security/` or any roadmap at all.
+The `roadmap/` directory does not exist. Proceeding with security hardening based on codebase analysis. The branch name "security" indicates the intent; the design in `scratch/security.md` defines scope.
 
-**Options:**
-1. Create the roadmap structure and add items
-2. This wave hasn't been planned yet — pause until roadmap is populated
-3. The branch name doesn't correspond to a wave — clarify intent
+## Open questions
+
+### COPPA compliance timeline
+
+The app serves students who may be under 13. COPPA requires parental consent for collecting data from children. This is out of scope for this wave but needs a dedicated wave before public launch.
+
+### Production infrastructure
+
+The security hardening assumes:
+- HTTPS termination at load balancer (not in FastAPI)
+- Managed PostgreSQL with encryption at rest
+- S3 with default encryption enabled
+
+These are infrastructure decisions outside this codebase. Need confirmation this is the deployment model.
+
+### Apple Client ID
+
+The design requires `APPLE_CLIENT_ID` env var for token verification. This should match the bundle ID registered with Apple. Need to confirm the production value.
