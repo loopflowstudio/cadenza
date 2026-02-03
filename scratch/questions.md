@@ -16,3 +16,22 @@
 4. **Auto-enable performance mode**: Should performance mode auto-enable when starting from a setlist/routine? Good UX for live performance, but adds coupling between features. Revisit after shipping the basics.
 
 5. **Exit gesture alternatives**: Triple-tap works, but is it discoverable? Consider adding a brief tooltip on first use: "Triple-tap to exit performance mode". Or show a small hint after 30 seconds.
+
+## Security
+
+### COPPA compliance timeline
+
+The app serves students who may be under 13. COPPA requires parental consent for collecting data from children. This is out of scope for this wave but needs a dedicated wave before public launch.
+
+### Production infrastructure
+
+The security hardening assumes:
+- HTTPS termination at load balancer (not in FastAPI)
+- Managed PostgreSQL with encryption at rest
+- S3 with default encryption enabled
+
+These are infrastructure decisions outside this codebase. Need confirmation this is the deployment model.
+
+### Apple Client ID
+
+The design requires `APPLE_CLIENT_ID` env var for token verification. This should match the bundle ID registered with Apple. Need to confirm the production value.
