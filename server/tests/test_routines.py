@@ -6,6 +6,7 @@ These tests verify:
 - Users can add, update, reorder, and remove exercises from routines
 - Proper authorization and ownership validation
 """
+
 import io
 
 
@@ -18,7 +19,7 @@ def create_piece(client, token, title, filename="test.pdf"):
         "/pieces",
         data={"title": title},
         files={"pdf_file": (filename, pdf_file, "application/pdf")},
-        headers={"Authorization": f"Bearer {token}"}
+        headers={"Authorization": f"Bearer {token}"},
     )
     return response
 
@@ -31,7 +32,7 @@ def test_user_can_create_routine(authenticated_client):
     response = client.post(
         "/routines",
         json={"title": "Morning Practice", "description": "Daily warm-up routine"},
-        headers={"Authorization": f"Bearer {token}"}
+        headers={"Authorization": f"Bearer {token}"},
     )
 
     assert response.status_code == 200
@@ -52,13 +53,10 @@ def test_user_can_list_their_routines(authenticated_client):
         client.post(
             "/routines",
             json={"title": f"Routine {i}"},
-            headers={"Authorization": f"Bearer {token}"}
+            headers={"Authorization": f"Bearer {token}"},
         )
 
-    response = client.get(
-        "/routines",
-        headers={"Authorization": f"Bearer {token}"}
-    )
+    response = client.get("/routines", headers={"Authorization": f"Bearer {token}"})
 
     assert response.status_code == 200
     routines = response.json()
@@ -74,7 +72,7 @@ def test_user_can_get_routine_with_exercises(authenticated_client):
     routine_response = client.post(
         "/routines",
         json={"title": "Practice Routine"},
-        headers={"Authorization": f"Bearer {token}"}
+        headers={"Authorization": f"Bearer {token}"},
     )
     routine_id = routine_response.json()["id"]
 
@@ -88,9 +86,9 @@ def test_user_can_get_routine_with_exercises(authenticated_client):
             "piece_id": piece1["id"],
             "order_index": 0,
             "recommended_time_seconds": 300,
-            "intentions": "Focus on even tone"
+            "intentions": "Focus on even tone",
         },
-        headers={"Authorization": f"Bearer {token}"}
+        headers={"Authorization": f"Bearer {token}"},
     )
 
     client.post(
@@ -98,15 +96,14 @@ def test_user_can_get_routine_with_exercises(authenticated_client):
         json={
             "piece_id": piece2["id"],
             "order_index": 1,
-            "recommended_time_seconds": 600
+            "recommended_time_seconds": 600,
         },
-        headers={"Authorization": f"Bearer {token}"}
+        headers={"Authorization": f"Bearer {token}"},
     )
 
     # Get routine with exercises
     response = client.get(
-        f"/routines/{routine_id}",
-        headers={"Authorization": f"Bearer {token}"}
+        f"/routines/{routine_id}", headers={"Authorization": f"Bearer {token}"}
     )
 
     assert response.status_code == 200
@@ -126,14 +123,14 @@ def test_user_can_update_routine_metadata(authenticated_client):
     routine_response = client.post(
         "/routines",
         json={"title": "Old Title", "description": "Old description"},
-        headers={"Authorization": f"Bearer {token}"}
+        headers={"Authorization": f"Bearer {token}"},
     )
     routine_id = routine_response.json()["id"]
 
     response = client.put(
         f"/routines/{routine_id}",
         json={"title": "New Title", "description": "New description"},
-        headers={"Authorization": f"Bearer {token}"}
+        headers={"Authorization": f"Bearer {token}"},
     )
 
     assert response.status_code == 200
@@ -149,19 +146,20 @@ def test_user_can_delete_routine(authenticated_client):
     routine_response = client.post(
         "/routines",
         json={"title": "To Delete"},
-        headers={"Authorization": f"Bearer {token}"}
+        headers={"Authorization": f"Bearer {token}"},
     )
     routine_id = routine_response.json()["id"]
 
     response = client.delete(
-        f"/routines/{routine_id}",
-        headers={"Authorization": f"Bearer {token}"}
+        f"/routines/{routine_id}", headers={"Authorization": f"Bearer {token}"}
     )
 
     assert response.status_code == 200
 
     # Verify it's gone
-    routines = client.get("/routines", headers={"Authorization": f"Bearer {token}"}).json()
+    routines = client.get(
+        "/routines", headers={"Authorization": f"Bearer {token}"}
+    ).json()
     assert len(routines) == 0
 
 
@@ -172,7 +170,7 @@ def test_user_cannot_modify_others_routine(authenticated_client):
     routine_response = client.post(
         "/routines",
         json={"title": "User1 Routine"},
-        headers={"Authorization": f"Bearer {user1_data['access_token']}"}
+        headers={"Authorization": f"Bearer {user1_data['access_token']}"},
     )
     routine_id = routine_response.json()["id"]
 
@@ -181,7 +179,7 @@ def test_user_cannot_modify_others_routine(authenticated_client):
     response = client.put(
         f"/routines/{routine_id}",
         json={"title": "Hacked"},
-        headers={"Authorization": f"Bearer {user2_data['access_token']}"}
+        headers={"Authorization": f"Bearer {user2_data['access_token']}"},
     )
 
     assert response.status_code == 403
@@ -196,7 +194,7 @@ def test_user_can_add_exercises_to_routine(authenticated_client):
     routine_response = client.post(
         "/routines",
         json={"title": "Practice Routine"},
-        headers={"Authorization": f"Bearer {token}"}
+        headers={"Authorization": f"Bearer {token}"},
     )
     routine_id = routine_response.json()["id"]
 
@@ -210,9 +208,9 @@ def test_user_can_add_exercises_to_routine(authenticated_client):
             "order_index": 0,
             "recommended_time_seconds": 600,
             "intentions": "Work on phrasing",
-            "start_page": 3
+            "start_page": 3,
         },
-        headers={"Authorization": f"Bearer {token}"}
+        headers={"Authorization": f"Bearer {token}"},
     )
 
     assert response.status_code == 200
@@ -233,7 +231,7 @@ def test_user_can_update_exercise(authenticated_client):
     routine_response = client.post(
         "/routines",
         json={"title": "Routine"},
-        headers={"Authorization": f"Bearer {token}"}
+        headers={"Authorization": f"Bearer {token}"},
     )
     routine_id = routine_response.json()["id"]
 
@@ -241,8 +239,12 @@ def test_user_can_update_exercise(authenticated_client):
 
     exercise_response = client.post(
         f"/routines/{routine_id}/exercises",
-        json={"piece_id": piece["id"], "order_index": 0, "recommended_time_seconds": 300},
-        headers={"Authorization": f"Bearer {token}"}
+        json={
+            "piece_id": piece["id"],
+            "order_index": 0,
+            "recommended_time_seconds": 300,
+        },
+        headers={"Authorization": f"Bearer {token}"},
     )
     exercise_id = exercise_response.json()["id"]
 
@@ -252,9 +254,9 @@ def test_user_can_update_exercise(authenticated_client):
         json={
             "recommended_time_seconds": 600,
             "intentions": "New focus",
-            "start_page": 5
+            "start_page": 5,
         },
-        headers={"Authorization": f"Bearer {token}"}
+        headers={"Authorization": f"Bearer {token}"},
     )
 
     assert response.status_code == 200
@@ -272,7 +274,7 @@ def test_user_can_reorder_exercises(authenticated_client):
     routine_response = client.post(
         "/routines",
         json={"title": "Routine"},
-        headers={"Authorization": f"Bearer {token}"}
+        headers={"Authorization": f"Bearer {token}"},
     )
     routine_id = routine_response.json()["id"]
 
@@ -282,7 +284,7 @@ def test_user_can_reorder_exercises(authenticated_client):
         ex_response = client.post(
             f"/routines/{routine_id}/exercises",
             json={"piece_id": piece["id"], "order_index": i},
-            headers={"Authorization": f"Bearer {token}"}
+            headers={"Authorization": f"Bearer {token}"},
         )
         exercise_ids.append(ex_response.json()["id"])
 
@@ -292,15 +294,14 @@ def test_user_can_reorder_exercises(authenticated_client):
     response = client.put(
         f"/routines/{routine_id}/reorder",
         json={"exercise_ids": new_order},
-        headers={"Authorization": f"Bearer {token}"}
+        headers={"Authorization": f"Bearer {token}"},
     )
 
     assert response.status_code == 200
 
     # Verify new order
     routine_data = client.get(
-        f"/routines/{routine_id}",
-        headers={"Authorization": f"Bearer {token}"}
+        f"/routines/{routine_id}", headers={"Authorization": f"Bearer {token}"}
     ).json()
 
     exercises = routine_data["exercises"]
@@ -318,7 +319,7 @@ def test_user_can_delete_exercise(authenticated_client):
     routine_response = client.post(
         "/routines",
         json={"title": "Routine"},
-        headers={"Authorization": f"Bearer {token}"}
+        headers={"Authorization": f"Bearer {token}"},
     )
     routine_id = routine_response.json()["id"]
 
@@ -327,22 +328,21 @@ def test_user_can_delete_exercise(authenticated_client):
     exercise_response = client.post(
         f"/routines/{routine_id}/exercises",
         json={"piece_id": piece["id"], "order_index": 0},
-        headers={"Authorization": f"Bearer {token}"}
+        headers={"Authorization": f"Bearer {token}"},
     )
     exercise_id = exercise_response.json()["id"]
 
     # Delete exercise
     response = client.delete(
         f"/routines/{routine_id}/exercises/{exercise_id}",
-        headers={"Authorization": f"Bearer {token}"}
+        headers={"Authorization": f"Bearer {token}"},
     )
 
     assert response.status_code == 200
 
     # Verify it's gone
     routine_data = client.get(
-        f"/routines/{routine_id}",
-        headers={"Authorization": f"Bearer {token}"}
+        f"/routines/{routine_id}", headers={"Authorization": f"Bearer {token}"}
     ).json()
 
     assert len(routine_data["exercises"]) == 0

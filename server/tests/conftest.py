@@ -8,13 +8,18 @@ from app.main import app
 from app.database import get_db
 
 SQLALCHEMY_DATABASE_URL = "sqlite:///./test.db"
-engine = create_engine(SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False})
+engine = create_engine(
+    SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False}
+)
+
 
 def override_get_db():
     with Session(engine) as session:
         yield session
 
+
 app.dependency_overrides[get_db] = override_get_db
+
 
 @pytest.fixture
 def client():
@@ -22,28 +27,38 @@ def client():
     yield TestClient(app)
     SQLModel.metadata.drop_all(engine)
 
+
 @pytest.fixture
 def apple_token():
     """Factory for creating test Apple ID tokens"""
-    def _create_token(user_id: str = "test_user_123", email: str = "test@example.com") -> str:
+
+    def _create_token(
+        user_id: str = "test_user_123", email: str = "test@example.com"
+    ) -> str:
         payload = {
             "sub": user_id,
             "email": email,
             "iss": "https://appleid.apple.com",
             "aud": "studio.loopflow.Cadenza",
-            "exp": 9999999999
+            "exp": 9999999999,
         }
         return jwt.encode(payload, "fake_key", algorithm="HS256")
+
     return _create_token
+
 
 @pytest.fixture
 def authenticated_client(client, apple_token):
     """Factory for getting an authenticated client with a valid JWT"""
-    def _authenticate(user_id: str = "test_user_123", email: str = "test@example.com") -> tuple[TestClient, dict]:
+
+    def _authenticate(
+        user_id: str = "test_user_123", email: str = "test@example.com"
+    ) -> tuple[TestClient, dict]:
         id_token = apple_token(user_id, email)
         response = client.post("/auth/apple", json={"id_token": id_token})
         auth_data = response.json()
         return client, auth_data
+
     return _authenticate
 
 

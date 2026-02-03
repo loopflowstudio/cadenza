@@ -1,4 +1,5 @@
 """S3 service for handling file uploads and downloads."""
+
 import os
 from datetime import datetime, timedelta, timezone
 from typing import Optional
@@ -14,6 +15,7 @@ from app.config import settings
 def _get_path_prefix() -> str:
     """Get the S3 path prefix based on environment."""
     return "" if settings.is_production else f"{settings.environment}/"
+
 
 def _get_object_tags() -> Optional[str]:
     """Get S3 object tags based on environment (30-day expiration for non-prod)."""
@@ -49,7 +51,9 @@ def get_piece_s3_key(piece_id: UUID) -> str:
     return f"{_get_path_prefix()}cadenza/pieces/{piece_id}.pdf"
 
 
-def upload_file_content(s3_key: str, content: bytes, content_type: str = "application/pdf") -> None:
+def upload_file_content(
+    s3_key: str, content: bytes, content_type: str = "application/pdf"
+) -> None:
     """
     Upload file content directly to S3.
 
@@ -107,11 +111,7 @@ def generate_upload_url(piece_id: UUID, content_type: str = "application/pdf") -
             ExpiresIn=3600,  # 1 hour
         )
 
-        return {
-            "url": presigned_url,
-            "s3_key": s3_key,
-            "expires_in": 3600
-        }
+        return {"url": presigned_url, "s3_key": s3_key, "expires_in": 3600}
     except ClientError as e:
         raise Exception(f"Failed to generate presigned URL: {e}")
 

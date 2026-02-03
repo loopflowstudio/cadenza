@@ -7,7 +7,7 @@ These tests verify the piece workflow:
 - Teachers can share pieces with students
 - Proper authorization and ownership validation
 """
-from uuid import uuid4
+
 import io
 
 
@@ -20,7 +20,7 @@ def create_piece(client, token, title, filename="test.pdf"):
         "/pieces",
         data={"title": title},
         files={"pdf_file": (filename, pdf_file, "application/pdf")},
-        headers={"Authorization": f"Bearer {token}"}
+        headers={"Authorization": f"Bearer {token}"},
     )
     return response
 
@@ -52,10 +52,7 @@ def test_user_can_list_their_pieces(authenticated_client):
         create_piece(client, token, f"Piece {i}", f"piece{i}.pdf")
 
     # Get all pieces
-    response = client.get(
-        "/pieces",
-        headers={"Authorization": f"Bearer {token}"}
-    )
+    response = client.get("/pieces", headers={"Authorization": f"Bearer {token}"})
 
     assert response.status_code == 200
     pieces = response.json()
@@ -79,7 +76,7 @@ def test_user_can_update_piece_title(authenticated_client):
     response = client.put(
         f"/pieces/{piece_id}",
         params={"title": "New Title"},
-        headers={"Authorization": f"Bearer {token}"}
+        headers={"Authorization": f"Bearer {token}"},
     )
 
     assert response.status_code == 200
@@ -97,8 +94,7 @@ def test_user_can_delete_their_piece(authenticated_client):
 
     # Delete piece
     response = client.delete(
-        f"/pieces/{piece_id}",
-        headers={"Authorization": f"Bearer {token}"}
+        f"/pieces/{piece_id}", headers={"Authorization": f"Bearer {token}"}
     )
 
     assert response.status_code == 200
@@ -112,7 +108,9 @@ def test_user_cannot_modify_someone_elses_piece(authenticated_client):
     """User cannot update or delete pieces they don't own"""
     # Create piece as user1
     client, user1_data = authenticated_client(user_id="u1", email="user1@example.com")
-    piece_response = create_piece(client, user1_data['access_token'], "User1 Piece", "piece.pdf")
+    piece_response = create_piece(
+        client, user1_data["access_token"], "User1 Piece", "piece.pdf"
+    )
     piece_id = piece_response.json()["id"]
 
     # Try to update as user2
@@ -120,7 +118,7 @@ def test_user_cannot_modify_someone_elses_piece(authenticated_client):
     response = client.put(
         f"/pieces/{piece_id}",
         params={"title": "Hacked"},
-        headers={"Authorization": f"Bearer {user2_data['access_token']}"}
+        headers={"Authorization": f"Bearer {user2_data['access_token']}"},
     )
 
     assert response.status_code == 403
@@ -130,7 +128,9 @@ def test_user_cannot_modify_someone_elses_piece(authenticated_client):
 def test_teacher_can_view_student_library(authenticated_client):
     """Teacher can see all pieces in their student's library"""
     # Create teacher
-    client, teacher_data = authenticated_client(user_id="t1", email="teacher@example.com")
+    client, teacher_data = authenticated_client(
+        user_id="t1", email="teacher@example.com"
+    )
     teacher_token = teacher_data["access_token"]
 
     # Create student and add teacher
@@ -141,7 +141,7 @@ def test_teacher_can_view_student_library(authenticated_client):
     client.post(
         "/users/set-teacher",
         params={"teacher_email": "teacher@example.com"},
-        headers={"Authorization": f"Bearer {student_token}"}
+        headers={"Authorization": f"Bearer {student_token}"},
     )
 
     # Student creates pieces
@@ -151,7 +151,7 @@ def test_teacher_can_view_student_library(authenticated_client):
     # Teacher views student library
     response = client.get(
         f"/students/{student_id}/pieces",
-        headers={"Authorization": f"Bearer {teacher_token}"}
+        headers={"Authorization": f"Bearer {teacher_token}"},
     )
 
     assert response.status_code == 200
@@ -165,10 +165,14 @@ def test_teacher_can_view_student_library(authenticated_client):
 def test_teacher_can_share_piece_with_student(authenticated_client):
     """Teacher can share a piece from their library to a student"""
     # Create teacher with a piece
-    client, teacher_data = authenticated_client(user_id="t1", email="teacher@example.com")
+    client, teacher_data = authenticated_client(
+        user_id="t1", email="teacher@example.com"
+    )
     teacher_token = teacher_data["access_token"]
 
-    teacher_piece_response = create_piece(client, teacher_token, "Bach Prelude", "bach.pdf")
+    teacher_piece_response = create_piece(
+        client, teacher_token, "Bach Prelude", "bach.pdf"
+    )
     teacher_piece_id = teacher_piece_response.json()["id"]
 
     # Create student and set teacher
@@ -179,13 +183,13 @@ def test_teacher_can_share_piece_with_student(authenticated_client):
     client.post(
         "/users/set-teacher",
         params={"teacher_email": "teacher@example.com"},
-        headers={"Authorization": f"Bearer {student_token}"}
+        headers={"Authorization": f"Bearer {student_token}"},
     )
 
     # Teacher shares piece with student
     response = client.post(
         f"/pieces/{teacher_piece_id}/share/{student_id}",
-        headers={"Authorization": f"Bearer {teacher_token}"}
+        headers={"Authorization": f"Bearer {teacher_token}"},
     )
 
     assert response.status_code == 200
@@ -196,8 +200,7 @@ def test_teacher_can_share_piece_with_student(authenticated_client):
 
     # Verify student now has the piece
     student_pieces = client.get(
-        "/pieces",
-        headers={"Authorization": f"Bearer {student_token}"}
+        "/pieces", headers={"Authorization": f"Bearer {student_token}"}
     ).json()
 
     assert len(student_pieces) == 1
@@ -207,7 +210,9 @@ def test_teacher_can_share_piece_with_student(authenticated_client):
 def test_shared_piece_is_independent_copy(authenticated_client):
     """Shared piece is a full copy that student can modify independently"""
     # Setup teacher and student
-    client, teacher_data = authenticated_client(user_id="t1", email="teacher@example.com")
+    client, teacher_data = authenticated_client(
+        user_id="t1", email="teacher@example.com"
+    )
     teacher_token = teacher_data["access_token"]
 
     _, student_data = authenticated_client(user_id="s1", email="student@example.com")
@@ -217,16 +222,18 @@ def test_shared_piece_is_independent_copy(authenticated_client):
     client.post(
         "/users/set-teacher",
         params={"teacher_email": "teacher@example.com"},
-        headers={"Authorization": f"Bearer {student_token}"}
+        headers={"Authorization": f"Bearer {student_token}"},
     )
 
     # Teacher creates and shares piece
-    teacher_piece_response = create_piece(client, teacher_token, "Original Title", "piece.pdf")
+    teacher_piece_response = create_piece(
+        client, teacher_token, "Original Title", "piece.pdf"
+    )
     teacher_piece_id = teacher_piece_response.json()["id"]
 
     share_response = client.post(
         f"/pieces/{teacher_piece_id}/share/{student_id}",
-        headers={"Authorization": f"Bearer {teacher_token}"}
+        headers={"Authorization": f"Bearer {teacher_token}"},
     )
 
     student_piece_id = share_response.json()["id"]
@@ -235,36 +242,40 @@ def test_shared_piece_is_independent_copy(authenticated_client):
     client.put(
         f"/pieces/{student_piece_id}",
         params={"title": "Student's Modified Title"},
-        headers={"Authorization": f"Bearer {student_token}"}
+        headers={"Authorization": f"Bearer {student_token}"},
     )
 
     # Verify teacher's original is unchanged
     teacher_pieces = client.get(
-        "/pieces",
-        headers={"Authorization": f"Bearer {teacher_token}"}
+        "/pieces", headers={"Authorization": f"Bearer {teacher_token}"}
     ).json()
 
-    assert teacher_pieces[0]["title"] == "Original Title", \
+    assert teacher_pieces[0]["title"] == "Original Title", (
         "Teacher's original should be unchanged"
+    )
 
 
 def test_teacher_cannot_share_with_non_student(authenticated_client):
     """Teacher can only share with their own students"""
     # Create teacher with piece
-    client, teacher_data = authenticated_client(user_id="t1", email="teacher@example.com")
+    client, teacher_data = authenticated_client(
+        user_id="t1", email="teacher@example.com"
+    )
     teacher_token = teacher_data["access_token"]
 
     piece_response = create_piece(client, teacher_token, "Piece", "piece.pdf")
     piece_id = piece_response.json()["id"]
 
     # Create user who is NOT this teacher's student
-    _, other_user_data = authenticated_client(user_id="other", email="other@example.com")
+    _, other_user_data = authenticated_client(
+        user_id="other", email="other@example.com"
+    )
     other_user_id = other_user_data["user"]["id"]
 
     # Try to share
     response = client.post(
         f"/pieces/{piece_id}/share/{other_user_id}",
-        headers={"Authorization": f"Bearer {teacher_token}"}
+        headers={"Authorization": f"Bearer {teacher_token}"},
     )
 
     assert response.status_code == 403

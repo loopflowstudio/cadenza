@@ -7,6 +7,7 @@ These tests verify:
 - Session duration is calculated
 - Calendar data shows practice history
 """
+
 import io
 
 
@@ -19,7 +20,7 @@ def create_piece(client, token, title, filename="test.pdf"):
         "/pieces",
         data={"title": title},
         files={"pdf_file": (filename, pdf_file, "application/pdf")},
-        headers={"Authorization": f"Bearer {token}"}
+        headers={"Authorization": f"Bearer {token}"},
     )
     return response
 
@@ -27,9 +28,7 @@ def create_piece(client, token, title, filename="test.pdf"):
 def create_routine_with_exercises(client, token, title, piece_count=2):
     """Helper to create a routine with exercises"""
     routine_response = client.post(
-        "/routines",
-        json={"title": title},
-        headers={"Authorization": f"Bearer {token}"}
+        "/routines", json={"title": title}, headers={"Authorization": f"Bearer {token}"}
     )
     routine = routine_response.json()
 
@@ -41,9 +40,9 @@ def create_routine_with_exercises(client, token, title, piece_count=2):
             json={
                 "piece_id": piece["id"],
                 "order_index": i,
-                "recommended_time_seconds": 300
+                "recommended_time_seconds": 300,
             },
-            headers={"Authorization": f"Bearer {token}"}
+            headers={"Authorization": f"Bearer {token}"},
         )
         exercises.append(exercise_response.json())
 
@@ -60,7 +59,7 @@ def test_student_can_start_session(authenticated_client):
     response = client.post(
         "/sessions",
         params={"routine_id": routine["id"]},
-        headers={"Authorization": f"Bearer {token}"}
+        headers={"Authorization": f"Bearer {token}"},
     )
 
     assert response.status_code == 200
@@ -82,7 +81,7 @@ def test_student_can_complete_exercise(authenticated_client):
     session_response = client.post(
         "/sessions",
         params={"routine_id": routine["id"]},
-        headers={"Authorization": f"Bearer {token}"}
+        headers={"Authorization": f"Bearer {token}"},
     )
     session_id = session_response.json()["id"]
 
@@ -91,9 +90,9 @@ def test_student_can_complete_exercise(authenticated_client):
         f"/sessions/{session_id}/exercises/{exercises[0]['id']}/complete",
         json={
             "actual_time_seconds": 320,
-            "reflections": "Good progress on tone quality"
+            "reflections": "Good progress on tone quality",
         },
-        headers={"Authorization": f"Bearer {token}"}
+        headers={"Authorization": f"Bearer {token}"},
     )
 
     assert response.status_code == 200
@@ -114,13 +113,12 @@ def test_student_can_complete_session(authenticated_client):
     session_response = client.post(
         "/sessions",
         params={"routine_id": routine["id"]},
-        headers={"Authorization": f"Bearer {token}"}
+        headers={"Authorization": f"Bearer {token}"},
     )
     session_id = session_response.json()["id"]
 
     response = client.put(
-        f"/sessions/{session_id}/complete",
-        headers={"Authorization": f"Bearer {token}"}
+        f"/sessions/{session_id}/complete", headers={"Authorization": f"Bearer {token}"}
     )
 
     assert response.status_code == 200
@@ -141,15 +139,13 @@ def test_session_tracks_duration(authenticated_client):
     session_response = client.post(
         "/sessions",
         params={"routine_id": routine["id"]},
-        headers={"Authorization": f"Bearer {token}"}
+        headers={"Authorization": f"Bearer {token}"},
     )
     session_id = session_response.json()["id"]
-    started_at = session_response.json()["started_at"]
 
     # Complete session
     response = client.put(
-        f"/sessions/{session_id}/complete",
-        headers={"Authorization": f"Bearer {token}"}
+        f"/sessions/{session_id}/complete", headers={"Authorization": f"Bearer {token}"}
     )
 
     # Duration should be calculated
@@ -169,16 +165,16 @@ def test_session_history_is_recorded(authenticated_client):
         session_response = client.post(
             "/sessions",
             params={"routine_id": routine["id"]},
-            headers={"Authorization": f"Bearer {token}"}
+            headers={"Authorization": f"Bearer {token}"},
         )
         session_id = session_response.json()["id"]
-        client.put(f"/sessions/{session_id}/complete", headers={"Authorization": f"Bearer {token}"})
+        client.put(
+            f"/sessions/{session_id}/complete",
+            headers={"Authorization": f"Bearer {token}"},
+        )
 
     # Get session history
-    response = client.get(
-        "/sessions",
-        headers={"Authorization": f"Bearer {token}"}
-    )
+    response = client.get("/sessions", headers={"Authorization": f"Bearer {token}"})
 
     assert response.status_code == 200
     sessions = response.json()
@@ -195,7 +191,7 @@ def test_exercise_session_stores_reflections(authenticated_client):
     session_response = client.post(
         "/sessions",
         params={"routine_id": routine["id"]},
-        headers={"Authorization": f"Bearer {token}"}
+        headers={"Authorization": f"Bearer {token}"},
     )
     session_id = session_response.json()["id"]
 
@@ -203,20 +199,19 @@ def test_exercise_session_stores_reflections(authenticated_client):
     reflections = [
         "Need more work on intonation",
         "Bow control improving",
-        "Tempo was consistent today"
+        "Tempo was consistent today",
     ]
 
     for i, exercise in enumerate(exercises):
         client.post(
             f"/sessions/{session_id}/exercises/{exercise['id']}/complete",
             json={"reflections": reflections[i]},
-            headers={"Authorization": f"Bearer {token}"}
+            headers={"Authorization": f"Bearer {token}"},
         )
 
     # Get session details
     response = client.get(
-        f"/sessions/{session_id}",
-        headers={"Authorization": f"Bearer {token}"}
+        f"/sessions/{session_id}", headers={"Authorization": f"Bearer {token}"}
     )
 
     exercise_sessions = response.json()["exercise_sessions"]
@@ -237,7 +232,7 @@ def test_completion_upsert_is_idempotent(authenticated_client):
     session_response = client.post(
         "/sessions",
         params={"routine_id": routine["id"]},
-        headers={"Authorization": f"Bearer {token}"}
+        headers={"Authorization": f"Bearer {token}"},
     )
     session_id = session_response.json()["id"]
     exercise_id = exercises[0]["id"]
@@ -245,18 +240,17 @@ def test_completion_upsert_is_idempotent(authenticated_client):
     first = client.post(
         f"/sessions/{session_id}/exercises/{exercise_id}/complete",
         json={"reflections": "First pass"},
-        headers={"Authorization": f"Bearer {token}"}
+        headers={"Authorization": f"Bearer {token}"},
     ).json()
 
     second = client.post(
         f"/sessions/{session_id}/exercises/{exercise_id}/complete",
         json={"reflections": "Second pass"},
-        headers={"Authorization": f"Bearer {token}"}
+        headers={"Authorization": f"Bearer {token}"},
     ).json()
 
     session_detail = client.get(
-        f"/sessions/{session_id}",
-        headers={"Authorization": f"Bearer {token}"}
+        f"/sessions/{session_id}", headers={"Authorization": f"Bearer {token}"}
     ).json()
 
     assert first["id"] == second["id"]
@@ -274,7 +268,7 @@ def test_exercise_completion_can_be_reversed(authenticated_client):
     session_response = client.post(
         "/sessions",
         params={"routine_id": routine["id"]},
-        headers={"Authorization": f"Bearer {token}"}
+        headers={"Authorization": f"Bearer {token}"},
     )
     session_id = session_response.json()["id"]
     exercise_id = exercises[0]["id"]
@@ -282,13 +276,13 @@ def test_exercise_completion_can_be_reversed(authenticated_client):
     client.post(
         f"/sessions/{session_id}/exercises/{exercise_id}/complete",
         json={"reflections": "Initial"},
-        headers={"Authorization": f"Bearer {token}"}
+        headers={"Authorization": f"Bearer {token}"},
     )
 
     response = client.patch(
         f"/sessions/{session_id}/exercises/{exercise_id}",
         json={"is_complete": False},
-        headers={"Authorization": f"Bearer {token}"}
+        headers={"Authorization": f"Bearer {token}"},
     )
 
     assert response.status_code == 200
@@ -309,15 +303,17 @@ def test_completions_endpoint_returns_timestamps(authenticated_client):
         session_response = client.post(
             "/sessions",
             params={"routine_id": routine["id"]},
-            headers={"Authorization": f"Bearer {token}"}
+            headers={"Authorization": f"Bearer {token}"},
         )
         session_id = session_response.json()["id"]
-        client.put(f"/sessions/{session_id}/complete", headers={"Authorization": f"Bearer {token}"})
+        client.put(
+            f"/sessions/{session_id}/complete",
+            headers={"Authorization": f"Bearer {token}"},
+        )
 
     # Get completions
     response = client.get(
-        "/sessions/completions",
-        headers={"Authorization": f"Bearer {token}"}
+        "/sessions/completions", headers={"Authorization": f"Bearer {token}"}
     )
 
     assert response.status_code == 200
@@ -330,7 +326,9 @@ def test_cannot_start_session_for_others_routine(authenticated_client):
     """User cannot start session for routine they don't own"""
     # User 1 creates routine
     client, user1_data = authenticated_client(user_id="u1", email="user1@example.com")
-    routine, _ = create_routine_with_exercises(client, user1_data["access_token"], "User1 Routine")
+    routine, _ = create_routine_with_exercises(
+        client, user1_data["access_token"], "User1 Routine"
+    )
 
     # User 2 tries to start session
     _, user2_data = authenticated_client(user_id="u2", email="user2@example.com")
@@ -338,7 +336,7 @@ def test_cannot_start_session_for_others_routine(authenticated_client):
     response = client.post(
         "/sessions",
         params={"routine_id": routine["id"]},
-        headers={"Authorization": f"Bearer {user2_data['access_token']}"}
+        headers={"Authorization": f"Bearer {user2_data['access_token']}"},
     )
 
     assert response.status_code == 403
@@ -348,12 +346,14 @@ def test_cannot_complete_others_session(authenticated_client):
     """User cannot complete someone else's session"""
     # User 1 creates and starts session
     client, user1_data = authenticated_client(user_id="u1", email="user1@example.com")
-    routine, _ = create_routine_with_exercises(client, user1_data["access_token"], "User1 Routine")
+    routine, _ = create_routine_with_exercises(
+        client, user1_data["access_token"], "User1 Routine"
+    )
 
     session_response = client.post(
         "/sessions",
         params={"routine_id": routine["id"]},
-        headers={"Authorization": f"Bearer {user1_data['access_token']}"}
+        headers={"Authorization": f"Bearer {user1_data['access_token']}"},
     )
     session_id = session_response.json()["id"]
 
@@ -362,7 +362,7 @@ def test_cannot_complete_others_session(authenticated_client):
 
     response = client.put(
         f"/sessions/{session_id}/complete",
-        headers={"Authorization": f"Bearer {user2_data['access_token']}"}
+        headers={"Authorization": f"Bearer {user2_data['access_token']}"},
     )
 
     assert response.status_code == 403
@@ -378,7 +378,7 @@ def test_get_session_with_exercise_details(authenticated_client):
     session_response = client.post(
         "/sessions",
         params={"routine_id": routine["id"]},
-        headers={"Authorization": f"Bearer {token}"}
+        headers={"Authorization": f"Bearer {token}"},
     )
     session_id = session_response.json()["id"]
 
@@ -387,13 +387,12 @@ def test_get_session_with_exercise_details(authenticated_client):
         client.post(
             f"/sessions/{session_id}/exercises/{exercise['id']}/complete",
             json={"actual_time_seconds": 300},
-            headers={"Authorization": f"Bearer {token}"}
+            headers={"Authorization": f"Bearer {token}"},
         )
 
     # Get session details
     response = client.get(
-        f"/sessions/{session_id}",
-        headers={"Authorization": f"Bearer {token}"}
+        f"/sessions/{session_id}", headers={"Authorization": f"Bearer {token}"}
     )
 
     assert response.status_code == 200
