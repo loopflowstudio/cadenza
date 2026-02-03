@@ -4,15 +4,18 @@ from uuid import UUID
 from typing import Optional
 from app.models import User
 
+
 class AppleAuthRequest(BaseModel):
     id_token: str = Field(..., alias="idToken")
 
     class Config:
         populate_by_name = True
 
+
 class AuthResponse(BaseModel):
     access_token: str
     user: User
+
 
 class PieceCreate(BaseModel):
     id: UUID
@@ -20,16 +23,21 @@ class PieceCreate(BaseModel):
     pdf_filename: str
     s3_key: Optional[str] = None
 
+
 class PieceUploadUrlRequest(BaseModel):
     """Request for a presigned upload URL"""
+
     piece_id: UUID
     filename: str
 
+
 class PieceUploadUrlResponse(BaseModel):
     """Response containing presigned upload URL"""
+
     upload_url: str
     s3_key: str
     expires_in: int
+
 
 class SetTeacherResponse(BaseModel):
     message: str
@@ -38,11 +46,13 @@ class SetTeacherResponse(BaseModel):
 
 class PieceDownloadUrlResponse(BaseModel):
     """Response containing presigned download URL"""
+
     download_url: str
     expires_in: int
 
 
 # Routine schemas
+
 
 class RoutineCreate(BaseModel):
     title: str
@@ -66,6 +76,7 @@ class ExerciseUpdate(BaseModel):
 
 class RoutineReorder(BaseModel):
     """List of exercise IDs in desired order"""
+
     exercise_ids: list[UUID]
 
 

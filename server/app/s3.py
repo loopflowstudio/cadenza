@@ -1,43 +1,43 @@
 """S3 service for handling file uploads and downloads."""
+
+import os
+from datetime import datetime, timedelta, timezone
+from typing import Optional
+from uuid import UUID
+
 import boto3
 from botocore.config import Config
 from botocore.exceptions import ClientError
-from typing import Optional
-from uuid import UUID
-from datetime import datetime, timedelta, timezone
-import os
 
-# S3 Configuration
-S3_BUCKET = os.getenv("S3_BUCKET", "loopflow")
-S3_REGION = os.getenv("AWS_REGION", "us-west-2")
-AWS_PROFILE = os.getenv("AWS_PROFILE")  # For local development
-ENVIRONMENT = os.getenv("ENVIRONMENT", "dev")  # 'dev' or 'prod'
+from app.config import settings
 
-# Environment-specific settings
+
 def _get_path_prefix() -> str:
     """Get the S3 path prefix based on environment."""
-    return "dev/" if ENVIRONMENT == "dev" else ""
+    return "" if settings.is_production else f"{settings.environment}/"
+
 
 def _get_object_tags() -> Optional[str]:
-    """Get S3 object tags based on environment (30-day expiration for dev)."""
-    if ENVIRONMENT == "dev":
+    """Get S3 object tags based on environment (30-day expiration for non-prod)."""
+    if not settings.is_production:
         expiry_date = datetime.now(timezone.utc) + timedelta(days=30)
         return f"expiry-date={expiry_date.strftime('%Y-%m-%d')}"
     return None
 
-# Initialize S3 client
+
 def get_s3_client():
     """Get configured S3 client."""
     session_kwargs = {}
-    if AWS_PROFILE:
-        session_kwargs["profile_name"] = AWS_PROFILE
+    aws_profile = os.getenv("AWS_PROFILE")  # For local development only
+    if aws_profile:
+        session_kwargs["profile_name"] = aws_profile
 
     session = boto3.Session(**session_kwargs)
 
     return session.client(
         "s3",
-        region_name=S3_REGION,
-        config=Config(signature_version="s3v4")
+        region_name=settings.aws_region,
+        config=Config(signature_version="s3v4"),
     )
 
 
@@ -51,7 +51,9 @@ def get_piece_s3_key(piece_id: UUID) -> str:
     return f"{_get_path_prefix()}cadenza/pieces/{piece_id}.pdf"
 
 
-def upload_file_content(s3_key: str, content: bytes, content_type: str = "application/pdf") -> None:
+def upload_file_content(
+    s3_key: str, content: bytes, content_type: str = "application/pdf"
+) -> None:
     """
     Upload file content directly to S3.
 
@@ -66,7 +68,7 @@ def upload_file_content(s3_key: str, content: bytes, content_type: str = "applic
 
     try:
         put_params = {
-            "Bucket": S3_BUCKET,
+            "Bucket": settings.s3_bucket,
             "Key": s3_key,
             "Body": content,
             "ContentType": content_type,
@@ -102,18 +104,14 @@ def generate_upload_url(piece_id: UUID, content_type: str = "application/pdf") -
         presigned_url = s3_client.generate_presigned_url(
             "put_object",
             Params={
-                "Bucket": S3_BUCKET,
+                "Bucket": settings.s3_bucket,
                 "Key": s3_key,
                 "ContentType": content_type,
             },
             ExpiresIn=3600,  # 1 hour
         )
 
-        return {
-            "url": presigned_url,
-            "s3_key": s3_key,
-            "expires_in": 3600
-        }
+        return {"url": presigned_url, "s3_key": s3_key, "expires_in": 3600}
     except ClientError as e:
         raise Exception(f"Failed to generate presigned URL: {e}")
 
@@ -134,7 +132,7 @@ def generate_download_url(s3_key: str) -> str:
         presigned_url = s3_client.generate_presigned_url(
             "get_object",
             Params={
-                "Bucket": S3_BUCKET,
+                "Bucket": settings.s3_bucket,
                 "Key": s3_key,
             },
             ExpiresIn=3600,  # 1 hour
@@ -162,8 +160,8 @@ def copy_bundled_to_user_piece(source_filename: str, piece_id: UUID) -> str:
 
     try:
         copy_params = {
-            "Bucket": S3_BUCKET,
-            "CopySource": {"Bucket": S3_BUCKET, "Key": source_key},
+            "Bucket": settings.s3_bucket,
+            "CopySource": {"Bucket": settings.s3_bucket, "Key": source_key},
             "Key": dest_key,
         }
 
@@ -190,7 +188,7 @@ def delete_piece(s3_key: str) -> None:
 
     try:
         s3_client.delete_object(
-            Bucket=S3_BUCKET,
+            Bucket=settings.s3_bucket,
             Key=s3_key,
         )
     except ClientError as e:
