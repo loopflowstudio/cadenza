@@ -25,6 +25,11 @@ app.add_middleware(
 def read_root():
     return {"message": "Cadenza API"}
 
+
+@app.get("/health")
+def health_check():
+    return {"status": "ok"}
+
 @app.post("/auth/dev-login", response_model=schemas.AuthResponse)
 def dev_login(
     email: str,
