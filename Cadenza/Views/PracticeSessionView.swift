@@ -15,10 +15,6 @@ struct PracticeSessionView: View {
     @State private var isLoadingPieces = true
     @State private var currentSession: PracticeSessionDTO?
     @State private var exerciseStartTime: Date = Date()
-    @State private var showExerciseCompletion = false
-    @State private var completedExercise: ExerciseDTO?
-    @State private var completedPieceId: UUID?
-    @State private var completedSessionId: UUID?
     @State private var pendingFinish = false
 
     @Environment(\.dismiss) private var dismiss
@@ -193,24 +189,6 @@ struct PracticeSessionView: View {
                 showReflections = false
             }
         }
-        .sheet(isPresented: $showExerciseCompletion) {
-            if let completedExercise {
-                ExerciseCompletionView(
-                    exerciseTitle: completedExercise.intentions ?? "Exercise",
-                    exerciseId: completedExercise.id,
-                    pieceId: completedPieceId,
-                    sessionId: completedSessionId
-                ) {
-                    showExerciseCompletion = false
-                    if pendingFinish {
-                        pendingFinish = false
-                        Task {
-                            await finishSession()
-                        }
-                    }
-                }
-            }
-        }
         .task {
             await loadPieces()
             await startSession()
@@ -265,10 +243,10 @@ struct PracticeSessionView: View {
             )
             reflectionText = ""
             exerciseStartTime = Date()
-            completedExercise = exercise
-            completedPieceId = exercise.pieceId
-            completedSessionId = session.id
-            showExerciseCompletion = true
+            if pendingFinish {
+                pendingFinish = false
+                await finishSession()
+            }
         } catch {
             print("Failed to complete exercise: \(error)")
         }
