@@ -15,6 +15,7 @@ Usage:
     python dev.py reset           # Reset database to clean state
     python dev.py seed            # Seed database with scenario data
     python dev.py research        # Run UX research: screenshots + Claude analysis
+    python dev.py fetch-bundles   # Download PDFs from Dropbox
 """
 
 from __future__ import annotations
@@ -387,6 +388,87 @@ Format as markdown with ## headers for each issue found."""
     print(analysis)
 
 
+def fetch_bundles(args: argparse.Namespace) -> None:
+    """Download bundled PDFs from Dropbox."""
+    import urllib.request
+    import zipfile
+
+    config_path = ROOT / ".cadenza-local.json"
+    resources_dir = ROOT / "Cadenza" / "Resources"
+
+    # Load or create config
+    if config_path.exists():
+        config = json.loads(config_path.read_text())
+    else:
+        config = {}
+
+    # Get Dropbox link from config or args
+    dropbox_url = args.url or config.get("dropbox_bundles_url")
+
+    if not dropbox_url:
+        print("No Dropbox URL configured.")
+        print("\nTo set up, either:")
+        print("  1. Run: python dev.py fetch-bundles --url 'https://dropbox.com/...'")
+        print("  2. Create .cadenza-local.json with: {\"dropbox_bundles_url\": \"...\"}")
+        print("\nThe URL should be a shared folder link. Add ?dl=1 to force download.")
+        return
+
+    # Save URL to config for future use
+    if args.url:
+        config["dropbox_bundles_url"] = args.url
+        config_path.write_text(json.dumps(config, indent=2))
+        print(f"Saved Dropbox URL to {config_path}")
+
+    # Ensure dl=1 for direct download
+    if "dl=0" in dropbox_url:
+        dropbox_url = dropbox_url.replace("dl=0", "dl=1")
+    elif "dl=1" not in dropbox_url:
+        dropbox_url += "&dl=1" if "?" in dropbox_url else "?dl=1"
+
+    print(f"Downloading from Dropbox...")
+
+    # Download to temp file
+    zip_path = Path("/tmp/cadenza-bundles.zip")
+    try:
+        urllib.request.urlretrieve(dropbox_url, zip_path)
+    except Exception as e:
+        print(f"Download failed: {e}")
+        return
+
+    # Extract PDFs
+    resources_dir.mkdir(parents=True, exist_ok=True)
+    pdf_count = 0
+
+    try:
+        with zipfile.ZipFile(zip_path, 'r') as zf:
+            for name in zf.namelist():
+                if name.endswith('.pdf'):
+                    # Extract just the filename, not the folder path
+                    filename = Path(name).name
+                    target = resources_dir / filename
+                    with zf.open(name) as src, open(target, 'wb') as dst:
+                        dst.write(src.read())
+                    pdf_count += 1
+                    print(f"  Extracted: {filename}")
+    except zipfile.BadZipFile:
+        # Might be a single PDF, not a zip
+        if zip_path.stat().st_size > 0:
+            # Check if it's actually a PDF
+            with open(zip_path, 'rb') as f:
+                header = f.read(4)
+            if header == b'%PDF':
+                target = resources_dir / "downloaded.pdf"
+                zip_path.rename(target)
+                print(f"  Downloaded single PDF: {target.name}")
+                pdf_count = 1
+            else:
+                print("Downloaded file is not a valid zip or PDF")
+                return
+
+    zip_path.unlink(missing_ok=True)
+    print(f"\nDownloaded {pdf_count} PDFs to {resources_dir}")
+
+
 def _load_simctl_devices() -> dict | None:
     for _ in range(3):
         result = subprocess.run(
@@ -522,6 +604,11 @@ def main() -> None:
     research_parser.add_argument("--device", default="iPhone 17", help="Simulator device")
     research_parser.add_argument("--verbose", "-v", action="store_true", help="Show xcodebuild output")
     research_parser.set_defaults(func=research)
+
+    # fetch-bundles
+    fetch_parser = subparsers.add_parser("fetch-bundles", help="Download PDFs from Dropbox")
+    fetch_parser.add_argument("--url", help="Dropbox shared folder URL")
+    fetch_parser.set_defaults(func=fetch_bundles)
 
     args = parser.parse_args()
     args.func(args)
