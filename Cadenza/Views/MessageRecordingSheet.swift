@@ -2,7 +2,7 @@ import AVFoundation
 import AVKit
 import SwiftData
 import SwiftUI
-import UIKit // UIImage jpegData for thumbnails
+import UIKit
 
 struct MessageRecordingSheet: View {
     let submissionId: UUID

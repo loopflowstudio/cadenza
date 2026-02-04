@@ -77,11 +77,7 @@ def test_create_text_message(authenticated_client):
     submission_id = create_submission_for_student(client, student_token)
 
     response = create_message(
-        client,
-        teacher_token,
-        submission_id,
-        text="Great progress!",
-        include_video=False,
+        client, teacher_token, submission_id, text="Great progress!", include_video=False
     )
 
     assert response.status_code == 200
@@ -169,7 +165,9 @@ def test_non_participant_cannot_message(authenticated_client):
     )
     stranger_token = stranger_data["access_token"]
 
-    response = create_message(client, stranger_token, submission_id, text="Hello!")
+    response = create_message(
+        client, stranger_token, submission_id, text="Hello!"
+    )
     assert response.status_code == 403
 
     list_response = client.get(
