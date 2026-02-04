@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "1640"
+   LastUpgradeVersion = "1500"
    version = "1.7">
    <BuildAction
       parallelizeBuildables = "YES"
       buildImplicitDependencies = "YES"
-      buildArchitectures = "Automatic">
+      runPostActionsOnFailure = "NO">
       <BuildActionEntries>
          <BuildActionEntry
             buildForTesting = "YES"
@@ -15,9 +15,37 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "04B5A60D2E0E6DF2004E2FEA"
+               BlueprintIdentifier = "E105858D0D4F4616F76B78CC"
                BuildableName = "Cadenza.app"
                BlueprintName = "Cadenza"
+               ReferencedContainer = "container:Cadenza.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "NO"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "A0A055552C269F135507E11B"
+               BuildableName = "CadenzaTests.xctest"
+               BlueprintName = "CadenzaTests"
+               ReferencedContainer = "container:Cadenza.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "NO"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "20702B12131AC15F08607E81"
+               BuildableName = "CadenzaUITests.xctest"
+               BlueprintName = "CadenzaUITests"
                ReferencedContainer = "container:Cadenza.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -28,14 +56,23 @@
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES"
-      shouldAutocreateTestPlan = "YES">
+      onlyGenerateCoverageForSpecifiedTargets = "NO">
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "E105858D0D4F4616F76B78CC"
+            BuildableName = "Cadenza.app"
+            BlueprintName = "Cadenza"
+            ReferencedContainer = "container:Cadenza.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
       <Testables>
          <TestableReference
             skipped = "NO"
-            parallelizable = "YES">
+            parallelizable = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "04B5A61C2E0E6DFA004E2FEA"
+               BlueprintIdentifier = "A0A055552C269F135507E11B"
                BuildableName = "CadenzaTests.xctest"
                BlueprintName = "CadenzaTests"
                ReferencedContainer = "container:Cadenza.xcodeproj">
@@ -43,16 +80,18 @@
          </TestableReference>
          <TestableReference
             skipped = "NO"
-            parallelizable = "YES">
+            parallelizable = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "04B5A6262E0E6DFA004E2FEA"
+               BlueprintIdentifier = "20702B12131AC15F08607E81"
                BuildableName = "CadenzaUITests.xctest"
                BlueprintName = "CadenzaUITests"
                ReferencedContainer = "container:Cadenza.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
+      <CommandLineArguments>
+      </CommandLineArguments>
    </TestAction>
    <LaunchAction
       buildConfiguration = "Debug"
@@ -68,25 +107,14 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "04B5A60D2E0E6DF2004E2FEA"
+            BlueprintIdentifier = "E105858D0D4F4616F76B78CC"
             BuildableName = "Cadenza.app"
             BlueprintName = "Cadenza"
             ReferencedContainer = "container:Cadenza.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <CommandLineArguments>
-         <CommandLineArgument
-            argument = ""
-            isEnabled = "YES">
-         </CommandLineArgument>
       </CommandLineArguments>
-      <EnvironmentVariables>
-         <EnvironmentVariable
-            key = "OS_ACTIVITY_MODE"
-            value = "debug"
-            isEnabled = "YES">
-         </EnvironmentVariable>
-      </EnvironmentVariables>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
@@ -98,12 +126,14 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "04B5A60D2E0E6DF2004E2FEA"
+            BlueprintIdentifier = "E105858D0D4F4616F76B78CC"
             BuildableName = "Cadenza.app"
             BlueprintName = "Cadenza"
             ReferencedContainer = "container:Cadenza.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
+      <CommandLineArguments>
+      </CommandLineArguments>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">

@@ -9,12 +9,17 @@ Usage:
     python dev.py test --ios      # Run iOS tests only
     python dev.py simulator       # Build and launch iOS simulator
     python dev.py simulator --mock-api  # Launch with mock API data
+    python dev.py simulator --build-only  # Build without launching
     python dev.py open            # Open Xcode project
+    python dev.py generate        # Generate Xcode project from project.yml
+    python dev.py reset           # Reset database to clean state
+    python dev.py seed            # Seed database with scenario data
 """
 
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 import subprocess
@@ -28,6 +33,30 @@ PROJECT = ROOT / "Cadenza.xcodeproj"
 CACHE_PATH = ROOT / "build" / "simulator_device_cache.json"
 
 
+def _get_branch_name() -> str:
+    """Get current git branch name."""
+    result = subprocess.run(
+        ["git", "rev-parse", "--abbrev-ref", "HEAD"],
+        capture_output=True, text=True, cwd=ROOT
+    )
+    return result.stdout.strip() if result.returncode == 0 else "main"
+
+
+def _get_db_port() -> int:
+    """Get a deterministic port for this branch (5433-5532 range)."""
+    branch = _get_branch_name()
+    hash_val = int(hashlib.md5(branch.encode()).hexdigest()[:8], 16)
+    return 5433 + (hash_val % 100)
+
+
+def _get_compose_project() -> str:
+    """Get docker-compose project name for this branch."""
+    branch = _get_branch_name()
+    # Sanitize branch name for docker
+    safe = branch.replace("/", "-").replace("_", "-").lower()
+    return f"cadenza-{safe}"
+
+
 def run(cmd: list[str], cwd: Path | None = None, check: bool = True) -> subprocess.CompletedProcess:
     """Run a command and return the result."""
     print(f"$ {' '.join(cmd)}")
@@ -36,25 +65,47 @@ def run(cmd: list[str], cwd: Path | None = None, check: bool = True) -> subproce
 
 def server(args: argparse.Namespace) -> None:
     """Start the Cadenza API server."""
-    os.chdir(SERVER_DIR)
+    port = _get_db_port()
+    project = _get_compose_project()
+    db_url = f"postgresql://cadenza:cadenza_dev@localhost:{port}/cadenza"
+
+    print(f"Branch: {_get_branch_name()}")
+    print(f"DB port: {port}")
+    print(f"Project: {project}\n")
+
+    # Set environment for docker-compose
+    compose_env = {
+        **os.environ,
+        "COMPOSE_PROJECT_NAME": project,
+        "CADENZA_DB_PORT": str(port),
+    }
 
     # Start database if using docker
     if args.docker:
-        run(["docker-compose", "up"])
+        subprocess.run(["docker-compose", "up"], cwd=SERVER_DIR, env=compose_env)
     else:
-        # Check if db is running
+        # Check if our specific db container is running
+        container_name = f"{project}-db-1"
         result = subprocess.run(
-            ["docker", "ps", "--filter", "name=cadenza-server-db", "--format", "{{.Names}}"],
+            ["docker", "ps", "--filter", f"name={container_name}", "--format", "{{.Names}}"],
             capture_output=True, text=True
         )
-        if "cadenza-server-db" not in result.stdout:
+        if container_name not in result.stdout:
             print("Starting PostgreSQL...")
-            run(["docker-compose", "up", "-d", "db"])
+            subprocess.run(
+                ["docker-compose", "up", "-d", "db"],
+                cwd=SERVER_DIR, env=compose_env
+            )
             time.sleep(2)
 
-        print("\nStarting server on http://localhost:8000")
-        print("API docs: http://localhost:8000/docs\n")
-        run(["uv", "run", "uvicorn", "app.main:app", "--reload", "--host", "0.0.0.0", "--port", "8000"])
+        print(f"\nStarting server on http://localhost:8000")
+        print(f"API docs: http://localhost:8000/docs\n")
+
+        server_env = {**os.environ, "DATABASE_URL": db_url}
+        subprocess.run(
+            ["uv", "run", "uvicorn", "app.main:app", "--reload", "--host", "0.0.0.0", "--port", "8000"],
+            cwd=SERVER_DIR, env=server_env
+        )
 
 
 def test(args: argparse.Namespace) -> None:
@@ -117,10 +168,6 @@ def simulator(args: argparse.Namespace) -> None:
     if devices and device_id and not _looks_like_udid(device):
         _cache_device_id(device, device_id)
 
-    # Boot simulator
-    subprocess.run(["xcrun", "simctl", "boot", device_id], capture_output=True)
-    subprocess.run(["open", "-a", "Simulator"])
-
     # Build
     build_dir = ROOT / "build"
     run([
@@ -131,6 +178,14 @@ def simulator(args: argparse.Namespace) -> None:
         "-derivedDataPath", str(build_dir),
         "build"
     ])
+
+    if args.build_only:
+        print("\nBuild succeeded")
+        return
+
+    # Boot simulator
+    subprocess.run(["xcrun", "simctl", "boot", device_id], capture_output=True)
+    subprocess.run(["open", "-a", "Simulator"])
 
     # Find and install app
     app_path = None
@@ -165,6 +220,58 @@ def simulator(args: argparse.Namespace) -> None:
 def open_xcode(args: argparse.Namespace) -> None:
     """Open the Xcode project."""
     subprocess.run(["open", str(PROJECT)])
+
+
+def generate(args: argparse.Namespace) -> None:
+    """Generate Xcode project from project.yml using xcodegen."""
+    project_yml = ROOT / "project.yml"
+    if not project_yml.exists():
+        print("Error: project.yml not found")
+        sys.exit(1)
+
+    result = subprocess.run(["which", "xcodegen"], capture_output=True)
+    if result.returncode != 0:
+        print("Error: xcodegen not installed")
+        print("Install with: brew install xcodegen")
+        sys.exit(1)
+
+    run(["xcodegen", "generate"])
+    print("\nXcode project generated successfully")
+
+
+def reset(args: argparse.Namespace) -> None:
+    """Reset database to clean state, optionally seed with scenario."""
+    port = _get_db_port()
+    db_url = f"postgresql://cadenza:cadenza_dev@localhost:{port}/cadenza"
+    env = {**os.environ, "DATABASE_URL": db_url}
+
+    print(f"Branch: {_get_branch_name()}, DB port: {port}\n")
+
+    scenario = args.scenario or "empty"
+    subprocess.run(
+        ["uv", "run", "python", "seed_scenario.py", "--scenario", scenario],
+        cwd=SERVER_DIR, env=env, check=True
+    )
+
+
+def seed(args: argparse.Namespace) -> None:
+    """Seed database with a specific scenario."""
+    port = _get_db_port()
+    db_url = f"postgresql://cadenza:cadenza_dev@localhost:{port}/cadenza"
+    env = {**os.environ, "DATABASE_URL": db_url}
+
+    if not args.list:
+        print(f"Branch: {_get_branch_name()}, DB port: {port}\n")
+
+    cmd = ["uv", "run", "python", "seed_scenario.py"]
+    if args.list:
+        cmd.append("--list")
+    elif args.scenario:
+        cmd.extend(["--scenario", args.scenario])
+    else:
+        cmd.append("--list")
+
+    subprocess.run(cmd, cwd=SERVER_DIR, env=env)
 
 
 def _load_simctl_devices() -> dict | None:
@@ -266,19 +373,35 @@ def main() -> None:
     test_parser = subparsers.add_parser("test", help="Run tests")
     test_parser.add_argument("--server", action="store_true", help="Server tests only")
     test_parser.add_argument("--ios", action="store_true", help="iOS tests only")
-    test_parser.add_argument("--device", default="iPhone 16", help="iOS Simulator device")
+    test_parser.add_argument("--device", default="iPhone 17", help="iOS Simulator device")
     test_parser.add_argument("-k", "--pattern", help="Test name pattern filter")
     test_parser.set_defaults(func=test)
 
     # simulator
     sim_parser = subparsers.add_parser("simulator", help="Build and launch iOS simulator")
-    sim_parser.add_argument("--device", default="iPhone 16", help="Simulator device name")
+    sim_parser.add_argument("--device", default="iPhone 17", help="Simulator device name")
     sim_parser.add_argument("--mock-api", action="store_true", help="Launch with mock API data")
+    sim_parser.add_argument("--build-only", action="store_true", help="Build without launching")
     sim_parser.set_defaults(func=simulator)
 
     # open
     open_parser = subparsers.add_parser("open", help="Open Xcode project")
     open_parser.set_defaults(func=open_xcode)
+
+    # generate
+    gen_parser = subparsers.add_parser("generate", help="Generate Xcode project from project.yml")
+    gen_parser.set_defaults(func=generate)
+
+    # reset
+    reset_parser = subparsers.add_parser("reset", help="Reset database to clean state")
+    reset_parser.add_argument("--scenario", "-s", help="Scenario to seed after reset")
+    reset_parser.set_defaults(func=reset)
+
+    # seed
+    seed_parser = subparsers.add_parser("seed", help="Seed database with scenario data")
+    seed_parser.add_argument("--scenario", "-s", help="Scenario name")
+    seed_parser.add_argument("--list", "-l", action="store_true", help="List available scenarios")
+    seed_parser.set_defaults(func=seed)
 
     args = parser.parse_args()
     args.func(args)

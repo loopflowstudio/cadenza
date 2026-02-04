@@ -7,319 +7,698 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		048C696E2E1726E5000AFF98 /* Apollo in Frameworks */ = {isa = PBXBuildFile; productRef = 048C696D2E1726E5000AFF98 /* Apollo */; };
-		048C69702E1726E5000AFF98 /* ApolloAPI in Frameworks */ = {isa = PBXBuildFile; productRef = 048C696F2E1726E5000AFF98 /* ApolloAPI */; };
-		048C69722E1726E5000AFF98 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 048C69712E1726E5000AFF98 /* GoogleSignIn */; };
-		048C69742E1726E5000AFF98 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 048C69732E1726E5000AFF98 /* GoogleSignInSwift */; };
-		048C6C1B2E2B29FD000AFF98 /* ApolloSQLite in Frameworks */ = {isa = PBXBuildFile; productRef = 048C6C1A2E2B29FD000AFF98 /* ApolloSQLite */; };
+		002E881248BE62FA085B0BD6 /* PitchEstimatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30FDC0B5E7147167B8615145 /* PitchEstimatorTests.swift */; };
+		04036EABA2C3053469D55B31 /* Sonata in G major.pdf in Resources */ = {isa = PBXBuildFile; fileRef = B269FBDFD4D206A08B87C183 /* Sonata in G major.pdf */; };
+		07546B59B61C05311DB0DB3E /* BundledMusicPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9B1FD7654EB5D54B1A910B3 /* BundledMusicPicker.swift */; };
+		078473791F9C5D1837130ECF /* RoutineAssignment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5465D60B8F4F1642C82DC5F7 /* RoutineAssignment.swift */; };
+		0A3987524F48C3A35BD7C87A /* CreateRoutineViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 003F199E37E6095CB2711466 /* CreateRoutineViewModel.swift */; };
+		0AB4AFF9D953790E0B5E97DD /* PieceManagementUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28DEE6429BF672C57A062697 /* PieceManagementUITests.swift */; };
+		1494B867D872565A4FA3CF77 /* CadenzaSmokeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35134A0FD46A9C1870A95013 /* CadenzaSmokeTests.swift */; };
+		173BD005D2B4BAD28A2746F8 /* MetronomeServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C3B01B34F89474BD6E19DA8 /* MetronomeServiceTests.swift */; };
+		19A00562E621415B1ABB45EA /* PageObjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B9937EDA6371625AF340910 /* PageObjects.swift */; };
+		1C4A8AC2A5144DFA939CDCF7 /* PracticeSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF3634DCFAB63D036601D59D /* PracticeSession.swift */; };
+		21E5B25113479AB522B02C6A /* Important things to think while playing cello.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 996629B1A6ECC779094D3F85 /* Important things to think while playing cello.pdf */; };
+		241B60D6588924A70A5F7F12 /* Cello Time Joggers.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 42D2A53457711AA97CB9964B /* Cello Time Joggers.pdf */; };
+		245904A25EF8F228B819DF33 /* Pathway for Young Cellists.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 4A1D89EB06F72D0F5524A1D4 /* Pathway for Young Cellists.pdf */; };
+		26A9E589FC70A56543537A87 /* DeveloperMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = B57438D284DEAEB9D79D506D /* DeveloperMenu.swift */; };
+		2A958BD57A2CCCDCEE186956 /* Suzuki - Cello School - Volume 3.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 8090057F20158755D615C8BD /* Suzuki - Cello School - Volume 3.pdf */; };
+		2B0DEACC10475A2CB22729CE /* CreateRoutineViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9E5D570F75FF4EAB6EC1E0E /* CreateRoutineViewModelTests.swift */; };
+		2B948D20153D3E92B39665B7 /* MockAPIClientImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64625EA0A40F1F3CC5EA5285 /* MockAPIClientImpl.swift */; };
+		2D2A3507846395FC14E68182 /* Exercise.swift in Sources */ = {isa = PBXBuildFile; fileRef = F68DD6F3D76214606E475841 /* Exercise.swift */; };
+		34C0334EE07A01D0CC49FF4F /* PracticeTimerOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787D8B4F35D92C50A7DE28F6 /* PracticeTimerOverlay.swift */; };
+		38613D9E6547E5E73B7988D5 /* PitchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F59E906BBA8E3B7C50511E46 /* PitchTests.swift */; };
+		54023F10AD3C53AB6BB472E9 /* Pitch.swift in Sources */ = {isa = PBXBuildFile; fileRef = D21E90E95134BCDFF65A63E8 /* Pitch.swift */; };
+		59A8D8E43B4D2FEF55AA9BE5 /* TeacherStudentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 949C841438CB10585A45DB79 /* TeacherStudentView.swift */; };
+		5D33B9518B3226118B87CFD2 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 903B72691447FBDECCD19FCC /* AuthService.swift */; };
+		62E78222938AFE62D84E37EA /* RoutineListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CA9F735C9D3E5638498985F /* RoutineListView.swift */; };
+		6AAE19A0C8B304EDFDF71ED0 /* SharePiecePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD4CEA7FB58B82D74A82BEA9 /* SharePiecePicker.swift */; };
+		7267CEDF1501777A974BDC47 /* Konzert - Joseph Haydn.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 813A483376C1077E8A33C071 /* Konzert - Joseph Haydn.pdf */; };
+		7385AB4F7EDA72B1B20A0AD5 /* Suzuki - Cello School - Volume 2.pdf in Resources */ = {isa = PBXBuildFile; fileRef = B2D6DE7A6D692B74F1369486 /* Suzuki - Cello School - Volume 2.pdf */; };
+		73DD405B1D85FD4E6CEC495B /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = B12C6D90C79FFF54865A6703 /* User.swift */; };
+		76D62308C1EBB3CBFB17D3D2 /* PracticeTunerOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74A6AC7E4789C728A26D1AD2 /* PracticeTunerOverlay.swift */; };
+		78B5299BB1431DCD8C201587 /* CadenzaApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 602E2FD6EF6C08938CEAD6E7 /* CadenzaApp.swift */; };
+		80D5F07D8453D68146E0A77B /* MockAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE0468DA25134D8B1434C00D /* MockAuthService.swift */; };
+		82EF38B4A166391FE2B8A516 /* TeacherStudentUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC73249EB4A7C839DA777402 /* TeacherStudentUITests.swift */; };
+		8448AF089183522CEF0C3B2E /* MetronomeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BA137B6C80B781F6F8DA7BC /* MetronomeService.swift */; };
+		8FC64CE5A4FD8B890CD91E9B /* Violoncello.pdf in Resources */ = {isa = PBXBuildFile; fileRef = A8DF9DC20F785EB19FDD42DE /* Violoncello.pdf */; };
+		92DF454084387669883CF8A0 /* PiecesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 920090A111690236F79C2F04 /* PiecesView.swift */; };
+		953AD361B3C62759BF5E8842 /* TestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FED8DCAC707C22E4C4AE99F3 /* TestHelpers.swift */; };
+		95811E4B57FCB2C70DC215F8 /* StudentDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB25C5DFF0690927FB4AAAB0 /* StudentDetailView.swift */; };
+		967174BF93F9B9653A1ADCED /* ServiceProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3268A9B30AD62793E9EDDA05 /* ServiceProvider.swift */; };
+		9981D7A7E126BDD0DB1A8BAF /* methode du jeune violoncelliste.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 6B2B2AC8469800AE6D50A9D4 /* methode du jeune violoncelliste.pdf */; };
+		9CBFE68EBE0A3E28C24D1501 /* AuthModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E6FA4CC95E22F17EE42B9B /* AuthModels.swift */; };
+		A8A6A4D978048535706C91D7 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF561EC6E5AF3F568DD26AE /* HomeView.swift */; };
+		A9B56A764C48AFE9DC2C5DB6 /* NetworkingConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56523085B2AB1F72044A66A6 /* NetworkingConfig.swift */; };
+		AE638B4DFFE7CE57C56F22FD /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A8D0401CB0A025FC5116229 /* ContentView.swift */; };
+		AF6637885AE75690E198A7B9 /* SignInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FA30BBA9BE9F5193CD18B7 /* SignInView.swift */; };
+		B2D73D33001C36CFEE267FF5 /* DevSignInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E58BE44D7B5C055F99292FB /* DevSignInView.swift */; };
+		B873EF767C6060C4E552E48C /* PracticeSessionWorkflowTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25AC52D76336C2B4C8624BE7 /* PracticeSessionWorkflowTests.swift */; };
+		BB463B862BA2F7AF472BA00D /* CreateRoutineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01D00538EE595AA15D11D11F /* CreateRoutineView.swift */; };
+		BC1DE273423DE9C1CA88D205 /* Essential Elements for Strings.pdf in Resources */ = {isa = PBXBuildFile; fileRef = F53D4EB337CA79A961588FC1 /* Essential Elements for Strings.pdf */; };
+		BE081660047C9FC9ECAA3348 /* ExerciseSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = D52759ABB0C749E01CBFAA03 /* ExerciseSession.swift */; };
+		C61522A72E54F890032BAEAE /* PitchEstimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A995A49914573B4E52D053F1 /* PitchEstimator.swift */; };
+		C9BFF85D9EA29EF15C01E397 /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FB6D7DD8040C6D2619E0C2E /* APIClient.swift */; };
+		CA40A5A7B59CD2152D385CA7 /* PieceRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 489705D3F143EFF1E1BC625D /* PieceRepository.swift */; };
+		D39CBBCAE98F66E6CAEF3026 /* HomeUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B94BB82EC93AEE385BA9DDD0 /* HomeUITests.swift */; };
+		D96E54CB60AF8F0268811B05 /* APIClientProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5E327B26222FE308BC01CED /* APIClientProtocol.swift */; };
+		DAA5BB3A0CE844247A263CD6 /* Suzuki - Cello School - Volume 1.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 6F58F3E0671CF1F0855F6C88 /* Suzuki - Cello School - Volume 1.pdf */; };
+		DB3A53990FB204F75190DFDF /* PracticeCalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2CA0BBBA54497639D2A7E5D /* PracticeCalendarView.swift */; };
+		DB620A3D68A6E5AD4F14730E /* PracticeSessionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B1CB56C327AED1EE3265CE5 /* PracticeSessionView.swift */; };
+		DE44303C98A039578A918F5A /* AssignRoutineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36AA91A33F24ED54E795526A /* AssignRoutineView.swift */; };
+		E23ADB1E35ED2C36A821FC47 /* Piece.swift in Sources */ = {isa = PBXBuildFile; fileRef = 801C1AE67C9DFF174141E5B1 /* Piece.swift */; };
+		E2A6A38DE6717742161895BB /* SheetMusicView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED4246C1922C26A7B1B8F370 /* SheetMusicView.swift */; };
+		E6D9ED7400FCDFC55474F11E /* TeacherStudentWorkflowTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15510ADDB2EBF8434226D48A /* TeacherStudentWorkflowTests.swift */; };
+		E968C7CCF9070920DC07FAC5 /* KeychainHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F7C14B0BDF2F8E3DD0AFF5 /* KeychainHelper.swift */; };
+		EE8DB8FB943B8DCE94A1EC33 /* PracticeMetronomeOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 683E3C336CDBADBB84148664 /* PracticeMetronomeOverlay.swift */; };
+		F15E28FE681462AED99ADE1A /* PitchService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDB5F3F89F12439CE50BCB61 /* PitchService.swift */; };
+		F252FE1FDA478DB43427ECBB /* Routine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CB1ABFF285F0FFE0948B46D /* Routine.swift */; };
+		FCF4E17EBB3740B51C37233E /* RoutineDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8683AAD66A9D75145EA1F27A /* RoutineDetailView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		04B5A61E2E0E6DFA004E2FEA /* PBXContainerItemProxy */ = {
+		166C2CCC135FA92DFCAF8787 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 04B5A6062E0E6DF2004E2FEA /* Project object */;
+			containerPortal = D1AE8EC53EC28557F8771111 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 04B5A60D2E0E6DF2004E2FEA;
+			remoteGlobalIDString = E105858D0D4F4616F76B78CC;
 			remoteInfo = Cadenza;
 		};
-		04B5A6282E0E6DFA004E2FEA /* PBXContainerItemProxy */ = {
+		530AF5D7CDD499B0635FE0D0 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 04B5A6062E0E6DF2004E2FEA /* Project object */;
+			containerPortal = D1AE8EC53EC28557F8771111 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 04B5A60D2E0E6DF2004E2FEA;
+			remoteGlobalIDString = E105858D0D4F4616F76B78CC;
 			remoteInfo = Cadenza;
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		04B5A60E2E0E6DF2004E2FEA /* Cadenza.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Cadenza.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		04B5A61D2E0E6DFA004E2FEA /* CadenzaTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CadenzaTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		04B5A6272E0E6DFA004E2FEA /* CadenzaUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CadenzaUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		003F199E37E6095CB2711466 /* CreateRoutineViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateRoutineViewModel.swift; sourceTree = "<group>"; };
+		01D00538EE595AA15D11D11F /* CreateRoutineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateRoutineView.swift; sourceTree = "<group>"; };
+		0A8D0401CB0A025FC5116229 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		15510ADDB2EBF8434226D48A /* TeacherStudentWorkflowTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeacherStudentWorkflowTests.swift; sourceTree = "<group>"; };
+		1BA137B6C80B781F6F8DA7BC /* MetronomeService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetronomeService.swift; sourceTree = "<group>"; };
+		1E58BE44D7B5C055F99292FB /* DevSignInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DevSignInView.swift; sourceTree = "<group>"; };
+		25AC52D76336C2B4C8624BE7 /* PracticeSessionWorkflowTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PracticeSessionWorkflowTests.swift; sourceTree = "<group>"; };
+		28DEE6429BF672C57A062697 /* PieceManagementUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PieceManagementUITests.swift; sourceTree = "<group>"; };
+		30FDC0B5E7147167B8615145 /* PitchEstimatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PitchEstimatorTests.swift; sourceTree = "<group>"; };
+		3268A9B30AD62793E9EDDA05 /* ServiceProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceProvider.swift; sourceTree = "<group>"; };
+		35134A0FD46A9C1870A95013 /* CadenzaSmokeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CadenzaSmokeTests.swift; sourceTree = "<group>"; };
+		36AA91A33F24ED54E795526A /* AssignRoutineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssignRoutineView.swift; sourceTree = "<group>"; };
+		3EF561EC6E5AF3F568DD26AE /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		42D2A53457711AA97CB9964B /* Cello Time Joggers.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "Cello Time Joggers.pdf"; sourceTree = "<group>"; };
+		489705D3F143EFF1E1BC625D /* PieceRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PieceRepository.swift; sourceTree = "<group>"; };
+		4A1D89EB06F72D0F5524A1D4 /* Pathway for Young Cellists.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "Pathway for Young Cellists.pdf"; sourceTree = "<group>"; };
+		4B1CB56C327AED1EE3265CE5 /* PracticeSessionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PracticeSessionView.swift; sourceTree = "<group>"; };
+		5465D60B8F4F1642C82DC5F7 /* RoutineAssignment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutineAssignment.swift; sourceTree = "<group>"; };
+		56523085B2AB1F72044A66A6 /* NetworkingConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkingConfig.swift; sourceTree = "<group>"; };
+		602E2FD6EF6C08938CEAD6E7 /* CadenzaApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CadenzaApp.swift; sourceTree = "<group>"; };
+		64625EA0A40F1F3CC5EA5285 /* MockAPIClientImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockAPIClientImpl.swift; sourceTree = "<group>"; };
+		683E3C336CDBADBB84148664 /* PracticeMetronomeOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PracticeMetronomeOverlay.swift; sourceTree = "<group>"; };
+		6B2B2AC8469800AE6D50A9D4 /* methode du jeune violoncelliste.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "methode du jeune violoncelliste.pdf"; sourceTree = "<group>"; };
+		6CB1ABFF285F0FFE0948B46D /* Routine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Routine.swift; sourceTree = "<group>"; };
+		6F58F3E0671CF1F0855F6C88 /* Suzuki - Cello School - Volume 1.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "Suzuki - Cello School - Volume 1.pdf"; sourceTree = "<group>"; };
+		73F7C14B0BDF2F8E3DD0AFF5 /* KeychainHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainHelper.swift; sourceTree = "<group>"; };
+		74A6AC7E4789C728A26D1AD2 /* PracticeTunerOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PracticeTunerOverlay.swift; sourceTree = "<group>"; };
+		787D8B4F35D92C50A7DE28F6 /* PracticeTimerOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PracticeTimerOverlay.swift; sourceTree = "<group>"; };
+		7B9937EDA6371625AF340910 /* PageObjects.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageObjects.swift; sourceTree = "<group>"; };
+		7FB6D7DD8040C6D2619E0C2E /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
+		801C1AE67C9DFF174141E5B1 /* Piece.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Piece.swift; sourceTree = "<group>"; };
+		8090057F20158755D615C8BD /* Suzuki - Cello School - Volume 3.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "Suzuki - Cello School - Volume 3.pdf"; sourceTree = "<group>"; };
+		80A93A766EECE9AFCF6D7A63 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		813A483376C1077E8A33C071 /* Konzert - Joseph Haydn.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "Konzert - Joseph Haydn.pdf"; sourceTree = "<group>"; };
+		8168A03A0CF35D31CB65A83D /* Cadenza.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Cadenza.entitlements; sourceTree = "<group>"; };
+		84A80C34947B594C63D9E85F /* CadenzaUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = CadenzaUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		8683AAD66A9D75145EA1F27A /* RoutineDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutineDetailView.swift; sourceTree = "<group>"; };
+		8CA9F735C9D3E5638498985F /* RoutineListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutineListView.swift; sourceTree = "<group>"; };
+		903B72691447FBDECCD19FCC /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
+		920090A111690236F79C2F04 /* PiecesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PiecesView.swift; sourceTree = "<group>"; };
+		949C841438CB10585A45DB79 /* TeacherStudentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeacherStudentView.swift; sourceTree = "<group>"; };
+		996629B1A6ECC779094D3F85 /* Important things to think while playing cello.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "Important things to think while playing cello.pdf"; sourceTree = "<group>"; };
+		99FA30BBA9BE9F5193CD18B7 /* SignInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInView.swift; sourceTree = "<group>"; };
+		9C3B01B34F89474BD6E19DA8 /* MetronomeServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetronomeServiceTests.swift; sourceTree = "<group>"; };
+		9F48386185F7E37392C33B0A /* CadenzaTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = CadenzaTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		A2CA0BBBA54497639D2A7E5D /* PracticeCalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PracticeCalendarView.swift; sourceTree = "<group>"; };
+		A8DF9DC20F785EB19FDD42DE /* Violoncello.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = Violoncello.pdf; sourceTree = "<group>"; };
+		A995A49914573B4E52D053F1 /* PitchEstimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PitchEstimator.swift; sourceTree = "<group>"; };
+		A9E5D570F75FF4EAB6EC1E0E /* CreateRoutineViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateRoutineViewModelTests.swift; sourceTree = "<group>"; };
+		AB25C5DFF0690927FB4AAAB0 /* StudentDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudentDetailView.swift; sourceTree = "<group>"; };
+		AD4CEA7FB58B82D74A82BEA9 /* SharePiecePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharePiecePicker.swift; sourceTree = "<group>"; };
+		AE0468DA25134D8B1434C00D /* MockAuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockAuthService.swift; sourceTree = "<group>"; };
+		AE3D6554395EDEF14BD47433 /* Icon */ = {isa = PBXFileReference; path = "Icon"; sourceTree = "<group>"; };
+		B12C6D90C79FFF54865A6703 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		B269FBDFD4D206A08B87C183 /* Sonata in G major.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "Sonata in G major.pdf"; sourceTree = "<group>"; };
+		B2D6DE7A6D692B74F1369486 /* Suzuki - Cello School - Volume 2.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "Suzuki - Cello School - Volume 2.pdf"; sourceTree = "<group>"; };
+		B57438D284DEAEB9D79D506D /* DeveloperMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeveloperMenu.swift; sourceTree = "<group>"; };
+		B94BB82EC93AEE385BA9DDD0 /* HomeUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeUITests.swift; sourceTree = "<group>"; };
+		CF3634DCFAB63D036601D59D /* PracticeSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PracticeSession.swift; sourceTree = "<group>"; };
+		D21E90E95134BCDFF65A63E8 /* Pitch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pitch.swift; sourceTree = "<group>"; };
+		D52759ABB0C749E01CBFAA03 /* ExerciseSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseSession.swift; sourceTree = "<group>"; };
+		D5E327B26222FE308BC01CED /* APIClientProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClientProtocol.swift; sourceTree = "<group>"; };
+		D8E6FA4CC95E22F17EE42B9B /* AuthModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthModels.swift; sourceTree = "<group>"; };
+		D9B1FD7654EB5D54B1A910B3 /* BundledMusicPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BundledMusicPicker.swift; sourceTree = "<group>"; };
+		DDFBE399676A3E84FCF154B9 /* Cadenza.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Cadenza.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		EC73249EB4A7C839DA777402 /* TeacherStudentUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeacherStudentUITests.swift; sourceTree = "<group>"; };
+		ED4246C1922C26A7B1B8F370 /* SheetMusicView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheetMusicView.swift; sourceTree = "<group>"; };
+		F53D4EB337CA79A961588FC1 /* Essential Elements for Strings.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "Essential Elements for Strings.pdf"; sourceTree = "<group>"; };
+		F59E906BBA8E3B7C50511E46 /* PitchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PitchTests.swift; sourceTree = "<group>"; };
+		F68DD6F3D76214606E475841 /* Exercise.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Exercise.swift; sourceTree = "<group>"; };
+		FDB5F3F89F12439CE50BCB61 /* PitchService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PitchService.swift; sourceTree = "<group>"; };
+		FED8DCAC707C22E4C4AE99F3 /* TestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestHelpers.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		048C697A2E172DF7000AFF98 /* Exceptions for "Cadenza" folder in "Cadenza" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Info.plist,
+/* Begin PBXGroup section */
+		257B33964791F3E36E0F6C17 /* Repositories */ = {
+			isa = PBXGroup;
+			children = (
+				489705D3F143EFF1E1BC625D /* PieceRepository.swift */,
 			);
-			target = 04B5A60D2E0E6DF2004E2FEA /* Cadenza */;
+			path = Repositories;
+			sourceTree = "<group>";
 		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
-
-/* Begin PBXFileSystemSynchronizedRootGroup section */
-		04B5A6102E0E6DF2004E2FEA /* Cadenza */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				048C697A2E172DF7000AFF98 /* Exceptions for "Cadenza" folder in "Cadenza" target */,
+		4294F18A6F32FD33C03D2F11 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				36AA91A33F24ED54E795526A /* AssignRoutineView.swift */,
+				D9B1FD7654EB5D54B1A910B3 /* BundledMusicPicker.swift */,
+				01D00538EE595AA15D11D11F /* CreateRoutineView.swift */,
+				B57438D284DEAEB9D79D506D /* DeveloperMenu.swift */,
+				1E58BE44D7B5C055F99292FB /* DevSignInView.swift */,
+				3EF561EC6E5AF3F568DD26AE /* HomeView.swift */,
+				920090A111690236F79C2F04 /* PiecesView.swift */,
+				A2CA0BBBA54497639D2A7E5D /* PracticeCalendarView.swift */,
+				683E3C336CDBADBB84148664 /* PracticeMetronomeOverlay.swift */,
+				4B1CB56C327AED1EE3265CE5 /* PracticeSessionView.swift */,
+				787D8B4F35D92C50A7DE28F6 /* PracticeTimerOverlay.swift */,
+				74A6AC7E4789C728A26D1AD2 /* PracticeTunerOverlay.swift */,
+				8683AAD66A9D75145EA1F27A /* RoutineDetailView.swift */,
+				8CA9F735C9D3E5638498985F /* RoutineListView.swift */,
+				AD4CEA7FB58B82D74A82BEA9 /* SharePiecePicker.swift */,
+				ED4246C1922C26A7B1B8F370 /* SheetMusicView.swift */,
+				99FA30BBA9BE9F5193CD18B7 /* SignInView.swift */,
+				AB25C5DFF0690927FB4AAAB0 /* StudentDetailView.swift */,
+				949C841438CB10585A45DB79 /* TeacherStudentView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		47BD6E1E8D941720FAF815FC /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				DDFBE399676A3E84FCF154B9 /* Cadenza.app */,
+				9F48386185F7E37392C33B0A /* CadenzaTests.xctest */,
+				84A80C34947B594C63D9E85F /* CadenzaUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		5AB775687D24D2FB1EAA2DAA /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				003F199E37E6095CB2711466 /* CreateRoutineViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		5BF2E50730F7095032C7D5E8 /* CadenzaUITests */ = {
+			isa = PBXGroup;
+			children = (
+				35134A0FD46A9C1870A95013 /* CadenzaSmokeTests.swift */,
+				B94BB82EC93AEE385BA9DDD0 /* HomeUITests.swift */,
+				7B9937EDA6371625AF340910 /* PageObjects.swift */,
+				28DEE6429BF672C57A062697 /* PieceManagementUITests.swift */,
+				EC73249EB4A7C839DA777402 /* TeacherStudentUITests.swift */,
+			);
+			path = CadenzaUITests;
+			sourceTree = "<group>";
+		};
+		6CC5079B706643F82BA37E7B /* Cadenza */ = {
+			isa = PBXGroup;
+			children = (
+				8168A03A0CF35D31CB65A83D /* Cadenza.entitlements */,
+				602E2FD6EF6C08938CEAD6E7 /* CadenzaApp.swift */,
+				0A8D0401CB0A025FC5116229 /* ContentView.swift */,
+				80A93A766EECE9AFCF6D7A63 /* Info.plist */,
+				BE3B25B4F54970173D716149 /* Mocks */,
+				7BDE00764314B22A084F76FB /* Models */,
+				257B33964791F3E36E0F6C17 /* Repositories */,
+				915C908E1661614A51514CAB /* Resources */,
+				CB0E96C86B4E1FBFAE5492CC /* Services */,
+				D16B9296CD9F48A739F53048 /* Utilities */,
+				5AB775687D24D2FB1EAA2DAA /* ViewModels */,
+				4294F18A6F32FD33C03D2F11 /* Views */,
 			);
 			path = Cadenza;
 			sourceTree = "<group>";
 		};
-		04B5A6202E0E6DFA004E2FEA /* CadenzaTests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
+		7BDE00764314B22A084F76FB /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				D8E6FA4CC95E22F17EE42B9B /* AuthModels.swift */,
+				F68DD6F3D76214606E475841 /* Exercise.swift */,
+				D52759ABB0C749E01CBFAA03 /* ExerciseSession.swift */,
+				801C1AE67C9DFF174141E5B1 /* Piece.swift */,
+				CF3634DCFAB63D036601D59D /* PracticeSession.swift */,
+				6CB1ABFF285F0FFE0948B46D /* Routine.swift */,
+				5465D60B8F4F1642C82DC5F7 /* RoutineAssignment.swift */,
+				B12C6D90C79FFF54865A6703 /* User.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		7E9EA42BB91E62B7F6E13DD7 /* TestHelpers */ = {
+			isa = PBXGroup;
+			children = (
+				FED8DCAC707C22E4C4AE99F3 /* TestHelpers.swift */,
+			);
+			path = TestHelpers;
+			sourceTree = "<group>";
+		};
+		7EF43FD7C047D735F2ACB731 /* CadenzaTests */ = {
+			isa = PBXGroup;
+			children = (
+				AC193E8FACA9EA8FB1205EAC /* Integration */,
+				ADE81364C5BA45FC98248BAD /* Models */,
+				F30183C723B7CC977E0B21F1 /* Services */,
+				7E9EA42BB91E62B7F6E13DD7 /* TestHelpers */,
+				C02A7AB4B40A8BD617200A32 /* ViewModels */,
+			);
 			path = CadenzaTests;
 			sourceTree = "<group>";
 		};
-		04B5A62A2E0E6DFA004E2FEA /* CadenzaUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = CadenzaUITests;
-			sourceTree = "<group>";
-		};
-/* End PBXFileSystemSynchronizedRootGroup section */
-
-/* Begin PBXFrameworksBuildPhase section */
-		04B5A60B2E0E6DF2004E2FEA /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				048C69702E1726E5000AFF98 /* ApolloAPI in Frameworks */,
-				048C696E2E1726E5000AFF98 /* Apollo in Frameworks */,
-				048C6C1B2E2B29FD000AFF98 /* ApolloSQLite in Frameworks */,
-				048C69722E1726E5000AFF98 /* GoogleSignIn in Frameworks */,
-				048C69742E1726E5000AFF98 /* GoogleSignInSwift in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		04B5A61A2E0E6DFA004E2FEA /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		04B5A6242E0E6DFA004E2FEA /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXFrameworksBuildPhase section */
-
-/* Begin PBXGroup section */
-		048C696C2E1726E5000AFF98 /* Frameworks */ = {
+		8BFD63799BE334DED7E543EF = {
 			isa = PBXGroup;
 			children = (
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		04B5A6052E0E6DF2004E2FEA = {
-			isa = PBXGroup;
-			children = (
-				04B5A6102E0E6DF2004E2FEA /* Cadenza */,
-				04B5A6202E0E6DFA004E2FEA /* CadenzaTests */,
-				04B5A62A2E0E6DFA004E2FEA /* CadenzaUITests */,
-				048C696C2E1726E5000AFF98 /* Frameworks */,
-				04B5A60F2E0E6DF2004E2FEA /* Products */,
+				6CC5079B706643F82BA37E7B /* Cadenza */,
+				7EF43FD7C047D735F2ACB731 /* CadenzaTests */,
+				5BF2E50730F7095032C7D5E8 /* CadenzaUITests */,
+				47BD6E1E8D941720FAF815FC /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		04B5A60F2E0E6DF2004E2FEA /* Products */ = {
+		915C908E1661614A51514CAB /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				04B5A60E2E0E6DF2004E2FEA /* Cadenza.app */,
-				04B5A61D2E0E6DFA004E2FEA /* CadenzaTests.xctest */,
-				04B5A6272E0E6DFA004E2FEA /* CadenzaUITests.xctest */,
+				42D2A53457711AA97CB9964B /* Cello Time Joggers.pdf */,
+				F53D4EB337CA79A961588FC1 /* Essential Elements for Strings.pdf */,
+				AE3D6554395EDEF14BD47433 /* Icon */,
+				996629B1A6ECC779094D3F85 /* Important things to think while playing cello.pdf */,
+				813A483376C1077E8A33C071 /* Konzert - Joseph Haydn.pdf */,
+				6B2B2AC8469800AE6D50A9D4 /* methode du jeune violoncelliste.pdf */,
+				4A1D89EB06F72D0F5524A1D4 /* Pathway for Young Cellists.pdf */,
+				B269FBDFD4D206A08B87C183 /* Sonata in G major.pdf */,
+				6F58F3E0671CF1F0855F6C88 /* Suzuki - Cello School - Volume 1.pdf */,
+				B2D6DE7A6D692B74F1369486 /* Suzuki - Cello School - Volume 2.pdf */,
+				8090057F20158755D615C8BD /* Suzuki - Cello School - Volume 3.pdf */,
+				A8DF9DC20F785EB19FDD42DE /* Violoncello.pdf */,
 			);
-			name = Products;
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		AC193E8FACA9EA8FB1205EAC /* Integration */ = {
+			isa = PBXGroup;
+			children = (
+				25AC52D76336C2B4C8624BE7 /* PracticeSessionWorkflowTests.swift */,
+				15510ADDB2EBF8434226D48A /* TeacherStudentWorkflowTests.swift */,
+			);
+			path = Integration;
+			sourceTree = "<group>";
+		};
+		ADE81364C5BA45FC98248BAD /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				F59E906BBA8E3B7C50511E46 /* PitchTests.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		BE3B25B4F54970173D716149 /* Mocks */ = {
+			isa = PBXGroup;
+			children = (
+				64625EA0A40F1F3CC5EA5285 /* MockAPIClientImpl.swift */,
+				AE0468DA25134D8B1434C00D /* MockAuthService.swift */,
+			);
+			path = Mocks;
+			sourceTree = "<group>";
+		};
+		C02A7AB4B40A8BD617200A32 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				A9E5D570F75FF4EAB6EC1E0E /* CreateRoutineViewModelTests.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		CB0E96C86B4E1FBFAE5492CC /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				7FB6D7DD8040C6D2619E0C2E /* APIClient.swift */,
+				D5E327B26222FE308BC01CED /* APIClientProtocol.swift */,
+				903B72691447FBDECCD19FCC /* AuthService.swift */,
+				1BA137B6C80B781F6F8DA7BC /* MetronomeService.swift */,
+				56523085B2AB1F72044A66A6 /* NetworkingConfig.swift */,
+				D21E90E95134BCDFF65A63E8 /* Pitch.swift */,
+				A995A49914573B4E52D053F1 /* PitchEstimator.swift */,
+				FDB5F3F89F12439CE50BCB61 /* PitchService.swift */,
+				3268A9B30AD62793E9EDDA05 /* ServiceProvider.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		D16B9296CD9F48A739F53048 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				73F7C14B0BDF2F8E3DD0AFF5 /* KeychainHelper.swift */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+		F30183C723B7CC977E0B21F1 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				9C3B01B34F89474BD6E19DA8 /* MetronomeServiceTests.swift */,
+				30FDC0B5E7147167B8615145 /* PitchEstimatorTests.swift */,
+			);
+			path = Services;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		04B5A60D2E0E6DF2004E2FEA /* Cadenza */ = {
+		20702B12131AC15F08607E81 /* CadenzaUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 04B5A6312E0E6DFB004E2FEA /* Build configuration list for PBXNativeTarget "Cadenza" */;
+			buildConfigurationList = C9A9242A535A2F13E6B37570 /* Build configuration list for PBXNativeTarget "CadenzaUITests" */;
 			buildPhases = (
-				04B5A60A2E0E6DF2004E2FEA /* Sources */,
-				04B5A60B2E0E6DF2004E2FEA /* Frameworks */,
-				04B5A60C2E0E6DF2004E2FEA /* Resources */,
+				EC0D5AC0D65B069AE6BE8BCC /* Sources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-			);
-			fileSystemSynchronizedGroups = (
-				04B5A6102E0E6DF2004E2FEA /* Cadenza */,
-			);
-			name = Cadenza;
-			packageProductDependencies = (
-				048C696D2E1726E5000AFF98 /* Apollo */,
-				048C696F2E1726E5000AFF98 /* ApolloAPI */,
-				048C69712E1726E5000AFF98 /* GoogleSignIn */,
-				048C69732E1726E5000AFF98 /* GoogleSignInSwift */,
-				048C6C1A2E2B29FD000AFF98 /* ApolloSQLite */,
-			);
-			productName = Cadenza;
-			productReference = 04B5A60E2E0E6DF2004E2FEA /* Cadenza.app */;
-			productType = "com.apple.product-type.application";
-		};
-		04B5A61C2E0E6DFA004E2FEA /* CadenzaTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 04B5A6342E0E6DFB004E2FEA /* Build configuration list for PBXNativeTarget "CadenzaTests" */;
-			buildPhases = (
-				04B5A6192E0E6DFA004E2FEA /* Sources */,
-				04B5A61A2E0E6DFA004E2FEA /* Frameworks */,
-				04B5A61B2E0E6DFA004E2FEA /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				04B5A61F2E0E6DFA004E2FEA /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				04B5A6202E0E6DFA004E2FEA /* CadenzaTests */,
-			);
-			name = CadenzaTests;
-			packageProductDependencies = (
-			);
-			productName = CadenzaTests;
-			productReference = 04B5A61D2E0E6DFA004E2FEA /* CadenzaTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
-		04B5A6262E0E6DFA004E2FEA /* CadenzaUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 04B5A6372E0E6DFB004E2FEA /* Build configuration list for PBXNativeTarget "CadenzaUITests" */;
-			buildPhases = (
-				04B5A6232E0E6DFA004E2FEA /* Sources */,
-				04B5A6242E0E6DFA004E2FEA /* Frameworks */,
-				04B5A6252E0E6DFA004E2FEA /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				04B5A6292E0E6DFA004E2FEA /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				04B5A62A2E0E6DFA004E2FEA /* CadenzaUITests */,
+				C7E3EC2D3D63820F0505C27C /* PBXTargetDependency */,
 			);
 			name = CadenzaUITests;
 			packageProductDependencies = (
 			);
 			productName = CadenzaUITests;
-			productReference = 04B5A6272E0E6DFA004E2FEA /* CadenzaUITests.xctest */;
+			productReference = 84A80C34947B594C63D9E85F /* CadenzaUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+		A0A055552C269F135507E11B /* CadenzaTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 27A7295BFABAF56CA504C014 /* Build configuration list for PBXNativeTarget "CadenzaTests" */;
+			buildPhases = (
+				7C8FFF578A5FC908B304F09C /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				BC8FADC4A59BD94CFDDFB505 /* PBXTargetDependency */,
+			);
+			name = CadenzaTests;
+			packageProductDependencies = (
+			);
+			productName = CadenzaTests;
+			productReference = 9F48386185F7E37392C33B0A /* CadenzaTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		E105858D0D4F4616F76B78CC /* Cadenza */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F6790ED2D913E5D732C38092 /* Build configuration list for PBXNativeTarget "Cadenza" */;
+			buildPhases = (
+				06AC62204230D79917D49F6B /* Sources */,
+				E639D2B4933C56CA58892C79 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Cadenza;
+			packageProductDependencies = (
+			);
+			productName = Cadenza;
+			productReference = DDFBE399676A3E84FCF154B9 /* Cadenza.app */;
+			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		04B5A6062E0E6DF2004E2FEA /* Project object */ = {
+		D1AE8EC53EC28557F8771111 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1600;
-				LastUpgradeCheck = 1600;
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1500;
 				TargetAttributes = {
-					04B5A60D2E0E6DF2004E2FEA = {
-						CreatedOnToolsVersion = 16.0;
+					20702B12131AC15F08607E81 = {
+						TestTargetID = E105858D0D4F4616F76B78CC;
 					};
-					04B5A61C2E0E6DFA004E2FEA = {
-						CreatedOnToolsVersion = 16.0;
-						TestTargetID = 04B5A60D2E0E6DF2004E2FEA;
-					};
-					04B5A6262E0E6DFA004E2FEA = {
-						CreatedOnToolsVersion = 16.0;
-						TestTargetID = 04B5A60D2E0E6DF2004E2FEA;
+					E105858D0D4F4616F76B78CC = {
+						DevelopmentTeam = "";
 					};
 				};
 			};
-			buildConfigurationList = 04B5A6092E0E6DF2004E2FEA /* Build configuration list for PBXProject "Cadenza" */;
+			buildConfigurationList = 4657FC78F268FEA51E353563 /* Build configuration list for PBXProject "Cadenza" */;
+			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				en,
 				Base,
+				en,
 			);
-			mainGroup = 04B5A6052E0E6DF2004E2FEA;
+			mainGroup = 8BFD63799BE334DED7E543EF;
 			minimizedProjectReferenceProxies = 1;
-			packageReferences = (
-				048C68692E165618000AFF98 /* XCRemoteSwiftPackageReference "apollo-ios" */,
-				048C68732E1664BE000AFF98 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
-			);
 			preferredProjectObjectVersion = 77;
-			productRefGroup = 04B5A60F2E0E6DF2004E2FEA /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				04B5A60D2E0E6DF2004E2FEA /* Cadenza */,
-				04B5A61C2E0E6DFA004E2FEA /* CadenzaTests */,
-				04B5A6262E0E6DFA004E2FEA /* CadenzaUITests */,
+				E105858D0D4F4616F76B78CC /* Cadenza */,
+				A0A055552C269F135507E11B /* CadenzaTests */,
+				20702B12131AC15F08607E81 /* CadenzaUITests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		04B5A60C2E0E6DF2004E2FEA /* Resources */ = {
+		E639D2B4933C56CA58892C79 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		04B5A61B2E0E6DFA004E2FEA /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		04B5A6252E0E6DFA004E2FEA /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
+				241B60D6588924A70A5F7F12 /* Cello Time Joggers.pdf in Resources */,
+				BC1DE273423DE9C1CA88D205 /* Essential Elements for Strings.pdf in Resources */,
+				21E5B25113479AB522B02C6A /* Important things to think while playing cello.pdf in Resources */,
+				7267CEDF1501777A974BDC47 /* Konzert - Joseph Haydn.pdf in Resources */,
+				245904A25EF8F228B819DF33 /* Pathway for Young Cellists.pdf in Resources */,
+				04036EABA2C3053469D55B31 /* Sonata in G major.pdf in Resources */,
+				DAA5BB3A0CE844247A263CD6 /* Suzuki - Cello School - Volume 1.pdf in Resources */,
+				7385AB4F7EDA72B1B20A0AD5 /* Suzuki - Cello School - Volume 2.pdf in Resources */,
+				2A958BD57A2CCCDCEE186956 /* Suzuki - Cello School - Volume 3.pdf in Resources */,
+				8FC64CE5A4FD8B890CD91E9B /* Violoncello.pdf in Resources */,
+				9981D7A7E126BDD0DB1A8BAF /* methode du jeune violoncelliste.pdf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		04B5A60A2E0E6DF2004E2FEA /* Sources */ = {
+		06AC62204230D79917D49F6B /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C9BFF85D9EA29EF15C01E397 /* APIClient.swift in Sources */,
+				D96E54CB60AF8F0268811B05 /* APIClientProtocol.swift in Sources */,
+				DE44303C98A039578A918F5A /* AssignRoutineView.swift in Sources */,
+				9CBFE68EBE0A3E28C24D1501 /* AuthModels.swift in Sources */,
+				5D33B9518B3226118B87CFD2 /* AuthService.swift in Sources */,
+				07546B59B61C05311DB0DB3E /* BundledMusicPicker.swift in Sources */,
+				78B5299BB1431DCD8C201587 /* CadenzaApp.swift in Sources */,
+				AE638B4DFFE7CE57C56F22FD /* ContentView.swift in Sources */,
+				BB463B862BA2F7AF472BA00D /* CreateRoutineView.swift in Sources */,
+				0A3987524F48C3A35BD7C87A /* CreateRoutineViewModel.swift in Sources */,
+				B2D73D33001C36CFEE267FF5 /* DevSignInView.swift in Sources */,
+				26A9E589FC70A56543537A87 /* DeveloperMenu.swift in Sources */,
+				2D2A3507846395FC14E68182 /* Exercise.swift in Sources */,
+				BE081660047C9FC9ECAA3348 /* ExerciseSession.swift in Sources */,
+				A8A6A4D978048535706C91D7 /* HomeView.swift in Sources */,
+				E968C7CCF9070920DC07FAC5 /* KeychainHelper.swift in Sources */,
+				8448AF089183522CEF0C3B2E /* MetronomeService.swift in Sources */,
+				2B948D20153D3E92B39665B7 /* MockAPIClientImpl.swift in Sources */,
+				80D5F07D8453D68146E0A77B /* MockAuthService.swift in Sources */,
+				A9B56A764C48AFE9DC2C5DB6 /* NetworkingConfig.swift in Sources */,
+				E23ADB1E35ED2C36A821FC47 /* Piece.swift in Sources */,
+				CA40A5A7B59CD2152D385CA7 /* PieceRepository.swift in Sources */,
+				92DF454084387669883CF8A0 /* PiecesView.swift in Sources */,
+				54023F10AD3C53AB6BB472E9 /* Pitch.swift in Sources */,
+				C61522A72E54F890032BAEAE /* PitchEstimator.swift in Sources */,
+				F15E28FE681462AED99ADE1A /* PitchService.swift in Sources */,
+				DB3A53990FB204F75190DFDF /* PracticeCalendarView.swift in Sources */,
+				EE8DB8FB943B8DCE94A1EC33 /* PracticeMetronomeOverlay.swift in Sources */,
+				1C4A8AC2A5144DFA939CDCF7 /* PracticeSession.swift in Sources */,
+				DB620A3D68A6E5AD4F14730E /* PracticeSessionView.swift in Sources */,
+				34C0334EE07A01D0CC49FF4F /* PracticeTimerOverlay.swift in Sources */,
+				76D62308C1EBB3CBFB17D3D2 /* PracticeTunerOverlay.swift in Sources */,
+				F252FE1FDA478DB43427ECBB /* Routine.swift in Sources */,
+				078473791F9C5D1837130ECF /* RoutineAssignment.swift in Sources */,
+				FCF4E17EBB3740B51C37233E /* RoutineDetailView.swift in Sources */,
+				62E78222938AFE62D84E37EA /* RoutineListView.swift in Sources */,
+				967174BF93F9B9653A1ADCED /* ServiceProvider.swift in Sources */,
+				6AAE19A0C8B304EDFDF71ED0 /* SharePiecePicker.swift in Sources */,
+				E2A6A38DE6717742161895BB /* SheetMusicView.swift in Sources */,
+				AF6637885AE75690E198A7B9 /* SignInView.swift in Sources */,
+				95811E4B57FCB2C70DC215F8 /* StudentDetailView.swift in Sources */,
+				59A8D8E43B4D2FEF55AA9BE5 /* TeacherStudentView.swift in Sources */,
+				73DD405B1D85FD4E6CEC495B /* User.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		04B5A6192E0E6DFA004E2FEA /* Sources */ = {
+		7C8FFF578A5FC908B304F09C /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2B0DEACC10475A2CB22729CE /* CreateRoutineViewModelTests.swift in Sources */,
+				173BD005D2B4BAD28A2746F8 /* MetronomeServiceTests.swift in Sources */,
+				002E881248BE62FA085B0BD6 /* PitchEstimatorTests.swift in Sources */,
+				38613D9E6547E5E73B7988D5 /* PitchTests.swift in Sources */,
+				B873EF767C6060C4E552E48C /* PracticeSessionWorkflowTests.swift in Sources */,
+				E6D9ED7400FCDFC55474F11E /* TeacherStudentWorkflowTests.swift in Sources */,
+				953AD361B3C62759BF5E8842 /* TestHelpers.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		04B5A6232E0E6DFA004E2FEA /* Sources */ = {
+		EC0D5AC0D65B069AE6BE8BCC /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1494B867D872565A4FA3CF77 /* CadenzaSmokeTests.swift in Sources */,
+				D39CBBCAE98F66E6CAEF3026 /* HomeUITests.swift in Sources */,
+				19A00562E621415B1ABB45EA /* PageObjects.swift in Sources */,
+				0AB4AFF9D953790E0B5E97DD /* PieceManagementUITests.swift in Sources */,
+				82EF38B4A166391FE2B8A516 /* TeacherStudentUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		04B5A61F2E0E6DFA004E2FEA /* PBXTargetDependency */ = {
+		BC8FADC4A59BD94CFDDFB505 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 04B5A60D2E0E6DF2004E2FEA /* Cadenza */;
-			targetProxy = 04B5A61E2E0E6DFA004E2FEA /* PBXContainerItemProxy */;
+			target = E105858D0D4F4616F76B78CC /* Cadenza */;
+			targetProxy = 530AF5D7CDD499B0635FE0D0 /* PBXContainerItemProxy */;
 		};
-		04B5A6292E0E6DFA004E2FEA /* PBXTargetDependency */ = {
+		C7E3EC2D3D63820F0505C27C /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 04B5A60D2E0E6DF2004E2FEA /* Cadenza */;
-			targetProxy = 04B5A6282E0E6DFA004E2FEA /* PBXContainerItemProxy */;
+			target = E105858D0D4F4616F76B78CC /* Cadenza */;
+			targetProxy = 166C2CCC135FA92DFCAF8787 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		04B5A62F2E0E6DFB004E2FEA /* Debug */ = {
+		08A77F77DA82968D0106872D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.cadenza.CadenzaTests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Cadenza.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Cadenza";
+			};
+			name = Debug;
+		};
+		38F793FCE1AA4D670ECEE004 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.cadenza.CadenzaUITests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Cadenza;
+			};
+			name = Debug;
+		};
+		4BEEDC8853EF65CE07F2E40F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.cadenza.CadenzaUITests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Cadenza;
+			};
+			name = Release;
+		};
+		4F7E4FA4242BEAD5026ABB89 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.cadenza.CadenzaTests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Cadenza.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Cadenza";
+			};
+			name = Release;
+		};
+		64ED35CA32E459B9E54E3D84 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Cadenza/Cadenza.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = "";
+				INFOPLIST_FILE = Cadenza/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.cadenza.Cadenza;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		6BCDE8368B2F79D16927E890 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Cadenza/Cadenza.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = "";
+				INFOPLIST_FILE = Cadenza/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.cadenza.Cadenza;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		A1E13D07AC9970248FBC4F54 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
@@ -349,14 +728,13 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
 					"$(inherited)",
+					"DEBUG=1",
 				);
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
@@ -364,25 +742,26 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
-				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.9;
 			};
 			name = Debug;
 		};
-		04B5A6302E0E6DFB004E2FEA /* Release */ = {
+		A4D6FA68988E79D8F0EAFCE7 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
@@ -412,8 +791,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
@@ -421,241 +799,57 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
-				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
-				VALIDATE_PRODUCT = YES;
-			};
-			name = Release;
-		};
-		04B5A6322E0E6DFB004E2FEA /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = Cadenza/Cadenza.entitlements;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "";
-				DEVELOPMENT_TEAM = 2V3M244HF2;
-				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = Cadenza/Info.plist;
-				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Cadenza uses the microphone to detect pitch for the tuner feature, helping you tune your instrument.";
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
-				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = studio.loopflow.Cadenza;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 6.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		04B5A6332E0E6DFB004E2FEA /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = Cadenza/Cadenza.entitlements;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "";
-				DEVELOPMENT_TEAM = 2V3M244HF2;
-				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = Cadenza/Info.plist;
-				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Cadenza uses the microphone to detect pitch for the tuner feature, helping you tune your instrument.";
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
-				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = studio.loopflow.Cadenza;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 6.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
-		04B5A6352E0E6DFB004E2FEA /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.loopflowstudio.CadenzaTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 6.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Cadenza.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Cadenza";
-			};
-			name = Debug;
-		};
-		04B5A6362E0E6DFB004E2FEA /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.loopflowstudio.CadenzaTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 6.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Cadenza.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Cadenza";
-			};
-			name = Release;
-		};
-		04B5A6382E0E6DFB004E2FEA /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
-				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.loopflowstudio.CadenzaUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_STRICT_CONCURRENCY = minimal;
-				SWIFT_VERSION = 6.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = Cadenza;
-			};
-			name = Debug;
-		};
-		04B5A6392E0E6DFB004E2FEA /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
-				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.loopflowstudio.CadenzaUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_STRICT_CONCURRENCY = minimal;
-				SWIFT_VERSION = 6.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = Cadenza;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.9;
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		04B5A6092E0E6DF2004E2FEA /* Build configuration list for PBXProject "Cadenza" */ = {
+		27A7295BFABAF56CA504C014 /* Build configuration list for PBXNativeTarget "CadenzaTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				04B5A62F2E0E6DFB004E2FEA /* Debug */,
-				04B5A6302E0E6DFB004E2FEA /* Release */,
+				08A77F77DA82968D0106872D /* Debug */,
+				4F7E4FA4242BEAD5026ABB89 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
-		04B5A6312E0E6DFB004E2FEA /* Build configuration list for PBXNativeTarget "Cadenza" */ = {
+		4657FC78F268FEA51E353563 /* Build configuration list for PBXProject "Cadenza" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				04B5A6322E0E6DFB004E2FEA /* Debug */,
-				04B5A6332E0E6DFB004E2FEA /* Release */,
+				A1E13D07AC9970248FBC4F54 /* Debug */,
+				A4D6FA68988E79D8F0EAFCE7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
-		04B5A6342E0E6DFB004E2FEA /* Build configuration list for PBXNativeTarget "CadenzaTests" */ = {
+		C9A9242A535A2F13E6B37570 /* Build configuration list for PBXNativeTarget "CadenzaUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				04B5A6352E0E6DFB004E2FEA /* Debug */,
-				04B5A6362E0E6DFB004E2FEA /* Release */,
+				38F793FCE1AA4D670ECEE004 /* Debug */,
+				4BEEDC8853EF65CE07F2E40F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
-		04B5A6372E0E6DFB004E2FEA /* Build configuration list for PBXNativeTarget "CadenzaUITests" */ = {
+		F6790ED2D913E5D732C38092 /* Build configuration list for PBXNativeTarget "Cadenza" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				04B5A6382E0E6DFB004E2FEA /* Debug */,
-				04B5A6392E0E6DFB004E2FEA /* Release */,
+				64ED35CA32E459B9E54E3D84 /* Debug */,
+				6BCDE8368B2F79D16927E890 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		048C68692E165618000AFF98 /* XCRemoteSwiftPackageReference "apollo-ios" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/apollographql/apollo-ios";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.23.0;
-			};
-		};
-		048C68732E1664BE000AFF98 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/google/GoogleSignIn-iOS";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 8.0.0;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		048C696D2E1726E5000AFF98 /* Apollo */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 048C68692E165618000AFF98 /* XCRemoteSwiftPackageReference "apollo-ios" */;
-			productName = Apollo;
-		};
-		048C696F2E1726E5000AFF98 /* ApolloAPI */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 048C68692E165618000AFF98 /* XCRemoteSwiftPackageReference "apollo-ios" */;
-			productName = ApolloAPI;
-		};
-		048C69712E1726E5000AFF98 /* GoogleSignIn */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 048C68732E1664BE000AFF98 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
-			productName = GoogleSignIn;
-		};
-		048C69732E1726E5000AFF98 /* GoogleSignInSwift */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 048C68732E1664BE000AFF98 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
-			productName = GoogleSignInSwift;
-		};
-		048C6C1A2E2B29FD000AFF98 /* ApolloSQLite */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 048C68692E165618000AFF98 /* XCRemoteSwiftPackageReference "apollo-ios" */;
-			productName = ApolloSQLite;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
-	rootObject = 04B5A6062E0E6DF2004E2FEA /* Project object */;
+	rootObject = D1AE8EC53EC28557F8771111 /* Project object */;
 }
