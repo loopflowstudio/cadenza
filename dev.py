@@ -292,22 +292,24 @@ def research(args: argparse.Namespace) -> None:
 
     # Run each scenario and capture screenshots
     all_screenshots = []
+    config_path = Path("/tmp/cadenza-research-config.json")
+
     for scenario in scenarios:
         scenario_dir = output_dir / scenario
         scenario_dir.mkdir(exist_ok=True)
+
+        # Write config file for test to read
+        config = {"scenario": scenario, "outputDir": str(scenario_dir)}
+        config_path.write_text(json.dumps(config))
 
         print(f"Running scenario: {scenario}")
         result = subprocess.run([
             "xcodebuild", "test",
             "-project", str(PROJECT),
-            "-scheme", "CadenzaUITests",
+            "-scheme", "Cadenza",
             "-destination", f"platform=iOS Simulator,name={args.device}",
             "-only-testing:CadenzaUITests/ScreenshotPipelineTests/testCaptureScenario",
-        ], env={
-            **os.environ,
-            "CADENZA_SCENARIO": scenario,
-            "CADENZA_OUTPUT_DIR": str(scenario_dir),
-        }, capture_output=True, text=True)
+        ], capture_output=True, text=True)
 
         if result.returncode != 0:
             print(f"  Warning: scenario failed")

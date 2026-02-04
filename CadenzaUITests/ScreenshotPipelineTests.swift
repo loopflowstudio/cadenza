@@ -1,16 +1,23 @@
 import XCTest
 
+/// Config for research screenshots, written by dev.py
+struct ResearchConfig: Codable {
+    let scenario: String
+    let outputDir: String
+}
+
 /// Automated screenshot capture for UX research.
-/// Controlled via environment variables:
-/// - CADENZA_SCENARIO: which scenario to run
-/// - CADENZA_OUTPUT_DIR: where to save screenshots
+/// Config is read from /tmp/cadenza-research-config.json
 @MainActor
 final class ScreenshotPipelineTests: XCTestCase {
 
     func testCaptureScenario() throws {
-        let env = ProcessInfo.processInfo.environment
-        let scenarioName = env["CADENZA_SCENARIO"] ?? "teacher-assigns-routine"
-        let outputDir = env["CADENZA_OUTPUT_DIR"] ?? NSTemporaryDirectory()
+        // Read config from file (written by dev.py research command)
+        let configURL = URL(fileURLWithPath: "/tmp/cadenza-research-config.json")
+        let config = try? JSONDecoder().decode(ResearchConfig.self, from: Data(contentsOf: configURL))
+
+        let scenarioName = config?.scenario ?? "teacher-assigns-routine"
+        let outputDir = config?.outputDir ?? NSTemporaryDirectory()
 
         let scenario = Scenarios.find(named: scenarioName)
         let app = XCUIApplication()

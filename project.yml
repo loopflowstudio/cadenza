@@ -24,7 +24,10 @@ targets:
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.cadenza.Cadenza
-        INFOPLIST_FILE: Cadenza/Info.plist
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_CFBundleDisplayName: Cadenza
+        INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
         CODE_SIGN_ENTITLEMENTS: Cadenza/Cadenza.entitlements
         DEVELOPMENT_TEAM: ""
     entitlements:
@@ -42,6 +45,7 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: com.cadenza.CadenzaTests
         TEST_HOST: "$(BUILT_PRODUCTS_DIR)/Cadenza.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Cadenza"
         BUNDLE_LOADER: "$(TEST_HOST)"
+        GENERATE_INFOPLIST_FILE: YES
 
   CadenzaUITests:
     type: bundle.ui-testing
@@ -54,6 +58,7 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.cadenza.CadenzaUITests
         TEST_TARGET_NAME: Cadenza
+        GENERATE_INFOPLIST_FILE: YES
 
 schemes:
   Cadenza:
