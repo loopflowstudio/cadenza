@@ -1511,7 +1511,8 @@ def create_submission_message(
 
     if include_video and message.video_duration_seconds is None:
         raise HTTPException(
-            status_code=422, detail="video_duration_seconds is required for video messages"
+            status_code=422,
+            detail="video_duration_seconds is required for video messages",
         )
 
     message_id = uuid4()
@@ -1530,7 +1531,9 @@ def create_submission_message(
         sender_id=current_user.id,
         text=text,
         video_s3_key=video_s3_key,
-        video_duration_seconds=message.video_duration_seconds if include_video else None,
+        video_duration_seconds=message.video_duration_seconds
+        if include_video
+        else None,
         thumbnail_s3_key=thumbnail_s3_key,
     )
 
