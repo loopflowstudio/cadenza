@@ -44,11 +44,7 @@ def get_current_user(
         try:
             user_id = int(token.removeprefix(DEV_TOKEN_PREFIX))
             user = db.exec(select(User).where(User.id == user_id)).first()
-            if (
-                user
-                and user.apple_user_id
-                and user.apple_user_id.startswith("dev_")
-            ):
+            if user and user.apple_user_id and user.apple_user_id.startswith("dev_"):
                 return user
         except (ValueError, TypeError):
             pass  # Fall through to normal JWT validation

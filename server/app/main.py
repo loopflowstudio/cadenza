@@ -57,9 +57,7 @@ def health_check():
 
 @app.post("/auth/dev-login", response_model=schemas.AuthResponse)
 @limiter.limit(settings.rate_limit_auth)
-def dev_login(
-    request: Request, email: str, db: Annotated[Session, Depends(get_db)]
-):
+def dev_login(request: Request, email: str, db: Annotated[Session, Depends(get_db)]):
     """
     Development-only login endpoint that bypasses Apple Sign In.
     Creates or updates a user with the given email.
@@ -107,7 +105,9 @@ def authenticate_with_apple(
     except InvalidTokenError:
         raise HTTPException(status_code=401, detail="Authentication failed")
     except Exception:
-        raise HTTPException(status_code=503, detail="Authentication service unavailable")
+        raise HTTPException(
+            status_code=503, detail="Authentication service unavailable"
+        )
 
     apple_user_id = apple_payload.get("sub")
     email = apple_payload.get("email", f"{apple_user_id}@privaterelay.appleid.com")
