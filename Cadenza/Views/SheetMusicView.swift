@@ -90,7 +90,6 @@ struct EnhancedSheetMusicViewer: View {
     @State private var pdfDocument: PDFDocument?
     @State private var currentPage = 1
     @State private var totalPages = 0
-    @State private var zoomScale: CGFloat = 1.0
     @State private var halfPagePosition = 0
     @State private var isCropEditing = false
     @State private var editingCropRect: CGRect = CropSettings.full.visibleRect.cgRect
@@ -317,20 +316,17 @@ struct EnhancedSheetMusicViewer: View {
         guard let pdfView = pdfView else { return }
         let newScale = min(pdfView.scaleFactor * 1.25, pdfView.maxScaleFactor)
         pdfView.scaleFactor = newScale
-        zoomScale = newScale
     }
 
     private func zoomOut() {
         guard let pdfView = pdfView else { return }
         let newScale = max(pdfView.scaleFactor / 1.25, pdfView.minScaleFactor)
         pdfView.scaleFactor = newScale
-        zoomScale = newScale
     }
 
     private func fitToWidth() {
         guard let pdfView = pdfView else { return }
         pdfView.scaleFactor = pdfView.scaleFactorForSizeToFit
-        zoomScale = pdfView.scaleFactor
     }
 
     // MARK: - Mode State
