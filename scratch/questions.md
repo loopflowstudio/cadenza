@@ -1,4 +1,17 @@
-# Open Questions
+# Questions
+
+## Wave Status
+
+The security wave appears complete. All roadmap items have been implemented and removed:
+- `01-remove-dev-backdoors.md` - Dev auth gating implemented
+- `02-cors-and-rate-limiting.md` - CORS and rate limits implemented
+- `03-apple-signin-verification.md` - Apple token verification implemented
+
+All 59 server tests pass. The branch is ready for merge to main.
+
+**Next step**: Merge this branch or start a new wave.
+
+---
 
 ## Video Submissions
 
