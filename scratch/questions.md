@@ -1,9 +1,5 @@
 # Questions
 
-## ~~Wave backlog missing~~ (Resolved)
-
-The `roadmap/` directory does not exist. Proceeding with security hardening based on codebase analysis. The branch name "security" indicates the intent; the design in `scratch/security.md` defines scope.
-
 ## Open questions
 
 ### COPPA compliance timeline
@@ -21,8 +17,8 @@ These are infrastructure decisions outside this codebase. Need confirmation this
 
 ### Apple Client ID
 
-The design requires `APPLE_CLIENT_ID` env var for token verification. This should match the bundle ID registered with Apple. Need to confirm the production value.
+Apple token verification requires `APPLE_CLIENT_ID` to match the Apple bundle ID. Confirm the production value.
 
 ### Dev-login endpoint scope
 
-Security hardening notes conflict: `scratch/security.md` suggests removing `/auth/dev-login`, while `scratch/security-remove-dev-backdoors.md` keeps it but gates to dev only. Implemented dev-only gating (404 in non-dev).
+Security hardening notes conflict: one earlier doc suggested removing `/auth/dev-login`, while the current implementation keeps it but gates to dev only (404 in non-dev). Confirm this is the intended long-term behavior.
