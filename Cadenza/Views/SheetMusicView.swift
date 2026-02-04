@@ -176,74 +176,46 @@ private struct TapZoneOverlay: View {
     let canGoPrevious: Bool
     let canGoNext: Bool
 
-    @State private var showLeftFeedback = false
-    @State private var showRightFeedback = false
-
     var body: some View {
         GeometryReader { geometry in
+            let zoneWidth = geometry.size.width * 0.2
             HStack(spacing: 0) {
-                // Left zone (20%)
-                tapZone(
-                    width: geometry.size.width * 0.2,
-                    showFeedback: showLeftFeedback,
-                    direction: .left
-                ) {
-                    if canGoPrevious {
-                        showLeftFeedback = true
-                        onPrevious()
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
-                            showLeftFeedback = false
-                        }
-                    }
-                }
-
-                // Center area (60%) - passthrough
-                Color.clear
-                    .frame(width: geometry.size.width * 0.6)
-                    .contentShape(Rectangle())
-                    .allowsHitTesting(false)
-
-                // Right zone (20%)
-                tapZone(
-                    width: geometry.size.width * 0.2,
-                    showFeedback: showRightFeedback,
-                    direction: .right
-                ) {
-                    if canGoNext {
-                        showRightFeedback = true
-                        onNext()
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
-                            showRightFeedback = false
-                        }
-                    }
-                }
+                TapZone(icon: "chevron.left", enabled: canGoPrevious, action: onPrevious)
+                    .frame(width: zoneWidth)
+                Spacer()
+                TapZone(icon: "chevron.right", enabled: canGoNext, action: onNext)
+                    .frame(width: zoneWidth)
             }
         }
     }
+}
 
-    private enum Direction { case left, right }
+private struct TapZone: View {
+    let icon: String
+    let enabled: Bool
+    let action: () -> Void
 
-    @ViewBuilder
-    private func tapZone(
-        width: CGFloat,
-        showFeedback: Bool,
-        direction: Direction,
-        action: @escaping () -> Void
-    ) -> some View {
-        ZStack {
-            Color.clear
-                .contentShape(Rectangle())
-                .onTapGesture(perform: action)
+    @State private var showFeedback = false
 
-            if showFeedback {
-                Image(systemName: direction == .left ? "chevron.left" : "chevron.right")
-                    .font(.system(size: 40, weight: .light))
-                    .foregroundColor(.primary.opacity(0.3))
-                    .transition(.opacity)
+    var body: some View {
+        Color.clear
+            .contentShape(Rectangle())
+            .onTapGesture {
+                guard enabled else { return }
+                showFeedback = true
+                action()
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
+                    showFeedback = false
+                }
             }
-        }
-        .frame(width: width)
-        .animation(.easeOut(duration: 0.15), value: showFeedback)
+            .overlay {
+                if showFeedback {
+                    Image(systemName: icon)
+                        .font(.system(size: 40, weight: .light))
+                        .foregroundColor(.primary.opacity(0.3))
+                }
+            }
+            .animation(.easeOut(duration: 0.15), value: showFeedback)
     }
 }
 
