@@ -1,238 +1,173 @@
-# User Research Simulation
+# upandrun: Local Dev & Dogfooding Infrastructure
 
-**What to build**: A system that simulates different user personas navigating the app, captures screenshots at each step, and feeds them to Claude for UX analysis.
+## What to Build
 
-## Personas
+Scripts and config to run the full Cadenza stack locally (server + iOS simulator) without Xcode IDE, with good logging and seed data for dogfooding.
 
-Three personas, each with distinct data and goals:
+## Current State
 
-```swift
-enum Persona: String, CaseIterable {
-    case teacher      // Has students, creates routines, assigns work
-    case student      // Has teacher, receives assignments, practices
-    case selfTaught   // No teacher, manages own routines
-}
+**What works:**
+- `python dev.py server` — starts postgres + uvicorn
+- `python dev.py simulator` — builds and launches iOS (but requires existing .xcodeproj)
+- `/auth/dev-login` endpoint — email-based auth bypass
+- DevSignInView — quick-fill buttons for test users
+- 11 bundled PDFs in `Cadenza/Resources/`
 
-struct PersonaConfig {
-    let persona: Persona
-    let userId: Int
-    let token: String
-    let seedData: PersonaSeedData
-}
+**What's missing:**
+- No `project.yml` for xcodegen (currently depends on Xcode-generated .xcodeproj)
+- No rich seed data (only creates empty users, no routines/pieces/sessions)
+- No structured logging (just `print()` statements)
+- No way to reset/switch between app states
 
-struct PersonaSeedData {
-    let pieces: [PieceDTO]
-    let routines: [RoutineDTO]
-    let hasTeacher: Bool
-    let students: [User]?
-}
-```
+## Data Structures
 
-Mock data per persona:
+### Seed Data Script
 
-| Persona | User ID | Has pieces | Has routines | Has teacher | Has students |
-|---------|---------|------------|--------------|-------------|--------------|
-| teacher | 1 | 3 | 1 | no | 2 |
-| student | 2 | 0 | 1 (assigned) | yes (id=1) | no |
-| selfTaught | 4 | 2 | 0 | no | no |
+```python
+# server/seed_scenario.py
 
-Self-taught user has a couple pieces and is trying to create their first routine.
+@dataclass
+class Scenario:
+    name: str
+    description: str
+    setup: Callable[[Session], None]
 
-## Scenarios
-
-Each scenario is a named sequence of navigation steps:
-
-```swift
-struct Scenario {
-    let name: String
-    let persona: Persona
-    let steps: [ScenarioStep]
-}
-
-enum ScenarioStep {
-    case launch
-    case navigate(to: String)  // accessibility identifier
-    case tap(element: String)
-    case wait(seconds: Double)
-    case screenshot(name: String)
-}
-```
-
-Example scenarios:
-
-```swift
-let scenarios = [
-    Scenario(
-        name: "teacher-assigns-routine",
-        persona: .teacher,
-        steps: [
-            .launch,
-            .screenshot(name: "home"),
-            .navigate(to: "nav-teacher-students"),
-            .screenshot(name: "students-list"),
-            .tap(element: "student-row-2"),
-            .screenshot(name: "student-detail"),
-            .tap(element: "assign-routine-button"),
-            .screenshot(name: "assign-sheet")
-        ]
+SCENARIOS = {
+    "empty": Scenario("Empty", "Fresh user, no data"),
+    "teacher-with-students": Scenario(
+        "Teacher with students",
+        "Teacher with 2 students, routines, pieces"
     ),
-    Scenario(
-        name: "student-starts-practice",
-        persona: .student,
-        steps: [
-            .launch,
-            .screenshot(name: "home"),
-            .navigate(to: "nav-practice"),
-            .screenshot(name: "routines"),
-            .tap(element: "start-practice-button"),
-            .screenshot(name: "practice-session")
-        ]
+    "student-with-assignment": Scenario(
+        "Student with assignment",
+        "Student with assigned routine, some practice history"
     ),
-    Scenario(
-        name: "self-taught-creates-routine",
-        persona: .selfTaught,
-        steps: [
-            .launch,
-            .screenshot(name: "home"),
-            .navigate(to: "nav-practice"),
-            .screenshot(name: "routines-empty"),
-            .tap(element: "create-routine-button"),
-            .screenshot(name: "create-routine-form")
-        ]
-    )
-]
-```
-
-## Screenshot Pipeline
-
-Reuse the loopflow pattern: XCTest harness → environment config → NSView capture.
-
-```swift
-// CadenzaUITests/ScreenshotPipelineTests.swift
-@MainActor
-final class ScreenshotPipelineTests: XCTestCase {
-
-    func testCaptureScenario() throws {
-        let env = ProcessInfo.processInfo.environment
-        let scenarioName = env["CADENZA_SCENARIO"] ?? "teacher-assigns-routine"
-        let outputDir = env["CADENZA_OUTPUT_DIR"] ?? NSTemporaryDirectory()
-
-        let app = XCUIApplication()
-        app.launchArguments += ["--mock-api", "--scenario", scenarioName]
-        app.launch()
-
-        let scenario = Scenarios.find(named: scenarioName)
-        for step in scenario.steps {
-            execute(step, in: app, outputDir: outputDir)
-        }
-    }
-
-    private func execute(_ step: ScenarioStep, in app: XCUIApplication, outputDir: String) {
-        switch step {
-        case .launch:
-            XCTAssertTrue(app.wait(for: .runningForeground, timeout: 10))
-        case .navigate(let id):
-            app.buttons[id].firstMatch.tap()
-        case .tap(let id):
-            app.buttons[id].firstMatch.tap()
-        case .wait(let seconds):
-            Thread.sleep(forTimeInterval: seconds)
-        case .screenshot(let name):
-            let screenshot = XCUIScreen.main.screenshot()
-            let url = URL(fileURLWithPath: outputDir).appendingPathComponent("\(name).png")
-            try? screenshot.pngRepresentation.write(to: url)
-        }
-    }
 }
 ```
 
-## CLI Runner
+### project.yml (xcodegen)
 
-Python script orchestrates the process:
+```yaml
+name: Cadenza
+options:
+  bundleIdPrefix: com.cadenza
+  deploymentTarget:
+    iOS: "17.0"
+
+targets:
+  Cadenza:
+    type: application
+    platform: iOS
+    sources:
+      - Cadenza
+    resources:
+      - Cadenza/Resources
+      - Cadenza/Assets.xcassets
+    settings:
+      PRODUCT_BUNDLE_IDENTIFIER: com.cadenza.Cadenza
+      DEVELOPMENT_TEAM: ""  # Set in local overrides
+    entitlements: Cadenza/Cadenza.entitlements
+```
+
+## Key Functions
 
 ```python
 # dev.py additions
 
-def cmd_research(args):
-    """Run simulated user research"""
-    scenarios = args.scenarios or ["all"]
-    output_dir = Path("scratch/research") / datetime.now().strftime("%Y%m%d-%H%M%S")
-    output_dir.mkdir(parents=True, exist_ok=True)
+def seed(args) -> None:
+    """Seed database with a specific scenario."""
+    # python dev.py seed --scenario teacher-with-students
 
-    for scenario in get_scenarios(scenarios):
-        run_scenario(scenario, output_dir)
+def reset(args) -> None:
+    """Reset database to clean state, optionally seed."""
+    # python dev.py reset
+    # python dev.py reset --scenario student-with-assignment
 
-    # After all screenshots captured, analyze
-    analyze_screenshots(output_dir)
+def logs(args) -> None:
+    """Tail server logs with filtering."""
+    # python dev.py logs --filter auth
+    # python dev.py logs --filter "DB WRITE"
 
-def run_scenario(scenario: str, output_dir: Path):
-    scenario_dir = output_dir / scenario
-    scenario_dir.mkdir(exist_ok=True)
-
-    subprocess.run([
-        "xcodebuild", "test",
-        "-project", "Cadenza.xcodeproj",
-        "-scheme", "CadenzaUITests",
-        "-destination", "platform=iOS Simulator,name=iPhone 15",
-        "-only-testing:CadenzaUITests/ScreenshotPipelineTests/testCaptureScenario",
-    ], env={
-        **os.environ,
-        "CADENZA_SCENARIO": scenario,
-        "CADENZA_OUTPUT_DIR": str(scenario_dir),
-    })
-
-def analyze_screenshots(output_dir: Path):
-    """Feed screenshots to Claude for UX analysis"""
-    # Collect all PNGs
-    screenshots = list(output_dir.rglob("*.png"))
-
-    # Build prompt with images
-    prompt = build_analysis_prompt(screenshots)
-
-    # Call Claude API with vision
-    response = anthropic.messages.create(
-        model="claude-sonnet-4-20250514",
-        messages=[{"role": "user", "content": prompt}],
-    )
-
-    # Write report
-    (output_dir / "analysis.md").write_text(response.content[0].text)
+def generate(args) -> None:
+    """Generate Xcode project from project.yml."""
+    # python dev.py generate
 ```
 
-## Analysis Prompt
-
-The prompt should focus on UX issues, not technical bugs:
-
-```
-You are reviewing screenshots from a music practice app used by:
-- Teachers: assign routines to students, track progress
-- Students: practice assigned routines, view sheet music
-- Self-taught: manage their own learning
-
-For each screenshot sequence, identify:
-1. Confusing UI elements or unclear affordances
-2. Missing information a user would need
-3. Friction points in the workflow
-4. What works well
-
-Be specific. Reference exact UI elements visible in the screenshots.
+```bash
+# Full workflow example
+python dev.py reset --scenario teacher-with-students
+python dev.py server &
+python dev.py generate
+python dev.py simulator
 ```
 
 ## Constraints
 
-- **iOS only**: No macOS. Use XCUITest, not NSView snapshotting.
-- **Simulator**: Screenshots from iOS Simulator, not device.
-- **Mock data**: All scenarios use `--mock-api`. No network calls.
-- **No auth flow**: Skip sign-in; mock starts authenticated.
+- **No Xcode IDE** — all Swift builds via `xcodegen` + `xcodebuild` CLI
+- **SPM for dependencies** — if we add any, they go in project.yml
+- **Bundled PDFs only** — no S3 needed for dogfooding (use local/bundled pieces)
+- **Single-command startup** — coding agents should be able to rebuild and run with one command
+
+## Seed Scenarios
+
+### 1. `empty`
+- Single user (current email), no other data
+
+### 2. `teacher-with-students`
+- Teacher: teacher@example.com
+- Students: student1@example.com, student2@example.com (linked to teacher)
+- 3 pieces for teacher (from bundled PDFs)
+- 1 routine with 2 exercises
+- Student1 has routine assigned
+
+### 3. `student-with-assignment`
+- Student: student1@example.com
+- Teacher: teacher@example.com
+- Assigned routine with 3 exercises
+- 2 completed practice sessions (for calendar gold stars)
+- 1 in-progress session
+
+## Observation Log Template
+
+After running the app, capture friction in this format:
+
+```markdown
+## Session: [date]
+
+### Flow: [what you tried]
+
+- [ ] Worked as expected
+- [ ] Broken: [description]
+- [ ] Missing: [description]
+- [ ] Friction: [description]
+
+### Notes
+[freeform observations]
+```
 
 ## Done When
 
 ```bash
-python dev.py research --scenarios teacher-assigns-routine
+# 1. Generate project and build succeeds
+python dev.py generate && python dev.py simulator --build-only
+# Expected: BUILD SUCCEEDED
+
+# 2. Seed data works
+python dev.py reset --scenario teacher-with-students
+curl -s http://localhost:8000/auth/dev-login?email=teacher@example.com | jq .user
+# Expected: {"id": 1, "email": "teacher@example.com", ...}
+
+curl -s -H "Authorization: Bearer dev_token_user_1" http://localhost:8000/routines | jq length
+# Expected: 1
+
+# 3. Full flow works
+python dev.py server &
+python dev.py simulator
+# Expected: App launches, can sign in as teacher, see routine with pieces
 ```
 
-Produces:
-1. `scratch/research/<timestamp>/teacher-assigns-routine/*.png` - screenshots
-2. `scratch/research/<timestamp>/analysis.md` - Claude's UX analysis
+## Open Questions
 
-The analysis identifies at least one actionable UX improvement.
+1. Do we need hot-reload for Swift, or is rebuild-on-save acceptable?
+2. Should bundled PDFs be treated as "local pieces" or uploaded to local S3 (minio)?
+3. What logging format? Structured JSON or human-readable with `[CATEGORY]` prefixes?
