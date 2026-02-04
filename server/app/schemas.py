@@ -2,6 +2,7 @@ from pydantic import BaseModel, Field
 from datetime import datetime
 from uuid import UUID
 from typing import Optional
+from app import models
 from app.models import User
 
 
@@ -48,6 +49,33 @@ class PieceDownloadUrlResponse(BaseModel):
     """Response containing presigned download URL"""
 
     download_url: str
+    expires_in: int
+
+
+class VideoSubmissionCreate(BaseModel):
+    exercise_id: Optional[UUID] = None
+    piece_id: Optional[UUID] = None
+    session_id: Optional[UUID] = None
+    duration_seconds: int
+    notes: Optional[str] = None
+
+
+class VideoSubmissionCreateResponse(BaseModel):
+    submission: models.VideoSubmission
+    upload_url: str
+    thumbnail_upload_url: str
+    expires_in: int
+
+
+class VideoSubmissionUploadUrlsResponse(BaseModel):
+    upload_url: str
+    thumbnail_upload_url: str
+    expires_in: int
+
+
+class VideoSubmissionVideoUrlResponse(BaseModel):
+    video_url: str
+    thumbnail_url: Optional[str]
     expires_in: int
 
 

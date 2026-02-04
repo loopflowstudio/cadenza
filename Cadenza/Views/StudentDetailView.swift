@@ -49,6 +49,8 @@ struct StudentDetailView: View {
                 Text("Sheet Music (\(pieces.count))")
             }
 
+            PendingVideosSection(studentId: student.id)
+
             // Error Display
             if let errorMessage = errorMessage {
                 Section {
@@ -129,4 +131,3 @@ struct StudentDetailView: View {
         return token
     }
 }
-
