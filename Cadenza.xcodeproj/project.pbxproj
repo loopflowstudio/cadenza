@@ -48,6 +48,7 @@
 		9981D7A7E126BDD0DB1A8BAF /* methode du jeune violoncelliste.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 6B2B2AC8469800AE6D50A9D4 /* methode du jeune violoncelliste.pdf */; };
 		9CBFE68EBE0A3E28C24D1501 /* AuthModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E6FA4CC95E22F17EE42B9B /* AuthModels.swift */; };
 		A8A6A4D978048535706C91D7 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF561EC6E5AF3F568DD26AE /* HomeView.swift */; };
+		A8B5C8009039975923947974 /* ScreenshotPipelineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF12DB315CF899ADE2B7CFD0 /* ScreenshotPipelineTests.swift */; };
 		A9B56A764C48AFE9DC2C5DB6 /* NetworkingConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56523085B2AB1F72044A66A6 /* NetworkingConfig.swift */; };
 		AE638B4DFFE7CE57C56F22FD /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A8D0401CB0A025FC5116229 /* ContentView.swift */; };
 		AF6637885AE75690E198A7B9 /* SignInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FA30BBA9BE9F5193CD18B7 /* SignInView.swift */; };
@@ -146,6 +147,7 @@
 		AD4CEA7FB58B82D74A82BEA9 /* SharePiecePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharePiecePicker.swift; sourceTree = "<group>"; };
 		AE0468DA25134D8B1434C00D /* MockAuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockAuthService.swift; sourceTree = "<group>"; };
 		AE3D6554395EDEF14BD47433 /* Icon */ = {isa = PBXFileReference; path = "Icon"; sourceTree = "<group>"; };
+		AF12DB315CF899ADE2B7CFD0 /* ScreenshotPipelineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotPipelineTests.swift; sourceTree = "<group>"; };
 		B12C6D90C79FFF54865A6703 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		B269FBDFD4D206A08B87C183 /* Sonata in G major.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "Sonata in G major.pdf"; sourceTree = "<group>"; };
 		B2D6DE7A6D692B74F1369486 /* Suzuki - Cello School - Volume 2.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "Suzuki - Cello School - Volume 2.pdf"; sourceTree = "<group>"; };
@@ -227,6 +229,7 @@
 				B94BB82EC93AEE385BA9DDD0 /* HomeUITests.swift */,
 				7B9937EDA6371625AF340910 /* PageObjects.swift */,
 				28DEE6429BF672C57A062697 /* PieceManagementUITests.swift */,
+				AF12DB315CF899ADE2B7CFD0 /* ScreenshotPipelineTests.swift */,
 				EC73249EB4A7C839DA777402 /* TeacherStudentUITests.swift */,
 			);
 			path = CadenzaUITests;
@@ -571,6 +574,7 @@
 				D39CBBCAE98F66E6CAEF3026 /* HomeUITests.swift in Sources */,
 				19A00562E621415B1ABB45EA /* PageObjects.swift in Sources */,
 				0AB4AFF9D953790E0B5E97DD /* PieceManagementUITests.swift in Sources */,
+				A8B5C8009039975923947974 /* ScreenshotPipelineTests.swift in Sources */,
 				82EF38B4A166391FE2B8A516 /* TeacherStudentUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

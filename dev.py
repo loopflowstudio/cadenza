@@ -14,6 +14,7 @@ Usage:
     python dev.py generate        # Generate Xcode project from project.yml
     python dev.py reset           # Reset database to clean state
     python dev.py seed            # Seed database with scenario data
+    python dev.py research        # Run UX research: screenshots + Claude analysis
 """
 
 from __future__ import annotations
@@ -25,6 +26,7 @@ import os
 import subprocess
 import sys
 import time
+from datetime import datetime
 from pathlib import Path
 
 ROOT = Path(__file__).parent
@@ -274,6 +276,115 @@ def seed(args: argparse.Namespace) -> None:
     subprocess.run(cmd, cwd=SERVER_DIR, env=env)
 
 
+def research(args: argparse.Namespace) -> None:
+    """Run UX research: capture screenshots and analyze with Claude."""
+    import base64
+
+    timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
+    output_dir = ROOT / "scratch" / "research" / timestamp
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    scenarios = args.scenarios.split(",") if args.scenarios else ["teacher-assigns-routine"]
+
+    print(f"Running UX research")
+    print(f"Scenarios: {scenarios}")
+    print(f"Output: {output_dir}\n")
+
+    # Run each scenario and capture screenshots
+    all_screenshots = []
+    for scenario in scenarios:
+        scenario_dir = output_dir / scenario
+        scenario_dir.mkdir(exist_ok=True)
+
+        print(f"Running scenario: {scenario}")
+        result = subprocess.run([
+            "xcodebuild", "test",
+            "-project", str(PROJECT),
+            "-scheme", "CadenzaUITests",
+            "-destination", f"platform=iOS Simulator,name={args.device}",
+            "-only-testing:CadenzaUITests/ScreenshotPipelineTests/testCaptureScenario",
+        ], env={
+            **os.environ,
+            "CADENZA_SCENARIO": scenario,
+            "CADENZA_OUTPUT_DIR": str(scenario_dir),
+        }, capture_output=True, text=True)
+
+        if result.returncode != 0:
+            print(f"  Warning: scenario failed")
+            if args.verbose:
+                print(result.stderr[-500:] if len(result.stderr) > 500 else result.stderr)
+
+        screenshots = list(scenario_dir.glob("*.png"))
+        all_screenshots.extend(screenshots)
+        print(f"  Captured {len(screenshots)} screenshots")
+
+    if not all_screenshots:
+        print("\nNo screenshots captured. Skipping analysis.")
+        return
+
+    # Analyze with Claude
+    print(f"\nAnalyzing {len(all_screenshots)} screenshots with Claude...")
+
+    try:
+        import anthropic
+    except ImportError:
+        print("Error: anthropic package not installed")
+        print("Run: uv pip install anthropic")
+        return
+
+    client = anthropic.Anthropic()
+
+    # Build message with images
+    content = [{
+        "type": "text",
+        "text": """You are reviewing screenshots from a music practice app (Cadenza) used by:
+- Teachers: assign routines to students, track progress
+- Students: practice assigned routines, view sheet music
+- Self-taught: manage their own learning
+
+For each screenshot sequence, identify:
+1. Confusing UI elements or unclear affordances
+2. Missing information a user would need
+3. Friction points in the workflow
+4. What works well
+
+Be specific. Reference exact UI elements visible in the screenshots.
+Format as markdown with ## headers for each issue found."""
+    }]
+
+    for screenshot in all_screenshots:
+        with open(screenshot, "rb") as f:
+            image_data = base64.standard_b64encode(f.read()).decode("utf-8")
+        content.append({
+            "type": "image",
+            "source": {
+                "type": "base64",
+                "media_type": "image/png",
+                "data": image_data,
+            }
+        })
+        content.append({
+            "type": "text",
+            "text": f"Screenshot: {screenshot.parent.name}/{screenshot.name}"
+        })
+
+    response = client.messages.create(
+        model="claude-sonnet-4-20250514",
+        max_tokens=4096,
+        messages=[{"role": "user", "content": content}]
+    )
+
+    analysis = response.content[0].text
+
+    # Write analysis to scratch/research/
+    report_file = output_dir / "analysis.md"
+    report_file.write_text(analysis)
+
+    print(f"\nAnalysis written to {report_file}")
+    print("\n" + "=" * 60)
+    print(analysis)
+
+
 def _load_simctl_devices() -> dict | None:
     for _ in range(3):
         result = subprocess.run(
@@ -402,6 +513,13 @@ def main() -> None:
     seed_parser.add_argument("--scenario", "-s", help="Scenario name")
     seed_parser.add_argument("--list", "-l", action="store_true", help="List available scenarios")
     seed_parser.set_defaults(func=seed)
+
+    # research
+    research_parser = subparsers.add_parser("research", help="Run UX research: screenshots + Claude analysis")
+    research_parser.add_argument("--scenarios", "-s", help="Comma-separated scenario names")
+    research_parser.add_argument("--device", default="iPhone 17", help="Simulator device")
+    research_parser.add_argument("--verbose", "-v", action="store_true", help="Show xcodebuild output")
+    research_parser.set_defaults(func=research)
 
     args = parser.parse_args()
     args.func(args)
