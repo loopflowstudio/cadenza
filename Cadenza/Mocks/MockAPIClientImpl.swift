@@ -13,6 +13,7 @@ class MockAPIClientImpl: APIClientProtocol {
     private var pieces: [PieceDTO] = []
     private var routines: [RoutineDTO] = []
     private var teacherStudentRelations: [Int: Int] = [:] // studentId: teacherId
+    private var videoSubmissions: [VideoSubmissionDTO] = []
 
     // Track which user each token represents
     private var tokenToUserId: [String: Int] = [:]
@@ -134,6 +135,23 @@ class MockAPIClientImpl: APIClientProtocol {
                         startPage: 1
                     )
                 ]
+            )
+        ]
+
+        videoSubmissions = [
+            VideoSubmissionDTO(
+                id: UUID(uuidString: "00000000-0000-0000-0000-000000000201")!,
+                userId: 2,
+                exerciseId: routines.first?.exercises.first?.id,
+                pieceId: pieces.first?.id,
+                sessionId: UUID(),
+                s3Key: "cadenza/videos/2/00000000-0000-0000-0000-000000000201.mp4",
+                thumbnailS3Key: "cadenza/videos/2/00000000-0000-0000-0000-000000000201_thumb.jpg",
+                durationSeconds: 42,
+                notes: "Tempo feels uneven in the middle.",
+                reviewedAt: nil,
+                reviewedById: nil,
+                createdAt: Date().addingTimeInterval(-3600)
             )
         ]
     }
@@ -461,6 +479,98 @@ class MockAPIClientImpl: APIClientProtocol {
             }
             return SessionCompletionDTO(completedAt: date)
         }
+    }
+
+    // MARK: - Video Submissions
+
+    func createVideoSubmission(request: VideoSubmissionCreateRequest, token: String) async throws -> VideoSubmissionCreateResponse {
+        let userId = getUserId(from: token)
+        let submissionId = UUID()
+        let submission = VideoSubmissionDTO(
+            id: submissionId,
+            userId: userId,
+            exerciseId: request.exerciseId,
+            pieceId: request.pieceId,
+            sessionId: request.sessionId,
+            s3Key: "cadenza/videos/\(userId)/\(submissionId.uuidString).mp4",
+            thumbnailS3Key: "cadenza/videos/\(userId)/\(submissionId.uuidString)_thumb.jpg",
+            durationSeconds: request.durationSeconds,
+            notes: request.notes,
+            reviewedAt: nil,
+            reviewedById: nil,
+            createdAt: Date()
+        )
+
+        videoSubmissions.append(submission)
+
+        return VideoSubmissionCreateResponse(
+            submission: submission,
+            uploadUrl: "https://example.com/upload",
+            thumbnailUploadUrl: "https://example.com/thumb-upload",
+            expiresIn: 3600
+        )
+    }
+
+    func getVideoSubmissionUploadUrl(submissionId: UUID, token: String) async throws -> VideoSubmissionUploadUrlsResponse {
+        return VideoSubmissionUploadUrlsResponse(
+            uploadUrl: "https://example.com/upload",
+            thumbnailUploadUrl: "https://example.com/thumb-upload",
+            expiresIn: 3600
+        )
+    }
+
+    func getMyVideoSubmissions(pieceId: UUID?, exerciseId: UUID?, token: String) async throws -> [VideoSubmissionDTO] {
+        let userId = getUserId(from: token)
+        return videoSubmissions.filter { submission in
+            guard submission.userId == userId else { return false }
+            if let pieceId, submission.pieceId != pieceId { return false }
+            if let exerciseId, submission.exerciseId != exerciseId { return false }
+            return true
+        }
+    }
+
+    func getStudentVideoSubmissions(studentId: Int, pieceId: UUID?, exerciseId: UUID?, pendingReviewOnly: Bool, token: String) async throws -> [VideoSubmissionDTO] {
+        return videoSubmissions.filter { submission in
+            guard submission.userId == studentId else { return false }
+            if let pieceId, submission.pieceId != pieceId { return false }
+            if let exerciseId, submission.exerciseId != exerciseId { return false }
+            if pendingReviewOnly && submission.reviewedAt != nil { return false }
+            return true
+        }
+    }
+
+    func markVideoSubmissionReviewed(submissionId: UUID, token: String) async throws -> VideoSubmissionDTO {
+        guard let index = videoSubmissions.firstIndex(where: { $0.id == submissionId }) else {
+            throw APIError.notFound
+        }
+
+        let reviewerId = getUserId(from: token)
+        let submission = videoSubmissions[index]
+        let updated = VideoSubmissionDTO(
+            id: submission.id,
+            userId: submission.userId,
+            exerciseId: submission.exerciseId,
+            pieceId: submission.pieceId,
+            sessionId: submission.sessionId,
+            s3Key: submission.s3Key,
+            thumbnailS3Key: submission.thumbnailS3Key,
+            durationSeconds: submission.durationSeconds,
+            notes: submission.notes,
+            reviewedAt: Date(),
+            reviewedById: reviewerId,
+            createdAt: submission.createdAt
+        )
+
+        videoSubmissions[index] = updated
+        return updated
+    }
+
+    func getVideoSubmissionVideoUrl(submissionId: UUID, token: String) async throws -> VideoSubmissionVideoUrlResponse {
+        return VideoSubmissionVideoUrlResponse(
+            videoUrl: "https://example.com/video",
+            thumbnailUrl: "https://example.com/thumb",
+            expiresIn: 3600
+        )
     }
 }
 #endif

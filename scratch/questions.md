@@ -1,0 +1,2 @@
+- Offline flow: current implementation creates submissions on the server before upload; no local-only submission is created when offline (would require a pending local record + later create-on-reconnect). Is that acceptable for PR1?
+- Teacher marking reviewed is available in VideoPlayerView without checking user type; should we gate the button by current user role?

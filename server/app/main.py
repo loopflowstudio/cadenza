@@ -1221,3 +1221,225 @@ def get_practice_session(
     ).all()
 
     return {"session": session, "exercise_sessions": list(exercise_sessions)}
+
+
+# MARK: - Video Submissions
+
+
+@app.post("/video-submissions", response_model=schemas.VideoSubmissionCreateResponse)
+def create_video_submission(
+    submission: schemas.VideoSubmissionCreate,
+    current_user: Annotated[models.User, Depends(auth.get_current_user)],
+    db: Annotated[Session, Depends(get_db)],
+):
+    from uuid import uuid4
+    from app import s3
+
+    if (
+        submission.exercise_id is None
+        and submission.piece_id is None
+        and submission.session_id is None
+    ):
+        raise HTTPException(
+            status_code=422, detail="At least one context field must be set"
+        )
+
+    submission_id = uuid4()
+    s3_key = s3.get_video_s3_key(current_user.id, submission_id)
+    thumbnail_s3_key = s3.get_video_thumbnail_s3_key(current_user.id, submission_id)
+
+    video_submission = models.VideoSubmission(
+        id=submission_id,
+        user_id=current_user.id,
+        exercise_id=submission.exercise_id,
+        piece_id=submission.piece_id,
+        session_id=submission.session_id,
+        s3_key=s3_key,
+        thumbnail_s3_key=thumbnail_s3_key,
+        duration_seconds=submission.duration_seconds,
+        notes=submission.notes,
+    )
+
+    db.add(video_submission)
+    db.commit()
+    db.refresh(video_submission)
+
+    upload_url = s3.generate_video_upload_url(current_user.id, submission_id)
+    thumbnail_upload_url = s3.generate_video_thumbnail_upload_url(
+        current_user.id, submission_id
+    )
+
+    return schemas.VideoSubmissionCreateResponse(
+        submission=video_submission,
+        upload_url=upload_url["url"],
+        thumbnail_upload_url=thumbnail_upload_url["url"],
+        expires_in=upload_url["expires_in"],
+    )
+
+
+@app.get(
+    "/video-submissions/{submission_id}/upload-url",
+    response_model=schemas.VideoSubmissionUploadUrlsResponse,
+)
+def get_video_submission_upload_url(
+    submission_id: str,
+    current_user: Annotated[models.User, Depends(auth.get_current_user)],
+    db: Annotated[Session, Depends(get_db)],
+):
+    from uuid import UUID
+    from app import s3
+
+    submission = db.get(models.VideoSubmission, UUID(submission_id))
+    if not submission:
+        raise HTTPException(status_code=404, detail="Video submission not found")
+
+    if submission.user_id != current_user.id:
+        raise HTTPException(
+            status_code=403, detail="Not authorized to upload this submission"
+        )
+
+    upload_url = s3.generate_video_upload_url(current_user.id, submission.id)
+    thumbnail_upload_url = s3.generate_video_thumbnail_upload_url(
+        current_user.id, submission.id
+    )
+
+    return schemas.VideoSubmissionUploadUrlsResponse(
+        upload_url=upload_url["url"],
+        thumbnail_upload_url=thumbnail_upload_url["url"],
+        expires_in=upload_url["expires_in"],
+    )
+
+
+@app.get("/video-submissions", response_model=list[models.VideoSubmission])
+def get_my_video_submissions(
+    current_user: Annotated[models.User, Depends(auth.get_current_user)],
+    db: Annotated[Session, Depends(get_db)],
+    piece_id: str | None = None,
+    exercise_id: str | None = None,
+):
+    from uuid import UUID
+
+    query = select(models.VideoSubmission).where(
+        models.VideoSubmission.user_id == current_user.id
+    )
+
+    if piece_id:
+        query = query.where(models.VideoSubmission.piece_id == UUID(piece_id))
+    if exercise_id:
+        query = query.where(models.VideoSubmission.exercise_id == UUID(exercise_id))
+
+    submissions = db.exec(
+        query.order_by(models.VideoSubmission.created_at.desc())
+    ).all()
+    return list(submissions)
+
+
+@app.get(
+    "/students/{student_id}/video-submissions",
+    response_model=list[models.VideoSubmission],
+)
+def get_student_video_submissions(
+    student_id: int,
+    current_user: Annotated[models.User, Depends(auth.get_current_user)],
+    db: Annotated[Session, Depends(get_db)],
+    piece_id: str | None = None,
+    exercise_id: str | None = None,
+    pending_review: bool = False,
+):
+    student = db.get(models.User, student_id)
+    if not student:
+        raise HTTPException(status_code=404, detail="Student not found")
+
+    if student.teacher_id != current_user.id:
+        raise HTTPException(
+            status_code=403, detail="Not authorized to view this student's submissions"
+        )
+
+    query = select(models.VideoSubmission).where(
+        models.VideoSubmission.user_id == student_id
+    )
+
+    if piece_id:
+        from uuid import UUID
+
+        query = query.where(models.VideoSubmission.piece_id == UUID(piece_id))
+    if exercise_id:
+        from uuid import UUID
+
+        query = query.where(models.VideoSubmission.exercise_id == UUID(exercise_id))
+    if pending_review:
+        query = query.where(models.VideoSubmission.reviewed_at.is_(None))
+
+    submissions = db.exec(
+        query.order_by(models.VideoSubmission.created_at.desc())
+    ).all()
+    return list(submissions)
+
+
+@app.patch(
+    "/video-submissions/{submission_id}/reviewed", response_model=models.VideoSubmission
+)
+def mark_video_submission_reviewed(
+    submission_id: str,
+    current_user: Annotated[models.User, Depends(auth.get_current_user)],
+    db: Annotated[Session, Depends(get_db)],
+):
+    from uuid import UUID
+
+    submission = db.get(models.VideoSubmission, UUID(submission_id))
+    if not submission:
+        raise HTTPException(status_code=404, detail="Video submission not found")
+
+    student = db.get(models.User, submission.user_id)
+    if not student:
+        raise HTTPException(status_code=404, detail="Student not found")
+
+    if student.teacher_id != current_user.id:
+        raise HTTPException(
+            status_code=403, detail="Not authorized to review this submission"
+        )
+
+    submission.reviewed_at = datetime.now(timezone.utc)
+    submission.reviewed_by_id = current_user.id
+
+    db.add(submission)
+    db.commit()
+    db.refresh(submission)
+    return submission
+
+
+@app.get(
+    "/video-submissions/{submission_id}/video-url",
+    response_model=schemas.VideoSubmissionVideoUrlResponse,
+)
+def get_video_submission_url(
+    submission_id: str,
+    current_user: Annotated[models.User, Depends(auth.get_current_user)],
+    db: Annotated[Session, Depends(get_db)],
+):
+    from uuid import UUID
+    from app import s3
+
+    submission = db.get(models.VideoSubmission, UUID(submission_id))
+    if not submission:
+        raise HTTPException(status_code=404, detail="Video submission not found")
+
+    if submission.user_id != current_user.id:
+        student = db.get(models.User, submission.user_id)
+        if not student or student.teacher_id != current_user.id:
+            raise HTTPException(
+                status_code=403, detail="Not authorized to view this submission"
+            )
+
+    video_url = s3.generate_download_url(submission.s3_key)
+    thumbnail_url = (
+        s3.generate_download_url(submission.thumbnail_s3_key)
+        if submission.thumbnail_s3_key
+        else None
+    )
+
+    return schemas.VideoSubmissionVideoUrlResponse(
+        video_url=video_url,
+        thumbnail_url=thumbnail_url,
+        expires_in=3600,
+    )
