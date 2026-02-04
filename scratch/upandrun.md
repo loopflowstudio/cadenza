@@ -34,7 +34,9 @@ Mock data per persona:
 |---------|---------|------------|--------------|-------------|--------------|
 | teacher | 1 | 3 | 1 | no | 2 |
 | student | 2 | 0 | 1 (assigned) | yes (id=1) | no |
-| selfTaught | 4 | 1 | 0 | no | no |
+| selfTaught | 4 | 2 | 0 | no | no |
+
+Self-taught user has a couple pieces and is trying to create their first routine.
 
 ## Scenarios
 
@@ -93,9 +95,9 @@ let scenarios = [
             .launch,
             .screenshot(name: "home"),
             .navigate(to: "nav-practice"),
-            .screenshot(name: "empty-routines"),
+            .screenshot(name: "routines-empty"),
             .tap(element: "create-routine-button"),
-            .screenshot(name: "create-routine-sheet")
+            .screenshot(name: "create-routine-form")
         ]
     )
 ]
