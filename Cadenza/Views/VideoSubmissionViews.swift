@@ -67,6 +67,7 @@ struct VideoSubmissionRow: View {
     let submission: VideoSubmissionDTO
     let onReviewed: () -> Void
 
+    @Environment(\.modelContext) private var modelContext
     @State private var thumbnailURL: URL?
 
     var body: some View {
@@ -110,28 +111,15 @@ struct VideoSubmissionRow: View {
     }
 
     private func loadThumbnail() async {
-        guard let token = token() else { return }
-
         do {
-            let apiClient = ServiceProvider.shared.apiClient
-            let response = try await apiClient.getVideoSubmissionVideoUrl(
-                submissionId: submission.id,
-                token: token
-            )
+            let service = VideoSubmissionService(modelContext: modelContext)
+            let response = try await service.getPlaybackUrls(submissionId: submission.id)
             if let thumbnailUrl = response.thumbnailUrl, let url = URL(string: thumbnailUrl) {
                 thumbnailURL = url
             }
         } catch {
             // Non-blocking
         }
-    }
-
-    private func token() -> String? {
-        guard let tokenData = KeychainHelper.load(key: "jwt_token"),
-              let token = String(data: tokenData, encoding: .utf8) else {
-            return nil
-        }
-        return token
     }
 }
 
