@@ -14,7 +14,7 @@ Scripts and config to run the full Cadenza stack locally (server + iOS simulator
 - 11 bundled PDFs in `Cadenza/Resources/`
 
 **What's missing:**
-- No `project.yml` for xcodegen (currently depends on Xcode-generated .xcodeproj)
+- `project.yml` exists but `python dev.py generate` not wired up
 - No rich seed data (only creates empty users, no routines/pieces/sessions)
 - No structured logging (just `print()` statements)
 - No way to reset/switch between app states
@@ -47,27 +47,7 @@ SCENARIOS = {
 
 ### project.yml (xcodegen)
 
-```yaml
-name: Cadenza
-options:
-  bundleIdPrefix: com.cadenza
-  deploymentTarget:
-    iOS: "17.0"
-
-targets:
-  Cadenza:
-    type: application
-    platform: iOS
-    sources:
-      - Cadenza
-    resources:
-      - Cadenza/Resources
-      - Cadenza/Assets.xcassets
-    settings:
-      PRODUCT_BUNDLE_IDENTIFIER: com.cadenza.Cadenza
-      DEVELOPMENT_TEAM: ""  # Set in local overrides
-    entitlements: Cadenza/Cadenza.entitlements
-```
+Already exists at repo root. Includes Cadenza, CadenzaTests, CadenzaUITests targets.
 
 ## Key Functions
 
