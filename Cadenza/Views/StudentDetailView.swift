@@ -37,7 +37,7 @@ struct StudentDetailView: View {
                         VStack(alignment: .leading) {
                             Text(piece.title)
                                 .font(.headline)
-                            if let sharedFrom = piece.sharedFromPieceId {
+                            if piece.sharedFromPieceId != nil {
                                 Text("Shared from you")
                                     .font(.caption)
                                     .foregroundStyle(.secondary)
@@ -48,8 +48,6 @@ struct StudentDetailView: View {
             } header: {
                 Text("Sheet Music (\(pieces.count))")
             }
-
-            PendingVideosSection(studentId: student.id)
 
             // Error Display
             if let errorMessage = errorMessage {
