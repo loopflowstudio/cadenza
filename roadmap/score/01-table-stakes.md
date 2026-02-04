@@ -53,8 +53,8 @@ Free feature in forScore—we should match.
 ### Face Gestures (Lower Priority)
 Camera-based: head turn, wink, mouth movement. forScore Pro feature. Less reliable than AirPods according to user reports. Consider as a later addition.
 
-### Tap Zones
-Simple fallback: tap left/right edges to turn pages. Already common pattern.
+### Tap Zones ✓
+Tap left/right edges (20% each) to turn pages. Implemented in `TapZoneOverlay` and `TapZone` components in `SheetMusicView.swift`. Brief chevron feedback on successful page turn.
 
 ## Priority 3: Annotation
 

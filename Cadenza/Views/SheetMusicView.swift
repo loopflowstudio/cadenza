@@ -44,13 +44,22 @@ struct EnhancedSheetMusicViewer: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            SheetMusicContainer(
-                url: url,
-                pdfView: $pdfView,
-                currentPage: $currentPage,
-                totalPages: $totalPages
-            )
-            .background(Color(UIColor.systemGray6))
+            ZStack {
+                SheetMusicContainer(
+                    url: url,
+                    pdfView: $pdfView,
+                    currentPage: $currentPage,
+                    totalPages: $totalPages
+                )
+                .background(Color(UIColor.systemGray6))
+
+                TapZoneOverlay(
+                    onPrevious: goToPreviousPage,
+                    onNext: goToNextPage,
+                    canGoPrevious: currentPage > 1,
+                    canGoNext: currentPage < totalPages
+                )
+            }
 
             controlBar
         }
@@ -156,6 +165,57 @@ struct EnhancedSheetMusicViewer: View {
         guard let pdfView = pdfView else { return }
         pdfView.scaleFactor = pdfView.scaleFactorForSizeToFit
         zoomScale = pdfView.scaleFactor
+    }
+}
+
+// MARK: - Tap Zone Overlay
+
+private struct TapZoneOverlay: View {
+    let onPrevious: () -> Void
+    let onNext: () -> Void
+    let canGoPrevious: Bool
+    let canGoNext: Bool
+
+    var body: some View {
+        GeometryReader { geometry in
+            let zoneWidth = geometry.size.width * 0.2
+            HStack(spacing: 0) {
+                TapZone(icon: "chevron.left", enabled: canGoPrevious, action: onPrevious)
+                    .frame(width: zoneWidth)
+                Spacer()
+                TapZone(icon: "chevron.right", enabled: canGoNext, action: onNext)
+                    .frame(width: zoneWidth)
+            }
+        }
+    }
+}
+
+private struct TapZone: View {
+    let icon: String
+    let enabled: Bool
+    let action: () -> Void
+
+    @State private var showFeedback = false
+
+    var body: some View {
+        Color.clear
+            .contentShape(Rectangle())
+            .onTapGesture {
+                guard enabled else { return }
+                showFeedback = true
+                action()
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
+                    showFeedback = false
+                }
+            }
+            .overlay {
+                if showFeedback {
+                    Image(systemName: icon)
+                        .font(.system(size: 40, weight: .light))
+                        .foregroundColor(.primary.opacity(0.3))
+                }
+            }
+            .animation(.easeOut(duration: 0.15), value: showFeedback)
     }
 }
 
