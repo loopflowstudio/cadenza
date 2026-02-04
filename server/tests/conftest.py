@@ -6,6 +6,8 @@ from unittest.mock import patch, MagicMock
 
 from app.main import app
 from app.database import get_db
+from app.apple_auth import InvalidTokenError
+from app.rate_limit import limiter
 
 SQLALCHEMY_DATABASE_URL = "sqlite:///./test.db"
 engine = create_engine(
@@ -80,3 +82,33 @@ def mock_s3():
         mock_client.delete_object.return_value = {}
 
         yield mock_client
+
+
+@pytest.fixture(autouse=True)
+def mock_apple_verification():
+    """Mock Apple token verification for tests."""
+
+    def _verify(id_token: str, _client_id: str) -> dict:
+        if id_token == "invalid_token":
+            raise InvalidTokenError("Invalid token")
+        return jwt.decode(
+            id_token,
+            options={
+                "verify_signature": False,
+                "verify_aud": False,
+                "verify_iss": False,
+            },
+        )
+
+    with patch("app.apple_auth.verify_apple_id_token", side_effect=_verify):
+        yield
+
+
+@pytest.fixture(autouse=True)
+def disable_rate_limiting():
+    previous = limiter.enabled
+    limiter.enabled = False
+    try:
+        yield
+    finally:
+        limiter.enabled = previous

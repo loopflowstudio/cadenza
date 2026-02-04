@@ -67,3 +67,9 @@ def test_missing_token_is_rejected(client):
     """Protected endpoints reject requests without tokens"""
     response = client.get("/auth/me")
     assert response.status_code == 401
+
+
+def test_invalid_apple_token_is_rejected(client):
+    """Apple auth rejects invalid identity tokens"""
+    response = client.post("/auth/apple", json={"id_token": "invalid_token"})
+    assert response.status_code == 401

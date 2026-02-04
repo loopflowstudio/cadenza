@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta, timezone
 from typing import Annotated
+
 import jwt
 from jwt.exceptions import InvalidTokenError
 from fastapi import Depends, HTTPException, status
@@ -10,7 +11,8 @@ from app.config import settings
 from app.database import get_db
 from app.models import User
 
-security = HTTPBearer()
+DEV_TOKEN_PREFIX = "dev_token_user_"
+security = HTTPBearer(auto_error=False)
 
 
 def create_access_token(data: dict) -> str:
@@ -26,48 +28,24 @@ def create_access_token(data: dict) -> str:
     return encoded_jwt
 
 
-def decode_apple_identity_token(id_token: str) -> dict:
-    """
-    In production, this should validate the Apple ID token by:
-    1. Fetching Apple's public keys from https://appleid.apple.com/auth/keys
-    2. Verifying the token signature
-    3. Validating claims (iss, aud, exp, etc.)
-
-    For now, we'll decode without verification for development.
-    """
-    try:
-        payload = jwt.decode(id_token, options={"verify_signature": False})
-        return payload
-    except InvalidTokenError:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid Apple ID token"
-        )
-
-
 def get_current_user(
     credentials: Annotated[HTTPAuthorizationCredentials, Depends(security)],
     db: Annotated[Session, Depends(get_db)],
 ) -> User:
+    if credentials is None:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Authentication failed",
+        )
     token = credentials.credentials
 
-    # Development mode: accept dev_token_user_X format
-    if token.startswith("dev_token_user_"):
+    # Development mode: accept dev_token_user_X format for dev-created users only
+    if token.startswith(DEV_TOKEN_PREFIX) and settings.is_dev:
         try:
-            user_id = int(token.replace("dev_token_user_", ""))
+            user_id = int(token.removeprefix(DEV_TOKEN_PREFIX))
             user = db.exec(select(User).where(User.id == user_id)).first()
-            if user:
+            if user and user.apple_user_id and user.apple_user_id.startswith("dev_"):
                 return user
-            # Auto-create dev users if they don't exist
-            user = User(
-                apple_user_id=f"mock_{user_id}",
-                email=f"user{user_id}@example.com",
-                full_name=f"Dev User {user_id}",
-                user_type=None,
-            )
-            db.add(user)
-            db.commit()
-            db.refresh(user)
-            return user
         except (ValueError, TypeError):
             pass  # Fall through to normal JWT validation
 
@@ -79,20 +57,20 @@ def get_current_user(
         if user_id is None:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Invalid authentication credentials",
+                detail="Authentication failed",
             )
         # Ensure user_id is an integer
         user_id = int(user_id)
-    except (InvalidTokenError, ValueError, TypeError) as e:
+    except (InvalidTokenError, ValueError, TypeError):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail=f"Invalid authentication credentials: {str(e)}",
+            detail="Authentication failed",
         )
 
     user = db.exec(select(User).where(User.id == user_id)).first()
     if user is None:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail=f"User not found for id {user_id}",
+            detail="Authentication failed",
         )
     return user
