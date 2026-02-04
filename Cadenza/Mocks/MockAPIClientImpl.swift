@@ -12,7 +12,6 @@ class MockAPIClientImpl: APIClientProtocol {
     private var users: [User] = []
     private var pieces: [PieceDTO] = []
     private var routines: [RoutineDTO] = []
-    private var teacherStudentRelations: [Int: Int] = [:] // studentId: teacherId
     private var videoSubmissions: [VideoSubmissionDTO] = []
     private var messages: [MessageDTO] = []
 
@@ -60,13 +59,6 @@ class MockAPIClientImpl: APIClientProtocol {
             "dev_token_user_1": 1,
             "dev_token_user_2": 2,
             "dev_token_user_3": 3
-        ]
-
-        // Set up teacher-student relationships
-        // Student 1 and Student 2 both have Teacher 1
-        teacherStudentRelations = [
-            2: 1,  // Student 1 has Teacher 1
-            3: 1   // Student 2 has Teacher 1
         ]
 
         // Create test pieces for teacher
@@ -180,16 +172,16 @@ class MockAPIClientImpl: APIClientProtocol {
 
     func getMyTeacher(token: String) async throws -> User? {
         let userId = getUserId(from: token)
-        if let teacherId = teacherStudentRelations[userId] {
-            return users.first { $0.id == teacherId }
+        guard let student = users.first(where: { $0.id == userId }),
+              let teacherId = student.teacherId else {
+            return nil
         }
-        return nil
+        return users.first { $0.id == teacherId }
     }
 
     func getMyStudents(token: String) async throws -> [User] {
         let userId = getUserId(from: token)
-        let studentIds = teacherStudentRelations.filter { $0.value == userId }.keys
-        return users.filter { studentIds.contains($0.id) }
+        return users.filter { $0.teacherId == userId }
     }
 
     func setTeacher(email: String, token: String) async throws -> User {
@@ -198,8 +190,6 @@ class MockAPIClientImpl: APIClientProtocol {
         guard let teacher = users.first(where: { $0.email == email }) else {
             throw APIError.requestFailed
         }
-
-        teacherStudentRelations[userId] = teacher.id
 
         // Update user object
         if let index = users.firstIndex(where: { $0.id == userId }) {
@@ -219,8 +209,6 @@ class MockAPIClientImpl: APIClientProtocol {
 
     func removeTeacher(token: String) async throws {
         let userId = getUserId(from: token)
-        teacherStudentRelations.removeValue(forKey: userId)
-
         // Update user object
         if let index = users.firstIndex(where: { $0.id == userId }) {
             users[index] = User(
@@ -380,7 +368,8 @@ class MockAPIClientImpl: APIClientProtocol {
         let userId = getUserId(from: token)
 
         // Verify teacher owns the student
-        guard teacherStudentRelations[studentId] == userId else {
+        guard let student = users.first(where: { $0.id == studentId }),
+              student.teacherId == userId else {
             throw APIError.unauthorized
         }
 
