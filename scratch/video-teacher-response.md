@@ -2,6 +2,18 @@
 
 Teachers can respond to student video submissions with their own videos and text.
 
+## Current implementation status
+
+- Added submission-scoped messages so teachers and students can exchange text and video replies.
+- Introduced message upload/playback flows with presigned S3 URLs for message videos and thumbnails.
+- Wired iOS UI for message threads, recording, playback, and simple compose actions.
+- Added server endpoints, model, and tests for message creation, listing, and video URL access.
+
+## Risks and bottlenecks
+
+- Message video uploads happen inline from the recording sheet; slow uploads will block dismissal.
+- Message playback URLs are fetched per row, which may add request overhead for large threads.
+
 ## Problem
 
 After PR1, students can submit practice videos—but there's no way for teachers to respond. The submission flow ends at "reviewed" status, a binary flag that tells students nothing about what they did well or what to fix.
