@@ -25,6 +25,17 @@ Each git branch gets its own:
 
 This allows multiple coding agents to work on different worktrees in parallel without port conflicts.
 
+## Bundled PDFs
+
+Set `CADENZA_BUNDLES` to a directory of PDFs (can be nested). They sync to the app on build:
+
+```bash
+export CADENZA_BUNDLES=~/Music/SheetMusic
+python dev.py simulator
+```
+
+PDFs are copied to `Cadenza/Resources/Bundles/` (gitignored). Works across worktrees since they all read from the same source.
+
 ## Seed Scenarios
 
 ### `empty`

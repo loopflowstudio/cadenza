@@ -1,8 +1,5 @@
 scratch/research/
 build/
 
-# Bundled PDFs - fetch with: python dev.py fetch-bundles
-Cadenza/Resources/*.pdf
-
-# Local config (contains Dropbox link)
-.cadenza-local.json
+# Bundled PDFs - copy sheet music here for testing
+Cadenza/Resources/Bundles/*.pdf

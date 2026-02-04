@@ -15,7 +15,6 @@ Usage:
     python dev.py reset           # Reset database to clean state
     python dev.py seed            # Seed database with scenario data
     python dev.py research        # Run UX research: screenshots + Claude analysis
-    python dev.py fetch-bundles   # Download PDFs from Dropbox
 """
 
 from __future__ import annotations
@@ -34,6 +33,7 @@ ROOT = Path(__file__).parent
 SERVER_DIR = ROOT / "server"
 PROJECT = ROOT / "Cadenza.xcodeproj"
 CACHE_PATH = ROOT / "build" / "simulator_device_cache.json"
+BUNDLES_DIR = ROOT / "Cadenza" / "Resources" / "Bundles"
 
 
 def _get_branch_name() -> str:
@@ -64,6 +64,38 @@ def run(cmd: list[str], cwd: Path | None = None, check: bool = True) -> subproce
     """Run a command and return the result."""
     print(f"$ {' '.join(cmd)}")
     return subprocess.run(cmd, cwd=cwd, check=check)
+
+
+def _sync_bundles() -> None:
+    """Copy PDFs from CADENZA_BUNDLES env var to Resources/Bundles/."""
+    source = os.environ.get("CADENZA_BUNDLES")
+    if not source:
+        return
+
+    source_path = Path(source).expanduser()
+    if not source_path.exists():
+        print(f"Warning: CADENZA_BUNDLES path does not exist: {source_path}")
+        return
+
+    BUNDLES_DIR.mkdir(parents=True, exist_ok=True)
+
+    # Find all PDFs recursively
+    pdfs = list(source_path.rglob("*.pdf"))
+    if not pdfs:
+        print(f"No PDFs found in {source_path}")
+        return
+
+    import shutil
+    copied = 0
+    for pdf in pdfs:
+        dest = BUNDLES_DIR / pdf.name
+        # Only copy if source is newer or dest doesn't exist
+        if not dest.exists() or pdf.stat().st_mtime > dest.stat().st_mtime:
+            shutil.copy2(pdf, dest)
+            copied += 1
+
+    if copied:
+        print(f"Synced {copied} PDFs from {source_path}")
 
 
 def server(args: argparse.Namespace) -> None:
@@ -142,6 +174,8 @@ def simulator(args: argparse.Namespace) -> None:
     if not _has_xcode():
         print("Error: Xcode not configured. Run: sudo xcode-select -s /Applications/Xcode.app")
         sys.exit(1)
+
+    _sync_bundles()
 
     device = args.device
     print(f"Building Cadenza for {device}...")
@@ -388,87 +422,6 @@ Format as markdown with ## headers for each issue found."""
     print(analysis)
 
 
-def fetch_bundles(args: argparse.Namespace) -> None:
-    """Download bundled PDFs from Dropbox."""
-    import urllib.request
-    import zipfile
-
-    config_path = ROOT / ".cadenza-local.json"
-    resources_dir = ROOT / "Cadenza" / "Resources"
-
-    # Load or create config
-    if config_path.exists():
-        config = json.loads(config_path.read_text())
-    else:
-        config = {}
-
-    # Get Dropbox link from config or args
-    dropbox_url = args.url or config.get("dropbox_bundles_url")
-
-    if not dropbox_url:
-        print("No Dropbox URL configured.")
-        print("\nTo set up, either:")
-        print("  1. Run: python dev.py fetch-bundles --url 'https://dropbox.com/...'")
-        print("  2. Create .cadenza-local.json with: {\"dropbox_bundles_url\": \"...\"}")
-        print("\nThe URL should be a shared folder link. Add ?dl=1 to force download.")
-        return
-
-    # Save URL to config for future use
-    if args.url:
-        config["dropbox_bundles_url"] = args.url
-        config_path.write_text(json.dumps(config, indent=2))
-        print(f"Saved Dropbox URL to {config_path}")
-
-    # Ensure dl=1 for direct download
-    if "dl=0" in dropbox_url:
-        dropbox_url = dropbox_url.replace("dl=0", "dl=1")
-    elif "dl=1" not in dropbox_url:
-        dropbox_url += "&dl=1" if "?" in dropbox_url else "?dl=1"
-
-    print(f"Downloading from Dropbox...")
-
-    # Download to temp file
-    zip_path = Path("/tmp/cadenza-bundles.zip")
-    try:
-        urllib.request.urlretrieve(dropbox_url, zip_path)
-    except Exception as e:
-        print(f"Download failed: {e}")
-        return
-
-    # Extract PDFs
-    resources_dir.mkdir(parents=True, exist_ok=True)
-    pdf_count = 0
-
-    try:
-        with zipfile.ZipFile(zip_path, 'r') as zf:
-            for name in zf.namelist():
-                if name.endswith('.pdf'):
-                    # Extract just the filename, not the folder path
-                    filename = Path(name).name
-                    target = resources_dir / filename
-                    with zf.open(name) as src, open(target, 'wb') as dst:
-                        dst.write(src.read())
-                    pdf_count += 1
-                    print(f"  Extracted: {filename}")
-    except zipfile.BadZipFile:
-        # Might be a single PDF, not a zip
-        if zip_path.stat().st_size > 0:
-            # Check if it's actually a PDF
-            with open(zip_path, 'rb') as f:
-                header = f.read(4)
-            if header == b'%PDF':
-                target = resources_dir / "downloaded.pdf"
-                zip_path.rename(target)
-                print(f"  Downloaded single PDF: {target.name}")
-                pdf_count = 1
-            else:
-                print("Downloaded file is not a valid zip or PDF")
-                return
-
-    zip_path.unlink(missing_ok=True)
-    print(f"\nDownloaded {pdf_count} PDFs to {resources_dir}")
-
-
 def _load_simctl_devices() -> dict | None:
     for _ in range(3):
         result = subprocess.run(
@@ -604,11 +557,6 @@ def main() -> None:
     research_parser.add_argument("--device", default="iPhone 17", help="Simulator device")
     research_parser.add_argument("--verbose", "-v", action="store_true", help="Show xcodebuild output")
     research_parser.set_defaults(func=research)
-
-    # fetch-bundles
-    fetch_parser = subparsers.add_parser("fetch-bundles", help="Download PDFs from Dropbox")
-    fetch_parser.add_argument("--url", help="Dropbox shared folder URL")
-    fetch_parser.set_defaults(func=fetch_bundles)
 
     args = parser.parse_args()
     args.func(args)
