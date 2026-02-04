@@ -1,11 +1,19 @@
 from typing import Annotated
 from datetime import datetime, timezone
-from fastapi import FastAPI, Depends, HTTPException, UploadFile, Form, File
+
+from fastapi import FastAPI, Depends, HTTPException, UploadFile, Form, File, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
+from jwt import InvalidTokenError
+from slowapi.errors import RateLimitExceeded
+from slowapi.middleware import SlowAPIMiddleware
 from sqlmodel import Session, select
 
-from app import models, schemas, auth
+from app import models, schemas, auth, apple_auth
+from app.config import settings
 from app.database import get_db, create_db_and_tables
+from app.middleware import SecurityHeadersMiddleware, HttpsRedirectMiddleware
+from app.rate_limit import limiter
 
 app = FastAPI(title="Cadenza API")
 
@@ -15,13 +23,26 @@ def on_startup():
     create_db_and_tables()
 
 
+app.state.limiter = limiter
+app.add_middleware(SlowAPIMiddleware)
+app.add_middleware(HttpsRedirectMiddleware)
+app.add_middleware(SecurityHeadersMiddleware)
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=settings.cors_origins_list,
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE"],
+    allow_headers=["Authorization", "Content-Type"],
 )
+
+
+@app.exception_handler(RateLimitExceeded)
+async def rate_limit_handler(request: Request, exc: RateLimitExceeded):
+    return JSONResponse(
+        status_code=429,
+        content={"detail": "Rate limit exceeded. Try again later."},
+    )
 
 
 @app.get("/")
@@ -35,11 +56,17 @@ def health_check():
 
 
 @app.post("/auth/dev-login", response_model=schemas.AuthResponse)
-def dev_login(email: str, db: Annotated[Session, Depends(get_db)]):
+@limiter.limit(settings.rate_limit_auth)
+def dev_login(
+    request: Request, email: str, db: Annotated[Session, Depends(get_db)]
+):
     """
     Development-only login endpoint that bypasses Apple Sign In.
     Creates or updates a user with the given email.
     """
+    if not settings.is_dev:
+        raise HTTPException(status_code=404, detail="Not found")
+
     # Find or create user by email
     user = db.exec(select(models.User).where(models.User.email == email)).first()
 
@@ -67,10 +94,20 @@ def dev_login(email: str, db: Annotated[Session, Depends(get_db)]):
 
 
 @app.post("/auth/apple", response_model=schemas.AuthResponse)
+@limiter.limit(settings.rate_limit_auth)
 def authenticate_with_apple(
-    request: schemas.AppleAuthRequest, db: Annotated[Session, Depends(get_db)]
+    request: Request,
+    apple_request: schemas.AppleAuthRequest,
+    db: Annotated[Session, Depends(get_db)],
 ):
-    apple_payload = auth.decode_apple_identity_token(request.id_token)
+    try:
+        apple_payload = apple_auth.verify_apple_id_token(
+            apple_request.id_token, settings.apple_client_id
+        )
+    except InvalidTokenError:
+        raise HTTPException(status_code=401, detail="Authentication failed")
+    except Exception:
+        raise HTTPException(status_code=503, detail="Authentication service unavailable")
 
     apple_user_id = apple_payload.get("sub")
     email = apple_payload.get("email", f"{apple_user_id}@privaterelay.appleid.com")
@@ -106,7 +143,9 @@ def authenticate_with_apple(
 
 
 @app.get("/auth/me", response_model=models.User)
+@limiter.limit(settings.rate_limit_auth)
 def get_current_user_info(
+    request: Request,
     current_user: Annotated[models.User, Depends(auth.get_current_user)],
 ):
     return current_user
@@ -202,7 +241,9 @@ def get_my_students(
 
 
 @app.get("/pieces", response_model=list[models.Piece])
+@limiter.limit(settings.rate_limit_read)
 def get_my_pieces(
+    request: Request,
     current_user: Annotated[models.User, Depends(auth.get_current_user)],
     db: Annotated[Session, Depends(get_db)],
 ):
@@ -219,7 +260,9 @@ def get_my_pieces(
 
 
 @app.post("/pieces", response_model=models.Piece)
+@limiter.limit(settings.rate_limit_write)
 async def create_piece(
+    request: Request,
     current_user: Annotated[models.User, Depends(auth.get_current_user)],
     db: Annotated[Session, Depends(get_db)],
     title: Annotated[str, Form()],

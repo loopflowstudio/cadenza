@@ -22,3 +22,7 @@ These are infrastructure decisions outside this codebase. Need confirmation this
 ### Apple Client ID
 
 The design requires `APPLE_CLIENT_ID` env var for token verification. This should match the bundle ID registered with Apple. Need to confirm the production value.
+
+### Dev-login endpoint scope
+
+Security hardening notes conflict: `scratch/security.md` suggests removing `/auth/dev-login`, while `scratch/security-remove-dev-backdoors.md` keeps it but gates to dev only. Implemented dev-only gating (404 in non-dev).
