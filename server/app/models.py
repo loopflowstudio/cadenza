@@ -191,3 +191,28 @@ class VideoSubmission(SQLModel, table=True):
     @field_serializer("id", "exercise_id", "piece_id", "session_id")
     def serialize_uuid(self, val: Optional[UUID], _info):
         return str(val) if val else None
+
+
+class Message(SQLModel, table=True):
+    __tablename__ = "messages"
+
+    id: UUID = Field(default_factory=uuid4, primary_key=True)
+    submission_id: UUID = Field(foreign_key="video_submissions.id", index=True)
+    sender_id: int = Field(foreign_key="users.id")
+
+    text: Optional[str] = None
+    video_s3_key: Optional[str] = None
+    video_duration_seconds: Optional[int] = None
+    thumbnail_s3_key: Optional[str] = None
+
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+    @field_serializer("created_at")
+    def serialize_datetime(self, dt: datetime, _info):
+        if dt.tzinfo is None:
+            dt = dt.replace(tzinfo=timezone.utc)
+        return dt.strftime("%Y-%m-%dT%H:%M:%SZ")
+
+    @field_serializer("id", "submission_id")
+    def serialize_uuid(self, val: UUID, _info):
+        return str(val)

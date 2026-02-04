@@ -14,7 +14,8 @@ struct CadenzaApp: App {
             RoutineAssignment.self,
             PracticeSession.self,
             ExerciseSession.self,
-            VideoSubmission.self
+            VideoSubmission.self,
+            Message.self
         ])
     }
 }

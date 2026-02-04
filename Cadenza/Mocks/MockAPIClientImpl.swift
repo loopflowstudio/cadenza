@@ -12,8 +12,8 @@ class MockAPIClientImpl: APIClientProtocol {
     private var users: [User] = []
     private var pieces: [PieceDTO] = []
     private var routines: [RoutineDTO] = []
-    private var teacherStudentRelations: [Int: Int] = [:] // studentId: teacherId
     private var videoSubmissions: [VideoSubmissionDTO] = []
+    private var messages: [MessageDTO] = []
 
     // Track which user each token represents
     private var tokenToUserId: [String: Int] = [:]
@@ -59,13 +59,6 @@ class MockAPIClientImpl: APIClientProtocol {
             "dev_token_user_1": 1,
             "dev_token_user_2": 2,
             "dev_token_user_3": 3
-        ]
-
-        // Set up teacher-student relationships
-        // Student 1 and Student 2 both have Teacher 1
-        teacherStudentRelations = [
-            2: 1,  // Student 1 has Teacher 1
-            3: 1   // Student 2 has Teacher 1
         ]
 
         // Create test pieces for teacher
@@ -179,16 +172,16 @@ class MockAPIClientImpl: APIClientProtocol {
 
     func getMyTeacher(token: String) async throws -> User? {
         let userId = getUserId(from: token)
-        if let teacherId = teacherStudentRelations[userId] {
-            return users.first { $0.id == teacherId }
+        guard let student = users.first(where: { $0.id == userId }),
+              let teacherId = student.teacherId else {
+            return nil
         }
-        return nil
+        return users.first { $0.id == teacherId }
     }
 
     func getMyStudents(token: String) async throws -> [User] {
         let userId = getUserId(from: token)
-        let studentIds = teacherStudentRelations.filter { $0.value == userId }.keys
-        return users.filter { studentIds.contains($0.id) }
+        return users.filter { $0.teacherId == userId }
     }
 
     func setTeacher(email: String, token: String) async throws -> User {
@@ -197,8 +190,6 @@ class MockAPIClientImpl: APIClientProtocol {
         guard let teacher = users.first(where: { $0.email == email }) else {
             throw APIError.requestFailed
         }
-
-        teacherStudentRelations[userId] = teacher.id
 
         // Update user object
         if let index = users.firstIndex(where: { $0.id == userId }) {
@@ -218,8 +209,6 @@ class MockAPIClientImpl: APIClientProtocol {
 
     func removeTeacher(token: String) async throws {
         let userId = getUserId(from: token)
-        teacherStudentRelations.removeValue(forKey: userId)
-
         // Update user object
         if let index = users.firstIndex(where: { $0.id == userId }) {
             users[index] = User(
@@ -379,7 +368,8 @@ class MockAPIClientImpl: APIClientProtocol {
         let userId = getUserId(from: token)
 
         // Verify teacher owns the student
-        guard teacherStudentRelations[studentId] == userId else {
+        guard let student = users.first(where: { $0.id == studentId }),
+              student.teacherId == userId else {
             throw APIError.unauthorized
         }
 
@@ -569,6 +559,50 @@ class MockAPIClientImpl: APIClientProtocol {
         return VideoSubmissionVideoUrlResponse(
             videoUrl: "https://example.com/video",
             thumbnailUrl: "https://example.com/thumb",
+            expiresIn: 3600
+        )
+    }
+
+    // MARK: - Video Submission Messages
+
+    func getMessages(submissionId: UUID, token: String) async throws -> [MessageDTO] {
+        return messages.filter { $0.submissionId == submissionId }
+            .sorted { $0.createdAt < $1.createdAt }
+    }
+
+    func createMessage(submissionId: UUID, request: MessageCreateRequest, token: String) async throws -> MessageCreateResponse {
+        let senderId = getUserId(from: token)
+        let messageId = UUID()
+        let includeVideo = request.includeVideo
+        let message = MessageDTO(
+            id: messageId,
+            submissionId: submissionId,
+            senderId: senderId,
+            text: request.text,
+            videoS3Key: includeVideo ? "cadenza/videos/\(senderId)/messages/\(messageId).mp4" : nil,
+            videoDurationSeconds: request.videoDurationSeconds,
+            thumbnailS3Key: includeVideo ? "cadenza/videos/\(senderId)/messages/\(messageId)_thumb.jpg" : nil,
+            createdAt: Date()
+        )
+
+        messages.append(message)
+
+        if includeVideo {
+            return MessageCreateResponse(
+                message: message,
+                uploadUrl: "https://example.com/message-upload",
+                thumbnailUploadUrl: "https://example.com/message-thumb-upload",
+                expiresIn: 3600
+            )
+        }
+
+        return MessageCreateResponse(message: message, uploadUrl: nil, thumbnailUploadUrl: nil, expiresIn: nil)
+    }
+
+    func getMessageVideoUrl(messageId: UUID, token: String) async throws -> MessageVideoUrlResponse {
+        return MessageVideoUrlResponse(
+            videoUrl: "https://example.com/message-video",
+            thumbnailUrl: "https://example.com/message-thumb",
             expiresIn: 3600
         )
     }
