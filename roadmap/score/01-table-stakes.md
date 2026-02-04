@@ -54,7 +54,8 @@ Free feature in forScore—we should match.
 Camera-based: head turn, wink, mouth movement. forScore Pro feature. Less reliable than AirPods according to user reports. Consider as a later addition.
 
 ### Tap Zones
-Simple fallback: tap left/right edges to turn pages. Already common pattern.
+~~Simple fallback: tap left/right edges to turn pages. Already common pattern.~~
+*Extracted to `scratch/score-tap-zones.md`*
 
 ## Priority 3: Annotation
 
