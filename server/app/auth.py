@@ -11,6 +11,7 @@ from app.config import settings
 from app.database import get_db
 from app.models import User
 
+DEV_TOKEN_PREFIX = "dev_token_user_"
 security = HTTPBearer(auto_error=False)
 
 
@@ -39,9 +40,9 @@ def get_current_user(
     token = credentials.credentials
 
     # Development mode: accept dev_token_user_X format for dev-created users only
-    if token.startswith("dev_token_user_") and settings.is_dev:
+    if token.startswith(DEV_TOKEN_PREFIX) and settings.is_dev:
         try:
-            user_id = int(token.replace("dev_token_user_", ""))
+            user_id = int(token.removeprefix(DEV_TOKEN_PREFIX))
             user = db.exec(select(User).where(User.id == user_id)).first()
             if (
                 user
