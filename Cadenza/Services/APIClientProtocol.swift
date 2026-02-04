@@ -46,6 +46,10 @@ protocol APIClientProtocol: Sendable {
     func getStudentVideoSubmissions(studentId: Int, pieceId: UUID?, exerciseId: UUID?, pendingReviewOnly: Bool, token: String) async throws -> [VideoSubmissionDTO]
     func markVideoSubmissionReviewed(submissionId: UUID, token: String) async throws -> VideoSubmissionDTO
     func getVideoSubmissionVideoUrl(submissionId: UUID, token: String) async throws -> VideoSubmissionVideoUrlResponse
-}
 
+    // MARK: - Video Submission Messages
+    func getMessages(submissionId: UUID, token: String) async throws -> [MessageDTO]
+    func createMessage(submissionId: UUID, request: MessageCreateRequest, token: String) async throws -> MessageCreateResponse
+    func getMessageVideoUrl(messageId: UUID, token: String) async throws -> MessageVideoUrlResponse
+}
 

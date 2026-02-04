@@ -14,6 +14,7 @@ class MockAPIClientImpl: APIClientProtocol {
     private var routines: [RoutineDTO] = []
     private var teacherStudentRelations: [Int: Int] = [:] // studentId: teacherId
     private var videoSubmissions: [VideoSubmissionDTO] = []
+    private var messages: [MessageDTO] = []
 
     // Track which user each token represents
     private var tokenToUserId: [String: Int] = [:]
@@ -569,6 +570,50 @@ class MockAPIClientImpl: APIClientProtocol {
         return VideoSubmissionVideoUrlResponse(
             videoUrl: "https://example.com/video",
             thumbnailUrl: "https://example.com/thumb",
+            expiresIn: 3600
+        )
+    }
+
+    // MARK: - Video Submission Messages
+
+    func getMessages(submissionId: UUID, token: String) async throws -> [MessageDTO] {
+        return messages.filter { $0.submissionId == submissionId }
+            .sorted { $0.createdAt < $1.createdAt }
+    }
+
+    func createMessage(submissionId: UUID, request: MessageCreateRequest, token: String) async throws -> MessageCreateResponse {
+        let senderId = getUserId(from: token)
+        let messageId = UUID()
+        let includeVideo = request.includeVideo
+        let message = MessageDTO(
+            id: messageId,
+            submissionId: submissionId,
+            senderId: senderId,
+            text: request.text,
+            videoS3Key: includeVideo ? "cadenza/videos/\(senderId)/messages/\(messageId).mp4" : nil,
+            videoDurationSeconds: request.videoDurationSeconds,
+            thumbnailS3Key: includeVideo ? "cadenza/videos/\(senderId)/messages/\(messageId)_thumb.jpg" : nil,
+            createdAt: Date()
+        )
+
+        messages.append(message)
+
+        if includeVideo {
+            return MessageCreateResponse(
+                message: message,
+                uploadUrl: "https://example.com/message-upload",
+                thumbnailUploadUrl: "https://example.com/message-thumb-upload",
+                expiresIn: 3600
+            )
+        }
+
+        return MessageCreateResponse(message: message, uploadUrl: nil, thumbnailUploadUrl: nil, expiresIn: nil)
+    }
+
+    func getMessageVideoUrl(messageId: UUID, token: String) async throws -> MessageVideoUrlResponse {
+        return MessageVideoUrlResponse(
+            videoUrl: "https://example.com/message-video",
+            thumbnailUrl: "https://example.com/message-thumb",
             expiresIn: 3600
         )
     }

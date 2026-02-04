@@ -1443,3 +1443,156 @@ def get_video_submission_url(
         thumbnail_url=thumbnail_url,
         expires_in=3600,
     )
+
+
+# MARK: - Video Submission Messages
+
+
+@app.get(
+    "/video-submissions/{submission_id}/messages",
+    response_model=list[models.Message],
+)
+def list_submission_messages(
+    submission_id: str,
+    current_user: Annotated[models.User, Depends(auth.get_current_user)],
+    db: Annotated[Session, Depends(get_db)],
+):
+    from uuid import UUID
+
+    submission = db.get(models.VideoSubmission, UUID(submission_id))
+    if not submission:
+        raise HTTPException(status_code=404, detail="Video submission not found")
+
+    if submission.user_id != current_user.id:
+        student = db.get(models.User, submission.user_id)
+        if not student or student.teacher_id != current_user.id:
+            raise HTTPException(
+                status_code=403, detail="Not authorized to view these messages"
+            )
+
+    messages = db.exec(
+        select(models.Message)
+        .where(models.Message.submission_id == submission.id)
+        .order_by(models.Message.created_at.asc())
+    ).all()
+    return list(messages)
+
+
+@app.post(
+    "/video-submissions/{submission_id}/messages",
+    response_model=schemas.MessageCreateResponse,
+)
+def create_submission_message(
+    submission_id: str,
+    message: schemas.MessageCreate,
+    current_user: Annotated[models.User, Depends(auth.get_current_user)],
+    db: Annotated[Session, Depends(get_db)],
+):
+    from uuid import UUID, uuid4
+    from app import s3
+
+    submission = db.get(models.VideoSubmission, UUID(submission_id))
+    if not submission:
+        raise HTTPException(status_code=404, detail="Video submission not found")
+
+    if submission.user_id != current_user.id:
+        student = db.get(models.User, submission.user_id)
+        if not student or student.teacher_id != current_user.id:
+            raise HTTPException(
+                status_code=403, detail="Not authorized to message this submission"
+            )
+
+    text = message.text.strip() if message.text else None
+    include_video = message.include_video
+    if not text and not include_video:
+        raise HTTPException(
+            status_code=422, detail="Message must include text or a video"
+        )
+
+    if include_video and message.video_duration_seconds is None:
+        raise HTTPException(
+            status_code=422, detail="video_duration_seconds is required for video messages"
+        )
+
+    message_id = uuid4()
+    video_s3_key = (
+        s3.get_message_s3_key(current_user.id, message_id) if include_video else None
+    )
+    thumbnail_s3_key = (
+        s3.get_message_thumbnail_s3_key(current_user.id, message_id)
+        if include_video
+        else None
+    )
+
+    submission_message = models.Message(
+        id=message_id,
+        submission_id=submission.id,
+        sender_id=current_user.id,
+        text=text,
+        video_s3_key=video_s3_key,
+        video_duration_seconds=message.video_duration_seconds if include_video else None,
+        thumbnail_s3_key=thumbnail_s3_key,
+    )
+
+    db.add(submission_message)
+    db.commit()
+    db.refresh(submission_message)
+
+    if include_video:
+        upload_url = s3.generate_message_upload_url(current_user.id, message_id)
+        thumbnail_upload_url = s3.generate_message_thumbnail_upload_url(
+            current_user.id, message_id
+        )
+
+        return schemas.MessageCreateResponse(
+            message=submission_message,
+            upload_url=upload_url["url"],
+            thumbnail_upload_url=thumbnail_upload_url["url"],
+            expires_in=upload_url["expires_in"],
+        )
+
+    return schemas.MessageCreateResponse(message=submission_message)
+
+
+@app.get(
+    "/messages/{message_id}/video-url",
+    response_model=schemas.MessageVideoUrlResponse,
+)
+def get_message_video_url(
+    message_id: str,
+    current_user: Annotated[models.User, Depends(auth.get_current_user)],
+    db: Annotated[Session, Depends(get_db)],
+):
+    from uuid import UUID
+    from app import s3
+
+    message = db.get(models.Message, UUID(message_id))
+    if not message:
+        raise HTTPException(status_code=404, detail="Message not found")
+
+    if not message.video_s3_key:
+        raise HTTPException(status_code=404, detail="Message video not found")
+
+    submission = db.get(models.VideoSubmission, message.submission_id)
+    if not submission:
+        raise HTTPException(status_code=404, detail="Video submission not found")
+
+    if submission.user_id != current_user.id:
+        student = db.get(models.User, submission.user_id)
+        if not student or student.teacher_id != current_user.id:
+            raise HTTPException(
+                status_code=403, detail="Not authorized to view this message"
+            )
+
+    video_url = s3.generate_download_url(message.video_s3_key)
+    thumbnail_url = (
+        s3.generate_download_url(message.thumbnail_s3_key)
+        if message.thumbnail_s3_key
+        else None
+    )
+
+    return schemas.MessageVideoUrlResponse(
+        video_url=video_url,
+        thumbnail_url=thumbnail_url,
+        expires_in=3600,
+    )

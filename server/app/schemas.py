@@ -79,6 +79,28 @@ class VideoSubmissionVideoUrlResponse(BaseModel):
     expires_in: int
 
 
+# Messages
+
+
+class MessageCreate(BaseModel):
+    text: Optional[str] = None
+    include_video: bool = False
+    video_duration_seconds: Optional[int] = None
+
+
+class MessageCreateResponse(BaseModel):
+    message: models.Message
+    upload_url: Optional[str] = None
+    thumbnail_upload_url: Optional[str] = None
+    expires_in: Optional[int] = None
+
+
+class MessageVideoUrlResponse(BaseModel):
+    video_url: str
+    thumbnail_url: Optional[str]
+    expires_in: int
+
+
 # Routine schemas
 
 

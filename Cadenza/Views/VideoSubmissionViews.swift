@@ -72,7 +72,7 @@ struct VideoSubmissionRow: View {
 
     var body: some View {
         NavigationLink {
-            VideoPlayerView(submission: submission, onReviewed: onReviewed)
+            VideoSubmissionDetailView(submission: submission, onReviewed: onReviewed)
         } label: {
             HStack(spacing: 12) {
                 ZStack {
@@ -123,7 +123,7 @@ struct VideoSubmissionRow: View {
     }
 }
 
-struct VideoPlayerView: View {
+struct VideoSubmissionDetailView: View {
     let submission: VideoSubmissionDTO
     let onReviewed: () -> Void
 
@@ -133,9 +133,46 @@ struct VideoPlayerView: View {
     @State private var errorMessage: String?
     @State private var reviewedAt: Date?
     @State private var isMarkingReviewed = false
+    @State private var messages: [MessageDTO] = []
+    @State private var isLoadingMessages = false
+    @State private var messageError: String?
+    @State private var composeText = ""
+    @State private var isRecordingMessage = false
+    @State private var isSendingMessage = false
 
     var body: some View {
         VStack(spacing: 16) {
+            videoSection
+            submissionInfoSection
+            messagesSection
+            ComposeBar(
+                text: $composeText,
+                isSending: isSendingMessage,
+                onSend: { Task { await sendTextMessage() } },
+                onRecordVideo: { isRecordingMessage = true }
+            )
+            Spacer()
+        }
+        .padding()
+        .navigationTitle("Video")
+        .navigationBarTitleDisplayMode(.inline)
+        .task {
+            await loadVideo()
+            await loadMessages()
+        }
+        .sheet(isPresented: $isRecordingMessage) {
+            MessageRecordingSheet(
+                submissionId: submission.id,
+                initialText: composeText
+            ) { newMessage in
+                messages.append(newMessage)
+                composeText = ""
+            }
+        }
+    }
+
+    private var videoSection: some View {
+        Group {
             if let player {
                 VideoPlayer(player: player)
                     .frame(maxHeight: 280)
@@ -146,30 +183,31 @@ struct VideoPlayerView: View {
                     .frame(height: 240)
                     .overlay(Text("Video unavailable").foregroundStyle(.white))
             }
+        }
+    }
 
-            VStack(alignment: .leading, spacing: 8) {
-                if let notes = submission.notes {
-                    Text(notes)
-                        .font(.body)
-                }
-
-                if let reviewedAt = reviewedAt ?? submission.reviewedAt {
-                    Text("Reviewed \(reviewedAt, style: .relative)")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                } else {
-                    Text("Not yet reviewed")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                }
-
-                if let errorMessage = errorMessage {
-                    Text(errorMessage)
-                        .foregroundStyle(.red)
-                        .font(.caption)
-                }
+    private var submissionInfoSection: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            if let notes = submission.notes {
+                Text(notes)
+                    .font(.body)
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
+
+            if let reviewedAt = reviewedAt ?? submission.reviewedAt {
+                Text("Reviewed \(reviewedAt, style: .relative)")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            } else {
+                Text("Not yet reviewed")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+
+            if let errorMessage = errorMessage {
+                Text(errorMessage)
+                    .foregroundStyle(.red)
+                    .font(.caption)
+            }
 
             if (reviewedAt ?? submission.reviewedAt) == nil {
                 Button(isMarkingReviewed ? "Marking..." : "Mark Reviewed") {
@@ -180,15 +218,34 @@ struct VideoPlayerView: View {
                 .buttonStyle(.borderedProminent)
                 .disabled(isMarkingReviewed)
             }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
 
-            Spacer()
+    private var messagesSection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("Messages")
+                .font(.headline)
+
+            if isLoadingMessages {
+                ProgressView()
+            } else if messages.isEmpty {
+                Text("No messages yet.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            } else {
+                ForEach(messages, id: \.id) { message in
+                    MessageRow(message: message)
+                }
+            }
+
+            if let messageError = messageError {
+                Text(messageError)
+                    .foregroundStyle(.red)
+                    .font(.caption)
+            }
         }
-        .padding()
-        .navigationTitle("Video")
-        .navigationBarTitleDisplayMode(.inline)
-        .task {
-            await loadVideo()
-        }
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 
     private func loadVideo() async {
@@ -221,6 +278,157 @@ struct VideoPlayerView: View {
             errorMessage = "Failed to mark reviewed."
         }
     }
+
+    private func loadMessages() async {
+        isLoadingMessages = true
+        messageError = nil
+
+        do {
+            let service = MessageService(modelContext: modelContext)
+            messages = try await service.getMessages(submissionId: submission.id)
+        } catch {
+            messageError = "Failed to load messages."
+        }
+
+        isLoadingMessages = false
+    }
+
+    private func sendTextMessage() async {
+        let trimmed = composeText.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else { return }
+
+        isSendingMessage = true
+        defer { isSendingMessage = false }
+
+        do {
+            let service = MessageService(modelContext: modelContext)
+            let response = try await service.createMessage(
+                submissionId: submission.id,
+                text: trimmed,
+                includeVideo: false,
+                videoDurationSeconds: nil
+            )
+            messages.append(response.message)
+            composeText = ""
+        } catch {
+            messageError = "Failed to send message."
+        }
+    }
+}
+
+struct MessageRow: View {
+    let message: MessageDTO
+
+    @Environment(\.modelContext) private var modelContext
+    @State private var thumbnailURL: URL?
+    @State private var videoURL: URL?
+    @State private var isShowingPlayer = false
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            if let text = message.text, !text.isEmpty {
+                Text(text)
+                    .font(.body)
+            }
+
+            if message.videoS3Key != nil {
+                Button {
+                    isShowingPlayer = true
+                } label: {
+                    ZStack {
+                        if let thumbnailURL {
+                            AsyncImage(url: thumbnailURL) { image in
+                                image.resizable()
+                            } placeholder: {
+                                Color.gray.opacity(0.2)
+                            }
+                            .frame(height: 140)
+                            .clipShape(RoundedRectangle(cornerRadius: 10))
+                        } else {
+                            RoundedRectangle(cornerRadius: 10)
+                                .fill(Color.gray.opacity(0.2))
+                                .frame(height: 140)
+                                .overlay(
+                                    Image(systemName: "video")
+                                        .foregroundStyle(.secondary)
+                                )
+                        }
+                    }
+                }
+                .buttonStyle(.plain)
+                .sheet(isPresented: $isShowingPlayer) {
+                    MessageVideoPlayerView(videoURL: videoURL)
+                }
+            }
+
+            Text(message.createdAt, style: .relative)
+                .font(.caption)
+                .foregroundStyle(.secondary)
+        }
+        .task {
+            await loadVideoUrls()
+        }
+    }
+
+    private func loadVideoUrls() async {
+        guard message.videoS3Key != nil, thumbnailURL == nil, videoURL == nil else { return }
+        do {
+            let service = MessageService(modelContext: modelContext)
+            let response = try await service.getPlaybackUrls(messageId: message.id)
+            if let url = URL(string: response.thumbnailUrl ?? "") {
+                thumbnailURL = url
+            }
+            if let url = URL(string: response.videoUrl) {
+                videoURL = url
+            }
+        } catch {
+            // Non-blocking
+        }
+    }
+}
+
+struct MessageVideoPlayerView: View {
+    let videoURL: URL?
+
+    var body: some View {
+        VStack {
+            if let videoURL {
+                VideoPlayer(player: AVPlayer(url: videoURL))
+                    .frame(maxHeight: 300)
+            } else {
+                ProgressView()
+            }
+        }
+        .padding()
+    }
+}
+
+struct ComposeBar: View {
+    @Binding var text: String
+    let isSending: Bool
+    let onSend: () -> Void
+    let onRecordVideo: () -> Void
+
+    var body: some View {
+        HStack(spacing: 8) {
+            TextField("Send a message", text: $text, axis: .vertical)
+                .textFieldStyle(.roundedBorder)
+
+            Button {
+                onRecordVideo()
+            } label: {
+                Image(systemName: "video.fill")
+            }
+            .buttonStyle(.bordered)
+            .accessibilityLabel("Record video message")
+
+            Button(isSending ? "Sending..." : "Send") {
+                onSend()
+            }
+            .buttonStyle(.borderedProminent)
+            .disabled(isSending || text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+        }
+    }
 }
 
 #Preview("Pending Videos") {
@@ -229,12 +437,34 @@ struct VideoPlayerView: View {
             PendingVideosSection(studentId: 1)
         }
     }
-    .modelContainer(for: [VideoSubmission.self])
+    .modelContainer(for: [VideoSubmission.self, Message.self])
 }
 
 #Preview("Video Player") {
     NavigationStack {
-        VideoPlayerView(submission: VideoSubmission.preview.toSubmissionDTO(), onReviewed: {})
+        VideoSubmissionDetailView(submission: VideoSubmission.preview.toSubmissionDTO(), onReviewed: {})
     }
-    .modelContainer(for: [VideoSubmission.self])
+    .modelContainer(for: [VideoSubmission.self, Message.self])
+}
+
+#Preview("Message Thread") {
+    NavigationStack {
+        VideoSubmissionDetailView(submission: VideoSubmission.preview.toSubmissionDTO(), onReviewed: {})
+    }
+    .modelContainer(for: [VideoSubmission.self, Message.self])
+}
+
+#Preview("Compose Bar") {
+    ComposeBar(text: .constant("Great progress!"), isSending: false, onSend: {}, onRecordVideo: {})
+        .padding()
+}
+
+#Preview("Text Message") {
+    MessageRow(message: .previewText)
+        .padding()
+}
+
+#Preview("Video Message") {
+    MessageRow(message: .previewVideo)
+        .padding()
 }

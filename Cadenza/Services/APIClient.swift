@@ -710,6 +710,56 @@ final class APIClient: APIClientProtocol, @unchecked Sendable {
 
         return try decoder.decode(VideoSubmissionVideoUrlResponse.self, from: data)
     }
+
+    // MARK: - Video Submission Messages
+
+    func getMessages(submissionId: UUID, token: String) async throws -> [MessageDTO] {
+        let url = baseURL.appendingPathComponent("/video-submissions/\(submissionId.uuidString)/messages")
+        var request = URLRequest(url: url)
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+
+        let (data, response) = try await URLSession.shared.data(for: request)
+
+        guard let httpResponse = response as? HTTPURLResponse,
+              (200...299).contains(httpResponse.statusCode) else {
+            throw APIError.requestFailed
+        }
+
+        return try decoder.decode([MessageDTO].self, from: data)
+    }
+
+    func createMessage(submissionId: UUID, request: MessageCreateRequest, token: String) async throws -> MessageCreateResponse {
+        let url = baseURL.appendingPathComponent("/video-submissions/\(submissionId.uuidString)/messages")
+        var urlRequest = URLRequest(url: url)
+        urlRequest.httpMethod = "POST"
+        urlRequest.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        urlRequest.httpBody = try encoder.encode(request)
+
+        let (data, response) = try await URLSession.shared.data(for: urlRequest)
+
+        guard let httpResponse = response as? HTTPURLResponse,
+              (200...299).contains(httpResponse.statusCode) else {
+            throw APIError.requestFailed
+        }
+
+        return try decoder.decode(MessageCreateResponse.self, from: data)
+    }
+
+    func getMessageVideoUrl(messageId: UUID, token: String) async throws -> MessageVideoUrlResponse {
+        let url = baseURL.appendingPathComponent("/messages/\(messageId.uuidString)/video-url")
+        var request = URLRequest(url: url)
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+
+        let (data, response) = try await URLSession.shared.data(for: request)
+
+        guard let httpResponse = response as? HTTPURLResponse,
+              (200...299).contains(httpResponse.statusCode) else {
+            throw APIError.requestFailed
+        }
+
+        return try decoder.decode(MessageVideoUrlResponse.self, from: data)
+    }
 }
 
 struct SetTeacherResponse: Codable {
