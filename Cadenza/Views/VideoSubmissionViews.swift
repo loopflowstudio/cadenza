@@ -132,6 +132,7 @@ struct VideoPlayerView: View {
     @State private var isLoading = false
     @State private var errorMessage: String?
     @State private var reviewedAt: Date?
+    @State private var isMarkingReviewed = false
 
     var body: some View {
         VStack(spacing: 16) {
@@ -171,12 +172,13 @@ struct VideoPlayerView: View {
             .frame(maxWidth: .infinity, alignment: .leading)
 
             if (reviewedAt ?? submission.reviewedAt) == nil {
-                Button("Mark Reviewed") {
+                Button(isMarkingReviewed ? "Marking..." : "Mark Reviewed") {
                     Task {
                         await markReviewed()
                     }
                 }
                 .buttonStyle(.borderedProminent)
+                .disabled(isMarkingReviewed)
             }
 
             Spacer()
@@ -207,6 +209,9 @@ struct VideoPlayerView: View {
     }
 
     private func markReviewed() async {
+        isMarkingReviewed = true
+        defer { isMarkingReviewed = false }
+
         do {
             let service = VideoSubmissionService(modelContext: modelContext)
             let updated = try await service.markReviewed(submissionId: submission.id)

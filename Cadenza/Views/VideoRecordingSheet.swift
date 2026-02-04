@@ -84,7 +84,7 @@ struct VideoRecordingSheet: View {
                                 .accessibilityLabel(cameraManager.isRecording ? "Stop Recording" : "Start Recording")
                             } else {
                                 Button("Retake") {
-                                    cameraManager.recordedURL = nil
+                                    clearRecording()
                                     notes = ""
                                 }
                                 .buttonStyle(.bordered)
@@ -117,6 +117,7 @@ struct VideoRecordingSheet: View {
             }
             .onDisappear {
                 cameraManager.stopSession()
+                clearRecording()
             }
         }
     }
@@ -132,6 +133,7 @@ struct VideoRecordingSheet: View {
         guard let recordedURL = cameraManager.recordedURL else { return }
         isSubmitting = true
         submissionError = nil
+        defer { isSubmitting = false }
 
         do {
             let persistedURL = try persistVideo(at: recordedURL)
@@ -160,14 +162,13 @@ struct VideoRecordingSheet: View {
         } catch {
             submissionError = error.localizedDescription
         }
-
-        isSubmitting = false
     }
 
     private func persistVideo(at url: URL) throws -> URL {
         let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
         let destinationURL = documentsURL.appendingPathComponent("\(UUID().uuidString).mp4")
         try FileManager.default.copyItem(at: url, to: destinationURL)
+        try? FileManager.default.removeItem(at: url)
         return destinationURL
     }
 
@@ -196,6 +197,13 @@ struct VideoRecordingSheet: View {
             throw APIError.requestFailed
         }
         return Int(seconds.rounded())
+    }
+
+    private func clearRecording() {
+        if let recordedURL = cameraManager.recordedURL {
+            try? FileManager.default.removeItem(at: recordedURL)
+        }
+        cameraManager.recordedURL = nil
     }
 }
 

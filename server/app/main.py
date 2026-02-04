@@ -1312,10 +1312,10 @@ def get_video_submission_upload_url(
 
 @app.get("/video-submissions", response_model=list[models.VideoSubmission])
 def get_my_video_submissions(
-    piece_id: str | None = None,
-    exercise_id: str | None = None,
     current_user: Annotated[models.User, Depends(auth.get_current_user)],
     db: Annotated[Session, Depends(get_db)],
+    piece_id: str | None = None,
+    exercise_id: str | None = None,
 ):
     from uuid import UUID
 
@@ -1340,11 +1340,11 @@ def get_my_video_submissions(
 )
 def get_student_video_submissions(
     student_id: int,
+    current_user: Annotated[models.User, Depends(auth.get_current_user)],
+    db: Annotated[Session, Depends(get_db)],
     piece_id: str | None = None,
     exercise_id: str | None = None,
     pending_review: bool = False,
-    current_user: Annotated[models.User, Depends(auth.get_current_user)],
-    db: Annotated[Session, Depends(get_db)],
 ):
     student = db.get(models.User, student_id)
     if not student:
