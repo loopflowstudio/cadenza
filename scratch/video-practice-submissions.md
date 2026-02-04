@@ -2,11 +2,19 @@
 
 Students can record a video of themselves practicing and submit it for teacher review.
 
+## Problem
+
+Music teachers can’t see how students practice between lessons. Text reflections help, but teachers need to observe technique, posture, and timing. A minimal video submission flow closes that gap.
+
 ## User Stories
 
-**Student**: "I just finished practicing this passage. I want my teacher to see what I'm doing wrong."
+**Student**: "I just finished practicing this passage. I want my teacher to see what I’m doing wrong."
 
 **Teacher**: "I want to see how my students are actually practicing between lessons, not just hear about it."
+
+## Approach
+
+Ship a minimal record → upload → review flow. No messaging, timestamps, or threading (PR2+).
 
 ## What Ships
 
@@ -21,55 +29,55 @@ class VideoSubmission(SQLModel, table=True):
     id: UUID = Field(default_factory=uuid4, primary_key=True)
     user_id: int = Field(foreign_key="users.id", index=True)
 
-    # What this video is about
-    exercise_id: UUID | None = Field(foreign_key="exercises.id")
-    piece_id: UUID | None = Field(foreign_key="pieces.id")  # standalone, not via exercise
-    session_id: UUID | None = Field(foreign_key="practice_sessions.id")
+    # Context (all optional, but at least one should be set)
+    exercise_id: UUID | None = Field(default=None, foreign_key="exercises.id")
+    piece_id: UUID | None = Field(default=None, foreign_key="pieces.id")
+    session_id: UUID | None = Field(default=None, foreign_key="practice_sessions.id")
 
-    # Video file
+    # Video
     s3_key: str
     thumbnail_s3_key: str | None = None
     duration_seconds: int
 
-    # Optional context from student
-    notes: str | None = None  # "I'm having trouble with the fingering here"
+    # Student notes
+    notes: str | None = None
 
-    # Review status
+    # Review tracking
     reviewed_at: datetime | None = None
-    reviewed_by_id: int | None = Field(foreign_key="users.id")
+    reviewed_by_id: int | None = Field(default=None, foreign_key="users.id")
 
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 ```
 
-New endpoints:
+Endpoints:
 
 ```python
-# Student uploads video
+# Create submission + upload URLs
 POST /video-submissions
-Body: { exercise_id?, piece_id?, notes? }
-Returns: { id, upload_url, thumbnail_upload_url }
+Body: { exercise_id?, piece_id?, session_id?, duration_seconds, notes? }
+Returns: { submission, upload_url, thumbnail_upload_url }
 
-# Get upload URLs (if video needs re-upload)
+# Fresh upload URLs (retry)
 GET /video-submissions/{id}/upload-url
 
-# Student's own submissions
+# List own submissions
 GET /video-submissions
-Query: ?piece_id=...&exercise_id=...
+Query: ?exercise_id=...&piece_id=...
 
-# Teacher views student's submissions
+# Teacher: list student submissions
 GET /students/{id}/video-submissions
-Query: ?piece_id=...&pending_review=true
+Query: ?pending_review=true
 
-# Mark as reviewed
+# Teacher: mark reviewed
 PATCH /video-submissions/{id}/reviewed
 
-# Get video playback URL
+# Playback URL
 GET /video-submissions/{id}/video-url
 ```
 
 ### iOS
 
-New model: `VideoSubmission`
+Model:
 
 ```swift
 @Model
@@ -93,65 +101,63 @@ final class VideoSubmission: Identifiable {
     // Local-only
     var localVideoPath: String?
     var localThumbnailPath: String?
-    var uploadStatus: UploadStatus  // .pending, .uploading, .uploaded, .failed
+    @Transient var uploadStatus: UploadStatus = .pending
+}
+
+enum UploadStatus: String, Codable {
+    case pending
+    case uploading
+    case uploaded
+    case failed
 }
 ```
 
-New service: `VideoSubmissionService`
+Service:
 
 ```swift
 protocol VideoSubmissionServiceProtocol {
     func createSubmission(
         exerciseId: UUID?,
         pieceId: UUID?,
-        notes: String?
+        sessionId: UUID?,
+        durationSeconds: Int,
+        notes: String?,
+        localVideoURL: URL?,
+        localThumbnailURL: URL?
     ) async throws -> VideoSubmission
 
     func uploadVideo(
         localURL: URL,
+        thumbnailURL: URL?,
         for submission: VideoSubmission
     ) async throws
 
-    func getMySubmissions(
-        pieceId: UUID?,
-        exerciseId: UUID?
-    ) async throws -> [VideoSubmission]
-
-    func getStudentSubmissions(
-        studentId: Int,
-        pendingReviewOnly: Bool
-    ) async throws -> [VideoSubmission]
-
-    func markReviewed(submissionId: UUID) async throws
+    func getMySubmissions(pieceId: UUID?, exerciseId: UUID?) async throws -> [VideoSubmissionDTO]
+    func getStudentSubmissions(studentId: Int, pendingReviewOnly: Bool, pieceId: UUID?, exerciseId: UUID?) async throws -> [VideoSubmissionDTO]
+    func markReviewed(submissionId: UUID) async throws -> VideoSubmissionDTO
+    func getPlaybackUrls(submissionId: UUID) async throws -> VideoSubmissionVideoUrlResponse
 }
 ```
 
-New views:
+Views:
 
 ```swift
-// After exercise completion, option to record video
 ExerciseCompletionView
-  └── VideoRecordingSheet  // camera UI, record button, preview
+  └── VideoRecordingSheet
 
-// In teacher's student list
 StudentDetailView
-  └── PendingVideosSection  // thumbnails of unreviewed videos
+  └── PendingVideosSection
 
-// Video player
-VideoPlayerView  // plays video with basic controls
+VideoPlayerView
 ```
 
 ### Recording UI
 
-Simple camera interface:
-- Portrait or landscape based on device orientation
 - Start/stop button
-- 3-minute max (show countdown)
+- 3-minute max with countdown
 - Preview before submitting
 - Optional notes field
-- Submit button
-
-Use AVFoundation for recording. Generate thumbnail from first frame.
+- Generates thumbnail from first frame
 
 ## S3 Structure
 
@@ -160,52 +166,80 @@ cadenza/videos/{user_id}/{submission_id}.mp4
 cadenza/videos/{user_id}/{submission_id}_thumb.jpg
 ```
 
-Same presigned URL pattern as pieces.
+## Key Decisions
 
-## Offline Support
+1. **Two-phase submission**: create metadata → upload via presigned URLs.
+2. **Local upload status only**: server doesn’t track pending state.
+3. **Duration required at creation**: client reads asset duration immediately after recording.
+4. **Teacher auth**: teacher can view/review iff `student.teacher_id == current_user.id`.
+5. **3-minute max, 720p**: enforced client-side.
+6. **Entry point after exercise completion**: no recording during active practice.
 
-1. Recording works offline (saved to Documents directory)
-2. Submission created locally with `uploadStatus = .pending`
-3. When online, upload video and thumbnail
-4. On success, update `uploadStatus = .uploaded`
-5. SwiftData syncs submission metadata to server
+## What Was Implemented
 
-## Constraints
+- VideoSubmission model, endpoints, and S3 helpers for create/list/review/playback.
+- iOS recording flow with camera preview, upload service, and teacher review UI.
+- Mock API data for video submissions to support previews/UI tests.
 
-- **Max duration**: 3 minutes (180 seconds)
-- **Format**: H.264/AAC in MP4
-- **Resolution**: 720p max
-- **File size**: ~50MB max for 3 min at 720p
+## Risks and Bottlenecks
 
-## Done When
+- Upload runs in the recording sheet; large uploads may feel slow.
+- Offline creation is not implemented; create requires connectivity.
+- Thumbnail/playback URLs fetched per row may add request overhead on large lists.
 
-1. Student completes exercise, sees "Record Video" option
-2. Student records 30-second video, adds note, submits
-3. Video uploads to S3
-4. Teacher sees video in student's profile with thumbnail
-5. Teacher plays video
-6. Teacher marks as reviewed
-7. Student sees "Reviewed by Teacher" status
+## Out of Scope (PR2+)
+
+- Teacher responses and messaging
+- Timestamped markers
+- Score linking
+- Progress timeline
+- Push notifications
+- Editing/trimming
 
 ## Test Plan
 
 Server:
 ```python
 def test_create_video_submission():
-    # Authenticated student can create submission
+    # Student can create submission
     # Returns presigned upload URLs
     # Submission appears in GET /video-submissions
 
+def test_create_submission_requires_duration():
+    # 422 if duration_seconds missing
+
 def test_teacher_views_student_submissions():
-    # Teacher can see student's submissions
-    # Non-teacher cannot see other user's submissions
+    # Teacher can see their student's submissions
+    # Returns submissions for that student only
+
+def test_non_teacher_cannot_view_other_submissions():
+    # 403 if requesting user is not student's teacher
 
 def test_mark_reviewed():
     # Teacher can mark submission as reviewed
     # reviewed_at and reviewed_by_id are set
+    # Student cannot mark their own as reviewed
+
+def test_get_playback_url():
+    # Owner can get playback URL
+    # Teacher can get student's playback URL
+    # Random user cannot get playback URL
 ```
 
-iOS:
-- Preview: VideoRecordingSheet with mock camera
-- Preview: PendingVideosSection with sample thumbnails
-- Preview: VideoPlayerView with sample video
+iOS Previews:
+```swift
+#Preview("Recording Sheet") { ... }
+#Preview("Pending Videos") { ... }
+#Preview("Video Player") { ... }
+```
+
+## Done When
+
+1. `python dev.py test --server` passes with new video submission tests
+2. Student completes exercise → sees “Record Video” button
+3. Student records 30-second video, adds note, submits
+4. Video uploads to S3
+5. Teacher sees video in student profile with thumbnail
+6. Teacher plays video
+7. Teacher marks as reviewed
+8. Student sees “Reviewed by Teacher” status
