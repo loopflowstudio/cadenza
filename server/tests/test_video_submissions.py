@@ -193,7 +193,6 @@ def test_get_playback_url(authenticated_client):
         user_id="student_1", email="student@example.com"
     )
     student_token = student_data["access_token"]
-    student_id = student_data["user"]["id"]
 
     client.post(
         "/users/set-teacher",

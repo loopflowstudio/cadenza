@@ -1376,7 +1376,9 @@ def get_student_video_submissions(
     return list(submissions)
 
 
-@app.patch("/video-submissions/{submission_id}/reviewed", response_model=models.VideoSubmission)
+@app.patch(
+    "/video-submissions/{submission_id}/reviewed", response_model=models.VideoSubmission
+)
 def mark_video_submission_reviewed(
     submission_id: str,
     current_user: Annotated[models.User, Depends(auth.get_current_user)],

@@ -82,7 +82,9 @@ def mock_s3():
         mock_client.delete_object.return_value = {}
 
         # Mock presigned URL generation to return a usable string
-        mock_client.generate_presigned_url.return_value = "https://example.com/presigned"
+        mock_client.generate_presigned_url.return_value = (
+            "https://example.com/presigned"
+        )
 
         yield mock_client
 
