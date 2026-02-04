@@ -146,8 +146,8 @@ python dev.py simulator
 # Expected: App launches, can sign in as teacher, see routine with pieces
 ```
 
-## Open Questions
+## Decisions
 
-1. Do we need hot-reload for Swift, or is rebuild-on-save acceptable?
-2. Should bundled PDFs be treated as "local pieces" or uploaded to local S3 (minio)?
-3. What logging format? Structured JSON or human-readable with `[CATEGORY]` prefixes?
+1. **No hot-reload for Swift** — manual `python dev.py simulator` is fine
+2. **Bundled PDFs only** — no minio for now; iOS loads from bundle when `s3_key` is nil
+3. **Human-readable logging** — keep `[DB WRITE]` style prefixes
