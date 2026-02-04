@@ -21,8 +21,8 @@ Scanned PDFs often have excessive whitespace. Musicians need to:
 
 forScore saves crop settings per-page without modifying the PDF.
 
-### Half-Page Turns
-In portrait orientation, show half of the current page and half of the next. Critical for music with awkward page breaks—lets you see what's coming without a full turn.
+### Half-Page Turns ✓
+Picked → `scratch/score-half-page-turns.md`
 
 ### Performance Mode
 Lock out most gestures during performance. Only page turns work. Prevents accidental menu triggers, annotation mode, etc.
