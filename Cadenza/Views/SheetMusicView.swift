@@ -84,13 +84,13 @@ struct SheetMusicView: UIViewRepresentable {
 struct EnhancedSheetMusicViewer: View {
     let url: URL
     @AppStorage("halfPageModeEnabled") private var halfPageMode = false
-    @AppStorage("performanceModeEnabled") private var performanceMode = false
     @AppStorage("documentCropSettings") private var cropSettingsData: Data = Data()
     @State private var pdfView: PDFView?
     @State private var pdfDocument: PDFDocument?
     @State private var currentPage = 1
     @State private var totalPages = 0
     @State private var halfPagePosition = 0
+    @State private var performanceMode = false
     @State private var isCropEditing = false
     @State private var editingCropRect: CGRect = CropSettings.full.visibleRect.cgRect
     @State private var isPortrait = true
@@ -907,6 +907,7 @@ private struct PerformanceModeOverlay: View {
                 Color.clear
                     .frame(width: blockedWidth)
                     .contentShape(Rectangle())
+                    .onTapGesture { }
                     .gesture(DragGesture().onChanged { _ in })
                     .gesture(MagnificationGesture().onChanged { _ in })
 
@@ -974,6 +975,14 @@ struct SheetMusicContainer: UIViewRepresentable {
 
     func updateUIView(_ uiView: PDFView, context: Context) {
         // Update if needed
+    }
+
+    static func dismantleUIView(_ uiView: PDFView, coordinator: Coordinator) {
+        NotificationCenter.default.removeObserver(
+            coordinator,
+            name: .PDFViewPageChanged,
+            object: uiView
+        )
     }
 
     func makeCoordinator() -> Coordinator {
