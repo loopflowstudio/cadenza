@@ -44,13 +44,22 @@ struct EnhancedSheetMusicViewer: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            SheetMusicContainer(
-                url: url,
-                pdfView: $pdfView,
-                currentPage: $currentPage,
-                totalPages: $totalPages
-            )
-            .background(Color(UIColor.systemGray6))
+            ZStack {
+                SheetMusicContainer(
+                    url: url,
+                    pdfView: $pdfView,
+                    currentPage: $currentPage,
+                    totalPages: $totalPages
+                )
+                .background(Color(UIColor.systemGray6))
+
+                TapZoneOverlay(
+                    onPrevious: goToPreviousPage,
+                    onNext: goToNextPage,
+                    canGoPrevious: currentPage > 1,
+                    canGoNext: currentPage < totalPages
+                )
+            }
 
             controlBar
         }
@@ -156,6 +165,85 @@ struct EnhancedSheetMusicViewer: View {
         guard let pdfView = pdfView else { return }
         pdfView.scaleFactor = pdfView.scaleFactorForSizeToFit
         zoomScale = pdfView.scaleFactor
+    }
+}
+
+// MARK: - Tap Zone Overlay
+
+private struct TapZoneOverlay: View {
+    let onPrevious: () -> Void
+    let onNext: () -> Void
+    let canGoPrevious: Bool
+    let canGoNext: Bool
+
+    @State private var showLeftFeedback = false
+    @State private var showRightFeedback = false
+
+    var body: some View {
+        GeometryReader { geometry in
+            HStack(spacing: 0) {
+                // Left zone (20%)
+                tapZone(
+                    width: geometry.size.width * 0.2,
+                    showFeedback: showLeftFeedback,
+                    direction: .left
+                ) {
+                    if canGoPrevious {
+                        showLeftFeedback = true
+                        onPrevious()
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
+                            showLeftFeedback = false
+                        }
+                    }
+                }
+
+                // Center area (60%) - passthrough
+                Color.clear
+                    .frame(width: geometry.size.width * 0.6)
+                    .contentShape(Rectangle())
+                    .allowsHitTesting(false)
+
+                // Right zone (20%)
+                tapZone(
+                    width: geometry.size.width * 0.2,
+                    showFeedback: showRightFeedback,
+                    direction: .right
+                ) {
+                    if canGoNext {
+                        showRightFeedback = true
+                        onNext()
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
+                            showRightFeedback = false
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private enum Direction { case left, right }
+
+    @ViewBuilder
+    private func tapZone(
+        width: CGFloat,
+        showFeedback: Bool,
+        direction: Direction,
+        action: @escaping () -> Void
+    ) -> some View {
+        ZStack {
+            Color.clear
+                .contentShape(Rectangle())
+                .onTapGesture(perform: action)
+
+            if showFeedback {
+                Image(systemName: direction == .left ? "chevron.left" : "chevron.right")
+                    .font(.system(size: 40, weight: .light))
+                    .foregroundColor(.primary.opacity(0.3))
+                    .transition(.opacity)
+            }
+        }
+        .frame(width: width)
+        .animation(.easeOut(duration: 0.15), value: showFeedback)
     }
 }
 
