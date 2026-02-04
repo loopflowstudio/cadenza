@@ -13,19 +13,14 @@ Missing almost everything that makes forScore beloved.
 
 ## Priority 1: Core Viewing
 
-### Crop & Margins
-Scanned PDFs often have excessive whitespace. Musicians need to:
-- Crop individual pages to focus on the music
-- Adjust margins globally for a document
-- De-skew crooked scans
+### Crop & Margins ✓
+Picked → `scratch/score-crop-margins.md`
 
-forScore saves crop settings per-page without modifying the PDF.
+### Half-Page Turns ✓
+Picked → `scratch/score-half-page-turns.md`
 
-### Half-Page Turns
-In portrait orientation, show half of the current page and half of the next. Critical for music with awkward page breaks—lets you see what's coming without a full turn.
-
-### Performance Mode
-Lock out most gestures during performance. Only page turns work. Prevents accidental menu triggers, annotation mode, etc.
+### Performance Mode ✓
+Picked → `scratch/score-performance-mode.md`
 
 ### Reflow (Stretch Goal)
 Detect music content regions and lay them out in a single horizontal scroll. Like a teleprompter. forScore's implementation doesn't parse notation—it uses visual detection to find "where music is" on the page.
