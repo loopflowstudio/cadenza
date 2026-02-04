@@ -327,7 +327,6 @@ SCENARIOS: dict[str, Scenario] = {
 def clear_database(session: Session) -> None:
     """Delete all data from all tables."""
     # Delete in order to respect foreign keys
-    session.exec(select(ExerciseSession)).all()
     for row in session.exec(select(ExerciseSession)):
         session.delete(row)
     for row in session.exec(select(PracticeSession)):
