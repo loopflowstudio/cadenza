@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 from typing import Any
 
 import httpx
@@ -34,12 +35,12 @@ def get_apple_public_keys(*, force_refresh: bool = False) -> list[dict[str, Any]
         raise
 
 
-def _public_key_for_kid(keys: list[dict[str, Any]], kid: str | None) -> str | None:
+def _public_key_for_kid(keys: list[dict[str, Any]], kid: str | None) -> Any | None:
     if not kid:
         return None
     for key in keys:
         if key.get("kid") == kid:
-            return jwt.algorithms.RSAAlgorithm.from_jwk(key)
+            return jwt.algorithms.RSAAlgorithm.from_jwk(json.dumps(key))
     return None
 
 

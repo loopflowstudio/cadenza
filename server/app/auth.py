@@ -61,7 +61,7 @@ def get_current_user(
         if user_id is None:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Invalid authentication credentials",
+                detail="Authentication failed",
             )
         # Ensure user_id is an integer
         user_id = int(user_id)
