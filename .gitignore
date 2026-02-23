@@ -3,3 +3,4 @@ build/
 
 # Bundled PDFs - copy sheet music here for testing
 Cadenza/Resources/Bundles/*.pdf
+.lf/log/
