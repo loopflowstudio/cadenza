@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		002E881248BE62FA085B0BD6 /* PitchEstimatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30FDC0B5E7147167B8615145 /* PitchEstimatorTests.swift */; };
+		04036EABA2C3053469D55B31 /* Sonata in G major.pdf in Resources */ = {isa = PBXBuildFile; fileRef = B269FBDFD4D206A08B87C183 /* Sonata in G major.pdf */; };
 		07546B59B61C05311DB0DB3E /* BundledMusicPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9B1FD7654EB5D54B1A910B3 /* BundledMusicPicker.swift */; };
 		078473791F9C5D1837130ECF /* RoutineAssignment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5465D60B8F4F1642C82DC5F7 /* RoutineAssignment.swift */; };
 		0A3987524F48C3A35BD7C87A /* CreateRoutineViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 003F199E37E6095CB2711466 /* CreateRoutineViewModel.swift */; };
@@ -16,7 +17,11 @@
 		173BD005D2B4BAD28A2746F8 /* MetronomeServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C3B01B34F89474BD6E19DA8 /* MetronomeServiceTests.swift */; };
 		19A00562E621415B1ABB45EA /* PageObjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B9937EDA6371625AF340910 /* PageObjects.swift */; };
 		1C4A8AC2A5144DFA939CDCF7 /* PracticeSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF3634DCFAB63D036601D59D /* PracticeSession.swift */; };
+		21E5B25113479AB522B02C6A /* Important things to think while playing cello.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 996629B1A6ECC779094D3F85 /* Important things to think while playing cello.pdf */; };
+		241B60D6588924A70A5F7F12 /* Cello Time Joggers.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 42D2A53457711AA97CB9964B /* Cello Time Joggers.pdf */; };
+		245904A25EF8F228B819DF33 /* Pathway for Young Cellists.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 4A1D89EB06F72D0F5524A1D4 /* Pathway for Young Cellists.pdf */; };
 		26A9E589FC70A56543537A87 /* DeveloperMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = B57438D284DEAEB9D79D506D /* DeveloperMenu.swift */; };
+		2A958BD57A2CCCDCEE186956 /* Suzuki - Cello School - Volume 3.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 8090057F20158755D615C8BD /* Suzuki - Cello School - Volume 3.pdf */; };
 		2B0DEACC10475A2CB22729CE /* CreateRoutineViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9E5D570F75FF4EAB6EC1E0E /* CreateRoutineViewModelTests.swift */; };
 		2B948D20153D3E92B39665B7 /* MockAPIClientImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64625EA0A40F1F3CC5EA5285 /* MockAPIClientImpl.swift */; };
 		2D2A3507846395FC14E68182 /* Exercise.swift in Sources */ = {isa = PBXBuildFile; fileRef = F68DD6F3D76214606E475841 /* Exercise.swift */; };
@@ -27,16 +32,20 @@
 		5D33B9518B3226118B87CFD2 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 903B72691447FBDECCD19FCC /* AuthService.swift */; };
 		62E78222938AFE62D84E37EA /* RoutineListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CA9F735C9D3E5638498985F /* RoutineListView.swift */; };
 		6AAE19A0C8B304EDFDF71ED0 /* SharePiecePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD4CEA7FB58B82D74A82BEA9 /* SharePiecePicker.swift */; };
+		7267CEDF1501777A974BDC47 /* Konzert - Joseph Haydn.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 813A483376C1077E8A33C071 /* Konzert - Joseph Haydn.pdf */; };
+		7385AB4F7EDA72B1B20A0AD5 /* Suzuki - Cello School - Volume 2.pdf in Resources */ = {isa = PBXBuildFile; fileRef = B2D6DE7A6D692B74F1369486 /* Suzuki - Cello School - Volume 2.pdf */; };
 		73DD405B1D85FD4E6CEC495B /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = B12C6D90C79FFF54865A6703 /* User.swift */; };
 		76D62308C1EBB3CBFB17D3D2 /* PracticeTunerOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74A6AC7E4789C728A26D1AD2 /* PracticeTunerOverlay.swift */; };
 		78B5299BB1431DCD8C201587 /* CadenzaApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 602E2FD6EF6C08938CEAD6E7 /* CadenzaApp.swift */; };
 		80D5F07D8453D68146E0A77B /* MockAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE0468DA25134D8B1434C00D /* MockAuthService.swift */; };
 		82EF38B4A166391FE2B8A516 /* TeacherStudentUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC73249EB4A7C839DA777402 /* TeacherStudentUITests.swift */; };
 		8448AF089183522CEF0C3B2E /* MetronomeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BA137B6C80B781F6F8DA7BC /* MetronomeService.swift */; };
+		8FC64CE5A4FD8B890CD91E9B /* Violoncello.pdf in Resources */ = {isa = PBXBuildFile; fileRef = A8DF9DC20F785EB19FDD42DE /* Violoncello.pdf */; };
 		92DF454084387669883CF8A0 /* PiecesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 920090A111690236F79C2F04 /* PiecesView.swift */; };
 		953AD361B3C62759BF5E8842 /* TestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FED8DCAC707C22E4C4AE99F3 /* TestHelpers.swift */; };
 		95811E4B57FCB2C70DC215F8 /* StudentDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB25C5DFF0690927FB4AAAB0 /* StudentDetailView.swift */; };
 		967174BF93F9B9653A1ADCED /* ServiceProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3268A9B30AD62793E9EDDA05 /* ServiceProvider.swift */; };
+		9981D7A7E126BDD0DB1A8BAF /* methode du jeune violoncelliste.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 6B2B2AC8469800AE6D50A9D4 /* methode du jeune violoncelliste.pdf */; };
 		9CBFE68EBE0A3E28C24D1501 /* AuthModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E6FA4CC95E22F17EE42B9B /* AuthModels.swift */; };
 		A8A6A4D978048535706C91D7 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF561EC6E5AF3F568DD26AE /* HomeView.swift */; };
 		A8B5C8009039975923947974 /* ScreenshotPipelineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF12DB315CF899ADE2B7CFD0 /* ScreenshotPipelineTests.swift */; };
@@ -46,12 +55,14 @@
 		B2D73D33001C36CFEE267FF5 /* DevSignInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E58BE44D7B5C055F99292FB /* DevSignInView.swift */; };
 		B873EF767C6060C4E552E48C /* PracticeSessionWorkflowTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25AC52D76336C2B4C8624BE7 /* PracticeSessionWorkflowTests.swift */; };
 		BB463B862BA2F7AF472BA00D /* CreateRoutineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01D00538EE595AA15D11D11F /* CreateRoutineView.swift */; };
+		BC1DE273423DE9C1CA88D205 /* Essential Elements for Strings.pdf in Resources */ = {isa = PBXBuildFile; fileRef = F53D4EB337CA79A961588FC1 /* Essential Elements for Strings.pdf */; };
 		BE081660047C9FC9ECAA3348 /* ExerciseSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = D52759ABB0C749E01CBFAA03 /* ExerciseSession.swift */; };
 		C61522A72E54F890032BAEAE /* PitchEstimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A995A49914573B4E52D053F1 /* PitchEstimator.swift */; };
 		C9BFF85D9EA29EF15C01E397 /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FB6D7DD8040C6D2619E0C2E /* APIClient.swift */; };
 		CA40A5A7B59CD2152D385CA7 /* PieceRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 489705D3F143EFF1E1BC625D /* PieceRepository.swift */; };
 		D39CBBCAE98F66E6CAEF3026 /* HomeUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B94BB82EC93AEE385BA9DDD0 /* HomeUITests.swift */; };
 		D96E54CB60AF8F0268811B05 /* APIClientProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5E327B26222FE308BC01CED /* APIClientProtocol.swift */; };
+		DAA5BB3A0CE844247A263CD6 /* Suzuki - Cello School - Volume 1.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 6F58F3E0671CF1F0855F6C88 /* Suzuki - Cello School - Volume 1.pdf */; };
 		DB3A53990FB204F75190DFDF /* PracticeCalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2CA0BBBA54497639D2A7E5D /* PracticeCalendarView.swift */; };
 		DB620A3D68A6E5AD4F14730E /* PracticeSessionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B1CB56C327AED1EE3265CE5 /* PracticeSessionView.swift */; };
 		DE44303C98A039578A918F5A /* AssignRoutineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36AA91A33F24ED54E795526A /* AssignRoutineView.swift */; };
@@ -96,21 +107,27 @@
 		35134A0FD46A9C1870A95013 /* CadenzaSmokeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CadenzaSmokeTests.swift; sourceTree = "<group>"; };
 		36AA91A33F24ED54E795526A /* AssignRoutineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssignRoutineView.swift; sourceTree = "<group>"; };
 		3EF561EC6E5AF3F568DD26AE /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		42D2A53457711AA97CB9964B /* Cello Time Joggers.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "Cello Time Joggers.pdf"; sourceTree = "<group>"; };
 		489705D3F143EFF1E1BC625D /* PieceRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PieceRepository.swift; sourceTree = "<group>"; };
+		4A1D89EB06F72D0F5524A1D4 /* Pathway for Young Cellists.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "Pathway for Young Cellists.pdf"; sourceTree = "<group>"; };
 		4B1CB56C327AED1EE3265CE5 /* PracticeSessionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PracticeSessionView.swift; sourceTree = "<group>"; };
 		5465D60B8F4F1642C82DC5F7 /* RoutineAssignment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutineAssignment.swift; sourceTree = "<group>"; };
 		56523085B2AB1F72044A66A6 /* NetworkingConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkingConfig.swift; sourceTree = "<group>"; };
 		602E2FD6EF6C08938CEAD6E7 /* CadenzaApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CadenzaApp.swift; sourceTree = "<group>"; };
 		64625EA0A40F1F3CC5EA5285 /* MockAPIClientImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockAPIClientImpl.swift; sourceTree = "<group>"; };
 		683E3C336CDBADBB84148664 /* PracticeMetronomeOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PracticeMetronomeOverlay.swift; sourceTree = "<group>"; };
+		6B2B2AC8469800AE6D50A9D4 /* methode du jeune violoncelliste.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "methode du jeune violoncelliste.pdf"; sourceTree = "<group>"; };
 		6CB1ABFF285F0FFE0948B46D /* Routine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Routine.swift; sourceTree = "<group>"; };
+		6F58F3E0671CF1F0855F6C88 /* Suzuki - Cello School - Volume 1.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "Suzuki - Cello School - Volume 1.pdf"; sourceTree = "<group>"; };
 		73F7C14B0BDF2F8E3DD0AFF5 /* KeychainHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainHelper.swift; sourceTree = "<group>"; };
 		74A6AC7E4789C728A26D1AD2 /* PracticeTunerOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PracticeTunerOverlay.swift; sourceTree = "<group>"; };
 		787D8B4F35D92C50A7DE28F6 /* PracticeTimerOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PracticeTimerOverlay.swift; sourceTree = "<group>"; };
 		7B9937EDA6371625AF340910 /* PageObjects.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageObjects.swift; sourceTree = "<group>"; };
 		7FB6D7DD8040C6D2619E0C2E /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
 		801C1AE67C9DFF174141E5B1 /* Piece.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Piece.swift; sourceTree = "<group>"; };
+		8090057F20158755D615C8BD /* Suzuki - Cello School - Volume 3.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "Suzuki - Cello School - Volume 3.pdf"; sourceTree = "<group>"; };
 		80A93A766EECE9AFCF6D7A63 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		813A483376C1077E8A33C071 /* Konzert - Joseph Haydn.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "Konzert - Joseph Haydn.pdf"; sourceTree = "<group>"; };
 		8168A03A0CF35D31CB65A83D /* Cadenza.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Cadenza.entitlements; sourceTree = "<group>"; };
 		84A80C34947B594C63D9E85F /* CadenzaUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = CadenzaUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		8683AAD66A9D75145EA1F27A /* RoutineDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutineDetailView.swift; sourceTree = "<group>"; };
@@ -118,10 +135,12 @@
 		903B72691447FBDECCD19FCC /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 		920090A111690236F79C2F04 /* PiecesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PiecesView.swift; sourceTree = "<group>"; };
 		949C841438CB10585A45DB79 /* TeacherStudentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeacherStudentView.swift; sourceTree = "<group>"; };
+		996629B1A6ECC779094D3F85 /* Important things to think while playing cello.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "Important things to think while playing cello.pdf"; sourceTree = "<group>"; };
 		99FA30BBA9BE9F5193CD18B7 /* SignInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInView.swift; sourceTree = "<group>"; };
 		9C3B01B34F89474BD6E19DA8 /* MetronomeServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetronomeServiceTests.swift; sourceTree = "<group>"; };
 		9F48386185F7E37392C33B0A /* CadenzaTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = CadenzaTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A2CA0BBBA54497639D2A7E5D /* PracticeCalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PracticeCalendarView.swift; sourceTree = "<group>"; };
+		A8DF9DC20F785EB19FDD42DE /* Violoncello.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = Violoncello.pdf; sourceTree = "<group>"; };
 		A995A49914573B4E52D053F1 /* PitchEstimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PitchEstimator.swift; sourceTree = "<group>"; };
 		A9E5D570F75FF4EAB6EC1E0E /* CreateRoutineViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateRoutineViewModelTests.swift; sourceTree = "<group>"; };
 		AB25C5DFF0690927FB4AAAB0 /* StudentDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudentDetailView.swift; sourceTree = "<group>"; };
@@ -130,6 +149,8 @@
 		AE3D6554395EDEF14BD47433 /* Icon */ = {isa = PBXFileReference; path = "Icon"; sourceTree = "<group>"; };
 		AF12DB315CF899ADE2B7CFD0 /* ScreenshotPipelineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotPipelineTests.swift; sourceTree = "<group>"; };
 		B12C6D90C79FFF54865A6703 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		B269FBDFD4D206A08B87C183 /* Sonata in G major.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "Sonata in G major.pdf"; sourceTree = "<group>"; };
+		B2D6DE7A6D692B74F1369486 /* Suzuki - Cello School - Volume 2.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "Suzuki - Cello School - Volume 2.pdf"; sourceTree = "<group>"; };
 		B57438D284DEAEB9D79D506D /* DeveloperMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeveloperMenu.swift; sourceTree = "<group>"; };
 		B94BB82EC93AEE385BA9DDD0 /* HomeUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeUITests.swift; sourceTree = "<group>"; };
 		CF3634DCFAB63D036601D59D /* PracticeSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PracticeSession.swift; sourceTree = "<group>"; };
@@ -141,6 +162,7 @@
 		DDFBE399676A3E84FCF154B9 /* Cadenza.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Cadenza.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EC73249EB4A7C839DA777402 /* TeacherStudentUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeacherStudentUITests.swift; sourceTree = "<group>"; };
 		ED4246C1922C26A7B1B8F370 /* SheetMusicView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheetMusicView.swift; sourceTree = "<group>"; };
+		F53D4EB337CA79A961588FC1 /* Essential Elements for Strings.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "Essential Elements for Strings.pdf"; sourceTree = "<group>"; };
 		F59E906BBA8E3B7C50511E46 /* PitchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PitchTests.swift; sourceTree = "<group>"; };
 		F68DD6F3D76214606E475841 /* Exercise.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Exercise.swift; sourceTree = "<group>"; };
 		FDB5F3F89F12439CE50BCB61 /* PitchService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PitchService.swift; sourceTree = "<group>"; };
@@ -280,7 +302,18 @@
 		915C908E1661614A51514CAB /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				42D2A53457711AA97CB9964B /* Cello Time Joggers.pdf */,
+				F53D4EB337CA79A961588FC1 /* Essential Elements for Strings.pdf */,
 				AE3D6554395EDEF14BD47433 /* Icon */,
+				996629B1A6ECC779094D3F85 /* Important things to think while playing cello.pdf */,
+				813A483376C1077E8A33C071 /* Konzert - Joseph Haydn.pdf */,
+				6B2B2AC8469800AE6D50A9D4 /* methode du jeune violoncelliste.pdf */,
+				4A1D89EB06F72D0F5524A1D4 /* Pathway for Young Cellists.pdf */,
+				B269FBDFD4D206A08B87C183 /* Sonata in G major.pdf */,
+				6F58F3E0671CF1F0855F6C88 /* Suzuki - Cello School - Volume 1.pdf */,
+				B2D6DE7A6D692B74F1369486 /* Suzuki - Cello School - Volume 2.pdf */,
+				8090057F20158755D615C8BD /* Suzuki - Cello School - Volume 3.pdf */,
+				A8DF9DC20F785EB19FDD42DE /* Violoncello.pdf */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -396,6 +429,7 @@
 			buildConfigurationList = F6790ED2D913E5D732C38092 /* Build configuration list for PBXNativeTarget "Cadenza" */;
 			buildPhases = (
 				06AC62204230D79917D49F6B /* Sources */,
+				E639D2B4933C56CA58892C79 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -445,6 +479,27 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		E639D2B4933C56CA58892C79 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				241B60D6588924A70A5F7F12 /* Cello Time Joggers.pdf in Resources */,
+				BC1DE273423DE9C1CA88D205 /* Essential Elements for Strings.pdf in Resources */,
+				21E5B25113479AB522B02C6A /* Important things to think while playing cello.pdf in Resources */,
+				7267CEDF1501777A974BDC47 /* Konzert - Joseph Haydn.pdf in Resources */,
+				245904A25EF8F228B819DF33 /* Pathway for Young Cellists.pdf in Resources */,
+				04036EABA2C3053469D55B31 /* Sonata in G major.pdf in Resources */,
+				DAA5BB3A0CE844247A263CD6 /* Suzuki - Cello School - Volume 1.pdf in Resources */,
+				7385AB4F7EDA72B1B20A0AD5 /* Suzuki - Cello School - Volume 2.pdf in Resources */,
+				2A958BD57A2CCCDCEE186956 /* Suzuki - Cello School - Volume 3.pdf in Resources */,
+				8FC64CE5A4FD8B890CD91E9B /* Violoncello.pdf in Resources */,
+				9981D7A7E126BDD0DB1A8BAF /* methode du jeune violoncelliste.pdf in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		06AC62204230D79917D49F6B /* Sources */ = {

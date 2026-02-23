@@ -581,6 +581,185 @@ final class APIClient: APIClientProtocol, @unchecked Sendable {
 
         return try decoder.decode([SessionCompletionDTO].self, from: data)
     }
+
+    // MARK: - Video Submissions
+
+    func createVideoSubmission(request: VideoSubmissionCreateRequest, token: String) async throws -> VideoSubmissionCreateResponse {
+        let url = baseURL.appendingPathComponent("/video-submissions")
+        var urlRequest = URLRequest(url: url)
+        urlRequest.httpMethod = "POST"
+        urlRequest.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        urlRequest.httpBody = try encoder.encode(request)
+
+        let (data, response) = try await URLSession.shared.data(for: urlRequest)
+
+        guard let httpResponse = response as? HTTPURLResponse,
+              (200...299).contains(httpResponse.statusCode) else {
+            throw APIError.requestFailed
+        }
+
+        return try decoder.decode(VideoSubmissionCreateResponse.self, from: data)
+    }
+
+    func getVideoSubmissionUploadUrl(submissionId: UUID, token: String) async throws -> VideoSubmissionUploadUrlsResponse {
+        let url = baseURL.appendingPathComponent("/video-submissions/\(submissionId.uuidString)/upload-url")
+        var request = URLRequest(url: url)
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+
+        let (data, response) = try await URLSession.shared.data(for: request)
+
+        guard let httpResponse = response as? HTTPURLResponse,
+              (200...299).contains(httpResponse.statusCode) else {
+            throw APIError.requestFailed
+        }
+
+        return try decoder.decode(VideoSubmissionUploadUrlsResponse.self, from: data)
+    }
+
+    func getMyVideoSubmissions(pieceId: UUID?, exerciseId: UUID?, token: String) async throws -> [VideoSubmissionDTO] {
+        var components = URLComponents(url: baseURL.appendingPathComponent("/video-submissions"), resolvingAgainstBaseURL: false)
+        var queryItems: [URLQueryItem] = []
+        if let pieceId {
+            queryItems.append(URLQueryItem(name: "piece_id", value: pieceId.uuidString))
+        }
+        if let exerciseId {
+            queryItems.append(URLQueryItem(name: "exercise_id", value: exerciseId.uuidString))
+        }
+        if !queryItems.isEmpty {
+            components?.queryItems = queryItems
+        }
+
+        guard let url = components?.url else {
+            throw APIError.requestFailed
+        }
+
+        var request = URLRequest(url: url)
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+
+        let (data, response) = try await URLSession.shared.data(for: request)
+
+        guard let httpResponse = response as? HTTPURLResponse,
+              (200...299).contains(httpResponse.statusCode) else {
+            throw APIError.requestFailed
+        }
+
+        return try decoder.decode([VideoSubmissionDTO].self, from: data)
+    }
+
+    func getStudentVideoSubmissions(studentId: Int, pieceId: UUID?, exerciseId: UUID?, pendingReviewOnly: Bool, token: String) async throws -> [VideoSubmissionDTO] {
+        var components = URLComponents(url: baseURL.appendingPathComponent("/students/\(studentId)/video-submissions"), resolvingAgainstBaseURL: false)
+        var queryItems: [URLQueryItem] = []
+        if let pieceId {
+            queryItems.append(URLQueryItem(name: "piece_id", value: pieceId.uuidString))
+        }
+        if let exerciseId {
+            queryItems.append(URLQueryItem(name: "exercise_id", value: exerciseId.uuidString))
+        }
+        if pendingReviewOnly {
+            queryItems.append(URLQueryItem(name: "pending_review", value: "true"))
+        }
+        if !queryItems.isEmpty {
+            components?.queryItems = queryItems
+        }
+
+        guard let url = components?.url else {
+            throw APIError.requestFailed
+        }
+
+        var request = URLRequest(url: url)
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+
+        let (data, response) = try await URLSession.shared.data(for: request)
+
+        guard let httpResponse = response as? HTTPURLResponse,
+              (200...299).contains(httpResponse.statusCode) else {
+            throw APIError.requestFailed
+        }
+
+        return try decoder.decode([VideoSubmissionDTO].self, from: data)
+    }
+
+    func markVideoSubmissionReviewed(submissionId: UUID, token: String) async throws -> VideoSubmissionDTO {
+        let url = baseURL.appendingPathComponent("/video-submissions/\(submissionId.uuidString)/reviewed")
+        var request = URLRequest(url: url)
+        request.httpMethod = "PATCH"
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+
+        let (data, response) = try await URLSession.shared.data(for: request)
+
+        guard let httpResponse = response as? HTTPURLResponse,
+              (200...299).contains(httpResponse.statusCode) else {
+            throw APIError.requestFailed
+        }
+
+        return try decoder.decode(VideoSubmissionDTO.self, from: data)
+    }
+
+    func getVideoSubmissionVideoUrl(submissionId: UUID, token: String) async throws -> VideoSubmissionVideoUrlResponse {
+        let url = baseURL.appendingPathComponent("/video-submissions/\(submissionId.uuidString)/video-url")
+        var request = URLRequest(url: url)
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+
+        let (data, response) = try await URLSession.shared.data(for: request)
+
+        guard let httpResponse = response as? HTTPURLResponse,
+              (200...299).contains(httpResponse.statusCode) else {
+            throw APIError.requestFailed
+        }
+
+        return try decoder.decode(VideoSubmissionVideoUrlResponse.self, from: data)
+    }
+
+    // MARK: - Video Submission Messages
+
+    func getMessages(submissionId: UUID, token: String) async throws -> [MessageDTO] {
+        let url = baseURL.appendingPathComponent("/video-submissions/\(submissionId.uuidString)/messages")
+        var request = URLRequest(url: url)
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+
+        let (data, response) = try await URLSession.shared.data(for: request)
+
+        guard let httpResponse = response as? HTTPURLResponse,
+              (200...299).contains(httpResponse.statusCode) else {
+            throw APIError.requestFailed
+        }
+
+        return try decoder.decode([MessageDTO].self, from: data)
+    }
+
+    func createMessage(submissionId: UUID, request: MessageCreateRequest, token: String) async throws -> MessageCreateResponse {
+        let url = baseURL.appendingPathComponent("/video-submissions/\(submissionId.uuidString)/messages")
+        var urlRequest = URLRequest(url: url)
+        urlRequest.httpMethod = "POST"
+        urlRequest.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        urlRequest.httpBody = try encoder.encode(request)
+
+        let (data, response) = try await URLSession.shared.data(for: urlRequest)
+
+        guard let httpResponse = response as? HTTPURLResponse,
+              (200...299).contains(httpResponse.statusCode) else {
+            throw APIError.requestFailed
+        }
+
+        return try decoder.decode(MessageCreateResponse.self, from: data)
+    }
+
+    func getMessageVideoUrl(messageId: UUID, token: String) async throws -> MessageVideoUrlResponse {
+        let url = baseURL.appendingPathComponent("/messages/\(messageId.uuidString)/video-url")
+        var request = URLRequest(url: url)
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+
+        let (data, response) = try await URLSession.shared.data(for: request)
+
+        guard let httpResponse = response as? HTTPURLResponse,
+              (200...299).contains(httpResponse.statusCode) else {
+            throw APIError.requestFailed
+        }
+
+        return try decoder.decode(MessageVideoUrlResponse.self, from: data)
+    }
 }
 
 struct SetTeacherResponse: Codable {

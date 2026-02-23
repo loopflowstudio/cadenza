@@ -51,6 +51,24 @@ def get_piece_s3_key(piece_id: UUID) -> str:
     return f"{_get_path_prefix()}cadenza/pieces/{piece_id}.pdf"
 
 
+def get_video_s3_key(user_id: int, submission_id: UUID) -> str:
+    return f"{_get_path_prefix()}cadenza/videos/{user_id}/{submission_id}.mp4"
+
+
+def get_video_thumbnail_s3_key(user_id: int, submission_id: UUID) -> str:
+    return f"{_get_path_prefix()}cadenza/videos/{user_id}/{submission_id}_thumb.jpg"
+
+
+def get_message_s3_key(user_id: int, message_id: UUID) -> str:
+    return f"{_get_path_prefix()}cadenza/videos/{user_id}/messages/{message_id}.mp4"
+
+
+def get_message_thumbnail_s3_key(user_id: int, message_id: UUID) -> str:
+    return (
+        f"{_get_path_prefix()}cadenza/videos/{user_id}/messages/{message_id}_thumb.jpg"
+    )
+
+
 def upload_file_content(
     s3_key: str, content: bytes, content_type: str = "application/pdf"
 ) -> None:
@@ -109,6 +127,86 @@ def generate_upload_url(piece_id: UUID, content_type: str = "application/pdf") -
                 "ContentType": content_type,
             },
             ExpiresIn=3600,  # 1 hour
+        )
+
+        return {"url": presigned_url, "s3_key": s3_key, "expires_in": 3600}
+    except ClientError as e:
+        raise Exception(f"Failed to generate presigned URL: {e}")
+
+
+def generate_video_upload_url(user_id: int, submission_id: UUID) -> dict:
+    s3_client = get_s3_client()
+    s3_key = get_video_s3_key(user_id, submission_id)
+
+    try:
+        presigned_url = s3_client.generate_presigned_url(
+            "put_object",
+            Params={
+                "Bucket": settings.s3_bucket,
+                "Key": s3_key,
+                "ContentType": "video/mp4",
+            },
+            ExpiresIn=3600,
+        )
+
+        return {"url": presigned_url, "s3_key": s3_key, "expires_in": 3600}
+    except ClientError as e:
+        raise Exception(f"Failed to generate presigned URL: {e}")
+
+
+def generate_video_thumbnail_upload_url(user_id: int, submission_id: UUID) -> dict:
+    s3_client = get_s3_client()
+    s3_key = get_video_thumbnail_s3_key(user_id, submission_id)
+
+    try:
+        presigned_url = s3_client.generate_presigned_url(
+            "put_object",
+            Params={
+                "Bucket": settings.s3_bucket,
+                "Key": s3_key,
+                "ContentType": "image/jpeg",
+            },
+            ExpiresIn=3600,
+        )
+
+        return {"url": presigned_url, "s3_key": s3_key, "expires_in": 3600}
+    except ClientError as e:
+        raise Exception(f"Failed to generate presigned URL: {e}")
+
+
+def generate_message_upload_url(user_id: int, message_id: UUID) -> dict:
+    s3_client = get_s3_client()
+    s3_key = get_message_s3_key(user_id, message_id)
+
+    try:
+        presigned_url = s3_client.generate_presigned_url(
+            "put_object",
+            Params={
+                "Bucket": settings.s3_bucket,
+                "Key": s3_key,
+                "ContentType": "video/mp4",
+            },
+            ExpiresIn=3600,
+        )
+
+        return {"url": presigned_url, "s3_key": s3_key, "expires_in": 3600}
+    except ClientError as e:
+        raise Exception(f"Failed to generate presigned URL: {e}")
+
+
+def generate_message_thumbnail_upload_url(user_id: int, message_id: UUID) -> dict:
+    s3_client = get_s3_client()
+    s3_key = get_message_thumbnail_s3_key(user_id, message_id)
+
+    try:
+        presigned_url = s3_client.generate_presigned_url(
+            "put_object",
+            Params={
+                "Bucket": settings.s3_bucket,
+                "Key": s3_key,
+                "ContentType": "image/jpeg",
+            },
+            ExpiresIn=3600,
         )
 
         return {"url": presigned_url, "s3_key": s3_key, "expires_in": 3600}

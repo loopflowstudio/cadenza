@@ -1,5 +1,10 @@
 # Open Questions
 
+## Video Submissions
+
+- Offline flow: current implementation creates submissions on the server before upload; no local-only submission is created when offline (would require a pending local record + later create-on-reconnect). Is that acceptable for PR1?
+- Teacher marking reviewed is available in VideoPlayerView without checking user type; should we gate the button by current user role?
+
 ## Score: Core Viewing Features
 
 1. **Divider position sync**: Should half-page divider positions sync to server for teacher-shared scores? (Probably yes in Phase 2—a teacher setting optimal split points for students is valuable.)
