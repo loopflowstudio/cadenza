@@ -1,0 +1,82 @@
+name: Cadenza
+options:
+  bundleIdPrefix: com.cadenza
+  deploymentTarget:
+    iOS: "17.0"
+  xcodeVersion: "15.0"
+  generateEmptyDirectories: true
+
+settings:
+  base:
+    SWIFT_VERSION: "5.9"
+
+targets:
+  Cadenza:
+    type: application
+    platform: iOS
+    sources:
+      - path: Cadenza
+        excludes:
+          - "**/*.xcassets"
+    resources:
+      - path: Cadenza/Resources
+      - path: Cadenza/Assets.xcassets
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.cadenza.Cadenza
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_CFBundleDisplayName: Cadenza
+        INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+        CODE_SIGN_ENTITLEMENTS: Cadenza/Cadenza.entitlements
+        DEVELOPMENT_TEAM: ""
+    entitlements:
+      path: Cadenza/Cadenza.entitlements
+
+  CadenzaTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - CadenzaTests
+    dependencies:
+      - target: Cadenza
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.cadenza.CadenzaTests
+        TEST_HOST: "$(BUILT_PRODUCTS_DIR)/Cadenza.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Cadenza"
+        BUNDLE_LOADER: "$(TEST_HOST)"
+        GENERATE_INFOPLIST_FILE: YES
+
+  CadenzaUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources:
+      - CadenzaUITests
+    dependencies:
+      - target: Cadenza
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.cadenza.CadenzaUITests
+        TEST_TARGET_NAME: Cadenza
+        GENERATE_INFOPLIST_FILE: YES
+
+schemes:
+  Cadenza:
+    build:
+      targets:
+        Cadenza: all
+        CadenzaTests: [test]
+        CadenzaUITests: [test]
+    run:
+      config: Debug
+    test:
+      config: Debug
+      targets:
+        - CadenzaTests
+        - CadenzaUITests
+    profile:
+      config: Release
+    analyze:
+      config: Debug
+    archive:
+      config: Release
