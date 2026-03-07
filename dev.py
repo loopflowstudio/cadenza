@@ -9,23 +9,55 @@ Usage:
     python dev.py test --ios      # Run iOS tests only
     python dev.py simulator       # Build and launch iOS simulator
     python dev.py simulator --mock-api  # Launch with mock API data
+    python dev.py simulator --build-only  # Build without launching
     python dev.py open            # Open Xcode project
+    python dev.py generate        # Generate Xcode project from project.yml
+    python dev.py reset           # Reset database to clean state
+    python dev.py seed            # Seed database with scenario data
+    python dev.py research        # Run UX research: screenshots + Claude analysis
 """
 
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 import subprocess
 import sys
 import time
+from datetime import datetime
 from pathlib import Path
 
 ROOT = Path(__file__).parent
 SERVER_DIR = ROOT / "server"
 PROJECT = ROOT / "Cadenza.xcodeproj"
 CACHE_PATH = ROOT / "build" / "simulator_device_cache.json"
+BUNDLES_DIR = ROOT / "Cadenza" / "Resources" / "Bundles"
+
+
+def _get_branch_name() -> str:
+    """Get current git branch name."""
+    result = subprocess.run(
+        ["git", "rev-parse", "--abbrev-ref", "HEAD"],
+        capture_output=True, text=True, cwd=ROOT
+    )
+    return result.stdout.strip() if result.returncode == 0 else "main"
+
+
+def _get_db_port() -> int:
+    """Get a deterministic port for this branch (5433-5532 range)."""
+    branch = _get_branch_name()
+    hash_val = int(hashlib.md5(branch.encode()).hexdigest()[:8], 16)
+    return 5433 + (hash_val % 100)
+
+
+def _get_compose_project() -> str:
+    """Get docker-compose project name for this branch."""
+    branch = _get_branch_name()
+    # Sanitize branch name for docker
+    safe = branch.replace("/", "-").replace("_", "-").lower()
+    return f"cadenza-{safe}"
 
 
 def run(cmd: list[str], cwd: Path | None = None, check: bool = True) -> subprocess.CompletedProcess:
@@ -34,27 +66,81 @@ def run(cmd: list[str], cwd: Path | None = None, check: bool = True) -> subproce
     return subprocess.run(cmd, cwd=cwd, check=check)
 
 
+def _sync_bundles() -> None:
+    """Copy PDFs from CADENZA_BUNDLES env var to Resources/Bundles/."""
+    source = os.environ.get("CADENZA_BUNDLES")
+    if not source:
+        return
+
+    source_path = Path(source).expanduser()
+    if not source_path.exists():
+        print(f"Warning: CADENZA_BUNDLES path does not exist: {source_path}")
+        return
+
+    BUNDLES_DIR.mkdir(parents=True, exist_ok=True)
+
+    # Find all PDFs recursively
+    pdfs = list(source_path.rglob("*.pdf"))
+    if not pdfs:
+        print(f"No PDFs found in {source_path}")
+        return
+
+    import shutil
+    copied = 0
+    for pdf in pdfs:
+        dest = BUNDLES_DIR / pdf.name
+        # Only copy if source is newer or dest doesn't exist
+        if not dest.exists() or pdf.stat().st_mtime > dest.stat().st_mtime:
+            shutil.copy2(pdf, dest)
+            copied += 1
+
+    if copied:
+        print(f"Synced {copied} PDFs from {source_path}")
+
+
 def server(args: argparse.Namespace) -> None:
     """Start the Cadenza API server."""
-    os.chdir(SERVER_DIR)
+    port = _get_db_port()
+    project = _get_compose_project()
+    db_url = f"postgresql://cadenza:cadenza_dev@localhost:{port}/cadenza"
+
+    print(f"Branch: {_get_branch_name()}")
+    print(f"DB port: {port}")
+    print(f"Project: {project}\n")
+
+    # Set environment for docker-compose
+    compose_env = {
+        **os.environ,
+        "COMPOSE_PROJECT_NAME": project,
+        "CADENZA_DB_PORT": str(port),
+    }
 
     # Start database if using docker
     if args.docker:
-        run(["docker-compose", "up"])
+        subprocess.run(["docker-compose", "up"], cwd=SERVER_DIR, env=compose_env)
     else:
-        # Check if db is running
+        # Check if our specific db container is running
+        container_name = f"{project}-db-1"
         result = subprocess.run(
-            ["docker", "ps", "--filter", "name=cadenza-server-db", "--format", "{{.Names}}"],
+            ["docker", "ps", "--filter", f"name={container_name}", "--format", "{{.Names}}"],
             capture_output=True, text=True
         )
-        if "cadenza-server-db" not in result.stdout:
+        if container_name not in result.stdout:
             print("Starting PostgreSQL...")
-            run(["docker-compose", "up", "-d", "db"])
+            subprocess.run(
+                ["docker-compose", "up", "-d", "db"],
+                cwd=SERVER_DIR, env=compose_env
+            )
             time.sleep(2)
 
-        print("\nStarting server on http://localhost:8000")
-        print("API docs: http://localhost:8000/docs\n")
-        run(["uv", "run", "uvicorn", "app.main:app", "--reload", "--host", "0.0.0.0", "--port", "8000"])
+        print(f"\nStarting server on http://localhost:8000")
+        print(f"API docs: http://localhost:8000/docs\n")
+
+        server_env = {**os.environ, "DATABASE_URL": db_url}
+        subprocess.run(
+            ["uv", "run", "uvicorn", "app.main:app", "--reload", "--host", "0.0.0.0", "--port", "8000"],
+            cwd=SERVER_DIR, env=server_env
+        )
 
 
 def test(args: argparse.Namespace) -> None:
@@ -89,6 +175,8 @@ def simulator(args: argparse.Namespace) -> None:
         print("Error: Xcode not configured. Run: sudo xcode-select -s /Applications/Xcode.app")
         sys.exit(1)
 
+    _sync_bundles()
+
     device = args.device
     print(f"Building Cadenza for {device}...")
 
@@ -117,10 +205,6 @@ def simulator(args: argparse.Namespace) -> None:
     if devices and device_id and not _looks_like_udid(device):
         _cache_device_id(device, device_id)
 
-    # Boot simulator
-    subprocess.run(["xcrun", "simctl", "boot", device_id], capture_output=True)
-    subprocess.run(["open", "-a", "Simulator"])
-
     # Build
     build_dir = ROOT / "build"
     run([
@@ -131,6 +215,14 @@ def simulator(args: argparse.Namespace) -> None:
         "-derivedDataPath", str(build_dir),
         "build"
     ])
+
+    if args.build_only:
+        print("\nBuild succeeded")
+        return
+
+    # Boot simulator
+    subprocess.run(["xcrun", "simctl", "boot", device_id], capture_output=True)
+    subprocess.run(["open", "-a", "Simulator"])
 
     # Find and install app
     app_path = None
@@ -165,6 +257,169 @@ def simulator(args: argparse.Namespace) -> None:
 def open_xcode(args: argparse.Namespace) -> None:
     """Open the Xcode project."""
     subprocess.run(["open", str(PROJECT)])
+
+
+def generate(args: argparse.Namespace) -> None:
+    """Generate Xcode project from project.yml using xcodegen."""
+    project_yml = ROOT / "project.yml"
+    if not project_yml.exists():
+        print("Error: project.yml not found")
+        sys.exit(1)
+
+    result = subprocess.run(["which", "xcodegen"], capture_output=True)
+    if result.returncode != 0:
+        print("Error: xcodegen not installed")
+        print("Install with: brew install xcodegen")
+        sys.exit(1)
+
+    run(["xcodegen", "generate"])
+    print("\nXcode project generated successfully")
+
+
+def reset(args: argparse.Namespace) -> None:
+    """Reset database to clean state, optionally seed with scenario."""
+    port = _get_db_port()
+    db_url = f"postgresql://cadenza:cadenza_dev@localhost:{port}/cadenza"
+    env = {**os.environ, "DATABASE_URL": db_url}
+
+    print(f"Branch: {_get_branch_name()}, DB port: {port}\n")
+
+    scenario = args.scenario or "empty"
+    subprocess.run(
+        ["uv", "run", "python", "seed_scenario.py", "--scenario", scenario],
+        cwd=SERVER_DIR, env=env, check=True
+    )
+
+
+def seed(args: argparse.Namespace) -> None:
+    """Seed database with a specific scenario."""
+    port = _get_db_port()
+    db_url = f"postgresql://cadenza:cadenza_dev@localhost:{port}/cadenza"
+    env = {**os.environ, "DATABASE_URL": db_url}
+
+    if not args.list:
+        print(f"Branch: {_get_branch_name()}, DB port: {port}\n")
+
+    cmd = ["uv", "run", "python", "seed_scenario.py"]
+    if args.list:
+        cmd.append("--list")
+    elif args.scenario:
+        cmd.extend(["--scenario", args.scenario])
+    else:
+        cmd.append("--list")
+
+    subprocess.run(cmd, cwd=SERVER_DIR, env=env)
+
+
+def research(args: argparse.Namespace) -> None:
+    """Run UX research: capture screenshots and analyze with Claude."""
+    import base64
+
+    timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
+    output_dir = ROOT / "scratch" / "research" / timestamp
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    scenarios = args.scenarios.split(",") if args.scenarios else ["teacher-assigns-routine"]
+
+    print(f"Running UX research")
+    print(f"Scenarios: {scenarios}")
+    print(f"Output: {output_dir}\n")
+
+    # Run each scenario and capture screenshots
+    all_screenshots = []
+    config_path = Path("/tmp/cadenza-research-config.json")
+
+    for scenario in scenarios:
+        scenario_dir = output_dir / scenario
+        scenario_dir.mkdir(exist_ok=True)
+
+        # Write config file for test to read
+        config = {"scenario": scenario, "outputDir": str(scenario_dir)}
+        config_path.write_text(json.dumps(config))
+
+        print(f"Running scenario: {scenario}")
+        result = subprocess.run([
+            "xcodebuild", "test",
+            "-project", str(PROJECT),
+            "-scheme", "Cadenza",
+            "-destination", f"platform=iOS Simulator,name={args.device}",
+            "-only-testing:CadenzaUITests/ScreenshotPipelineTests/testCaptureScenario",
+        ], capture_output=True, text=True)
+
+        if result.returncode != 0:
+            print(f"  Warning: scenario failed")
+            if args.verbose:
+                print(result.stderr[-500:] if len(result.stderr) > 500 else result.stderr)
+
+        screenshots = list(scenario_dir.glob("*.png"))
+        all_screenshots.extend(screenshots)
+        print(f"  Captured {len(screenshots)} screenshots")
+
+    if not all_screenshots:
+        print("\nNo screenshots captured. Skipping analysis.")
+        return
+
+    # Analyze with Claude
+    print(f"\nAnalyzing {len(all_screenshots)} screenshots with Claude...")
+
+    try:
+        import anthropic
+    except ImportError:
+        print("Error: anthropic package not installed")
+        print("Run: uv pip install anthropic")
+        return
+
+    client = anthropic.Anthropic()
+
+    # Build message with images
+    content = [{
+        "type": "text",
+        "text": """You are reviewing screenshots from a music practice app (Cadenza) used by:
+- Teachers: assign routines to students, track progress
+- Students: practice assigned routines, view sheet music
+- Self-taught: manage their own learning
+
+For each screenshot sequence, identify:
+1. Confusing UI elements or unclear affordances
+2. Missing information a user would need
+3. Friction points in the workflow
+4. What works well
+
+Be specific. Reference exact UI elements visible in the screenshots.
+Format as markdown with ## headers for each issue found."""
+    }]
+
+    for screenshot in all_screenshots:
+        with open(screenshot, "rb") as f:
+            image_data = base64.standard_b64encode(f.read()).decode("utf-8")
+        content.append({
+            "type": "image",
+            "source": {
+                "type": "base64",
+                "media_type": "image/png",
+                "data": image_data,
+            }
+        })
+        content.append({
+            "type": "text",
+            "text": f"Screenshot: {screenshot.parent.name}/{screenshot.name}"
+        })
+
+    response = client.messages.create(
+        model="claude-sonnet-4-20250514",
+        max_tokens=4096,
+        messages=[{"role": "user", "content": content}]
+    )
+
+    analysis = response.content[0].text
+
+    # Write analysis to scratch/research/
+    report_file = output_dir / "analysis.md"
+    report_file.write_text(analysis)
+
+    print(f"\nAnalysis written to {report_file}")
+    print("\n" + "=" * 60)
+    print(analysis)
 
 
 def _load_simctl_devices() -> dict | None:
@@ -266,19 +521,42 @@ def main() -> None:
     test_parser = subparsers.add_parser("test", help="Run tests")
     test_parser.add_argument("--server", action="store_true", help="Server tests only")
     test_parser.add_argument("--ios", action="store_true", help="iOS tests only")
-    test_parser.add_argument("--device", default="iPhone 16", help="iOS Simulator device")
+    test_parser.add_argument("--device", default="iPhone 17", help="iOS Simulator device")
     test_parser.add_argument("-k", "--pattern", help="Test name pattern filter")
     test_parser.set_defaults(func=test)
 
     # simulator
     sim_parser = subparsers.add_parser("simulator", help="Build and launch iOS simulator")
-    sim_parser.add_argument("--device", default="iPhone 16", help="Simulator device name")
+    sim_parser.add_argument("--device", default="iPhone 17", help="Simulator device name")
     sim_parser.add_argument("--mock-api", action="store_true", help="Launch with mock API data")
+    sim_parser.add_argument("--build-only", action="store_true", help="Build without launching")
     sim_parser.set_defaults(func=simulator)
 
     # open
     open_parser = subparsers.add_parser("open", help="Open Xcode project")
     open_parser.set_defaults(func=open_xcode)
+
+    # generate
+    gen_parser = subparsers.add_parser("generate", help="Generate Xcode project from project.yml")
+    gen_parser.set_defaults(func=generate)
+
+    # reset
+    reset_parser = subparsers.add_parser("reset", help="Reset database to clean state")
+    reset_parser.add_argument("--scenario", "-s", help="Scenario to seed after reset")
+    reset_parser.set_defaults(func=reset)
+
+    # seed
+    seed_parser = subparsers.add_parser("seed", help="Seed database with scenario data")
+    seed_parser.add_argument("--scenario", "-s", help="Scenario name")
+    seed_parser.add_argument("--list", "-l", action="store_true", help="List available scenarios")
+    seed_parser.set_defaults(func=seed)
+
+    # research
+    research_parser = subparsers.add_parser("research", help="Run UX research: screenshots + Claude analysis")
+    research_parser.add_argument("--scenarios", "-s", help="Comma-separated scenario names")
+    research_parser.add_argument("--device", default="iPhone 17", help="Simulator device")
+    research_parser.add_argument("--verbose", "-v", action="store_true", help="Show xcodebuild output")
+    research_parser.set_defaults(func=research)
 
     args = parser.parse_args()
     args.func(args)

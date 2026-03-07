@@ -6,7 +6,7 @@ services:
       POSTGRES_PASSWORD: cadenza_dev
       POSTGRES_DB: cadenza
     ports:
-      - "5432:5432"
+      - "${CADENZA_DB_PORT:-5432}:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
 

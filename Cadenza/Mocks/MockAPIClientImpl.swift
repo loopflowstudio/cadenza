@@ -51,6 +51,15 @@ class MockAPIClientImpl: APIClientProtocol {
                 userType: .student,
                 teacherId: 1,
                 createdAt: Date()
+            ),
+            User(
+                id: 4,
+                appleUserId: "mock_4",
+                email: "selftaught@example.com",
+                fullName: "Self-Taught User",
+                userType: nil,  // No specific type - learning on their own
+                teacherId: nil,
+                createdAt: Date()
             )
         ]
 
@@ -58,7 +67,8 @@ class MockAPIClientImpl: APIClientProtocol {
         tokenToUserId = [
             "dev_token_user_1": 1,
             "dev_token_user_2": 2,
-            "dev_token_user_3": 3
+            "dev_token_user_3": 3,
+            "dev_token_user_4": 4
         ]
 
         // Create test pieces for teacher
@@ -89,6 +99,27 @@ class MockAPIClientImpl: APIClientProtocol {
                 title: "Beethoven Moonlight Sonata",
                 pdfFilename: "beethoven-moonlight.pdf",
                 s3Key: "cadenza/pieces/00000000-0000-0000-0000-000000000003.pdf",
+                sharedFromPieceId: nil,
+                createdAt: Date(),
+                updatedAt: Date()
+            ),
+            // Self-taught user's pieces
+            PieceDTO(
+                id: UUID(uuidString: "00000000-0000-0000-0000-000000000004")!,
+                ownerId: 4,
+                title: "Suzuki Cello Book 1",
+                pdfFilename: "Suzuki - Cello School - Volume 1.pdf",
+                s3Key: nil,  // Bundled PDF
+                sharedFromPieceId: nil,
+                createdAt: Date(),
+                updatedAt: Date()
+            ),
+            PieceDTO(
+                id: UUID(uuidString: "00000000-0000-0000-0000-000000000005")!,
+                ownerId: 4,
+                title: "Essential Elements",
+                pdfFilename: "Essential Elements for Strings.pdf",
+                s3Key: nil,  // Bundled PDF
                 sharedFromPieceId: nil,
                 createdAt: Date(),
                 updatedAt: Date()
